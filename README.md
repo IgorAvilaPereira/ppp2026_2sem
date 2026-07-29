@@ -72,4 +72,5 @@ Os padrões de projeto são classificados como:
 [strategy_exemplos.md](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./01_strategy/strategy_exemplos.md) <br>
 [aula](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./01_strategy/aula) <br>
 [codigo](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./01_strategy/codigo) <br>
+[simulador_pato](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./01_strategy/simulador_pato) <br>
 [Strategy](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./01_strategy/Strategy) <br>
