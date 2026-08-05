@@ -154,5 +154,6 @@ https://github.com/IgorAvilaPereira/ppp2024_1sem/tree/main/codigos/placar_observ
 &nbsp;
 [strategy_vs_observer.md](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./02_observer/strategy_vs_observer.md) <br>
 [controle_bolsa](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./02_observer/controle_bolsa) <br>
+[defesa_civil](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./02_observer/defesa_civil) <br>
 [instagram](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./02_observer/instagram) <br>
 [instagram_up](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./02_observer/instagram_up) <br>
