@@ -17,7 +17,6 @@ public class ExportarODS extends Exportador {
     }
 
     protected void gravar(String output) {
-        // Create the data to save.
         final Object[][] data = new Object[this.vetPessoa.size()][3];
 
         for (int i = 0; i < this.vetPessoa.size(); i++) {
@@ -27,10 +26,8 @@ public class ExportarODS extends Exportador {
 
         String[] columns = new String[] { "cpf", "nome", "endereco" };
 
-        // System.out.println("oi"+data.toString());
         TableModel model = new DefaultTableModel(data, columns);
 
-        // Save the data to an ODS file and open it.
         try {
             final File file = new File("exportador/src/main/resources/output."
                     + this.getClass().getSimpleName().replace("Exportar", "").toLowerCase());
