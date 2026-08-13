@@ -33,7 +33,8 @@ public class ExportarODS extends Exportador {
                     + this.getClass().getSimpleName().replace("Exportar", "").toLowerCase());
 
             SpreadSheet.createEmpty(model).saveAs(file);
-            OOUtils.open(file);
+            // aqui abre o libreoffice ou o software padrao de planilhas - basta descomentar caso ache necessario
+            // OOUtils.open(file);
 
         } catch (IOException e) {
             e.printStackTrace();
