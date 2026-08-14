@@ -292,3 +292,6 @@ https://github.com/IgorAvilaPereira/ppp2024_1sem/tree/main/codigos/placar_observ
 [exportador](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./03_template_method/exportador) <br>
 [template_method](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./03_template_method/template_method) <br>
 [template_method2](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./03_template_method/template_method2) <br>
+## [./04_atividade1_strategy_observer_templatemethod](https://github.com/IgorAvilaPereira/ppp2026_2sem/tree/main/./04_atividade1_strategy_observer_templatemethod) <br>
+<br><br>[Baixar todo o material da aula](https://download-directory.github.io/?url=http://github.com/IgorAvilaPereira/ppp2026_2sem/tree/main/04_atividade1_strategy_observer_templatemethod) <br><br>
+&nbsp;
