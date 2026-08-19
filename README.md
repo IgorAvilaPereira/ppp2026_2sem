@@ -396,6 +396,7 @@ Essas desvantagens não anulam os benefícios do padrão Command, mas é importa
 [command_controle](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./04_command/command_controle) <br>
 [command_rotas](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./04_command/command_rotas) <br>
 [command_web](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./04_command/command_web) <br>
+[controlador](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./04_command/controlador) <br>
 [demo2](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./04_command/demo2) <br>
 [demo3](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./04_command/demo3) <br>
 ## [./05_atividade1_strategy_observer_templatemethod_command](https://github.com/IgorAvilaPereira/ppp2026_2sem/tree/main/./05_atividade1_strategy_observer_templatemethod_command) <br>
