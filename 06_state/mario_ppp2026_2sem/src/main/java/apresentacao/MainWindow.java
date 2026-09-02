@@ -84,42 +84,42 @@ public class MainWindow extends JFrame {
 
   private void cliqueReinicio() {
     mario.setEstadoAtual(new MarioPequeno());
-    ImageIcon icon = new ImageIcon("/home/iapereira/git/ppp2026_2sem/06_state/mario_ppp2026_2sem/src/main/resources/"
+    ImageIcon icon = new ImageIcon("src/main/resources/"
         + mario.getEstadoAtual().getClass().getSimpleName() + ".png");
     button7.setIcon(icon);
   }
 
   private void cliqueFlor() {
     mario.flor();
-    ImageIcon icon = new ImageIcon("/home/iapereira/git/ppp2026_2sem/06_state/mario_ppp2026_2sem/src/main/resources/"
+    ImageIcon icon = new ImageIcon("src/main/resources/"
         + mario.getEstadoAtual().getClass().getSimpleName() + ".png");
     button7.setIcon(icon);
   }
 
   private void cliqueDano() {
     mario.dano();
-    ImageIcon icon = new ImageIcon("/home/iapereira/git/ppp2026_2sem/06_state/mario_ppp2026_2sem/src/main/resources/"
+    ImageIcon icon = new ImageIcon("src/main/resources/"
         + mario.getEstadoAtual().getClass().getSimpleName() + ".png");
     button7.setIcon(icon);
   }
 
   private void cliqueCogumelo() {
     mario.cogumelo();
-    ImageIcon icon = new ImageIcon("/home/iapereira/git/ppp2026_2sem/06_state/mario_ppp2026_2sem/src/main/resources/"
+    ImageIcon icon = new ImageIcon("src/main/resources/"
         + mario.getEstadoAtual().getClass().getSimpleName() + ".png");
     button7.setIcon(icon);
   }
 
   private void cliqueEstrela() {
     mario.estrela();
-    ImageIcon icon = new ImageIcon("/home/iapereira/git/ppp2026_2sem/06_state/mario_ppp2026_2sem/src/main/resources/"
+    ImageIcon icon = new ImageIcon("src/main/resources/"
         + mario.getEstadoAtual().getClass().getSimpleName() + ".png");
     button7.setIcon(icon);
   }
 
   private void cliquePena() {
     mario.pena();
-    ImageIcon icon = new ImageIcon("/home/iapereira/git/ppp2026_2sem/06_state/mario_ppp2026_2sem/src/main/resources/"
+    ImageIcon icon = new ImageIcon("src/main/resources/"
         + mario.getEstadoAtual().getClass().getSimpleName() + ".png");
     button7.setIcon(icon);
   }
