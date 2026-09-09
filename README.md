@@ -567,3 +567,4 @@ Identificação: O iterador é fácil de reconhecer pelos métodos de navegaçã
 [resultset.md](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./07_iterator/resultset.md) <br>
 [aula_iterator](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./07_iterator/aula_iterator) <br>
 [restaurante](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./07_iterator/restaurante) <br>
+[restaurante_ppp2026_2sem](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./07_iterator/restaurante_ppp2026_2sem) <br>
