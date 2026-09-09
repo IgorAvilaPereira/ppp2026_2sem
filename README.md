@@ -502,6 +502,7 @@ https://acervolima.com/diferenca-entre-o-estado-e-o-padrao-de-design-de-estrateg
 [mario_ppp2026_2sem](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./06_state/mario_ppp2026_2sem) <br>
 [mario_state_aula](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./06_state/mario_state_aula) <br>
 ## [./07_iterator](https://github.com/IgorAvilaPereira/ppp2026_2sem/tree/main/./07_iterator) <br>
+[aula-iterator-java.md](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./07_iterator/aula-iterator-java.md) <br>
 [iterator.md](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./07_iterator/iterator.md) <br>
 [iterator.pdf](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./07_iterator/iterator.pdf) <br>
 
