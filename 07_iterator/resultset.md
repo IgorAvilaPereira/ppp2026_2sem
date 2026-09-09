@@ -24,6 +24,7 @@ Quando você executa uma consulta, o banco de dados processa os dados, mas o dri
    3. Extração: Os métodos getX() lêem apenas os bytes daquela linha atual que já está na memória do driver.
    4. Descarte: Quando o next() avança para a linha 2, a linha 1 pode ser descartada ou sobrescrevida na memória interna do driver.
 
+```java
 try (Connection conn = DriverManager.getConnection(URL, USER, PASS);
      PreparedStatement stmt = conn.prepareStatement("SELECT id, nome FROM usuarios");
      // O ResultSet nasce posicionado ANTES da primeira linha
@@ -43,7 +44,7 @@ try (Connection conn = DriverManager.getConnection(URL, USER, PASS);
 } catch (SQLException e) {
     e.printStackTrace();
 }
-
+```
 ------------------------------
 
 ## Por que ele não é um java.util.Iterator oficial?
@@ -55,9 +56,16 @@ Você sabia que se você esquecer de configurar o Fetch Size em alguns bancos (c
 Para evitar que o banco de dados envie milhões de registros de uma vez e estoure a memória ram do seu servidor Java, você precisa configurar duas propriedades cruciais no seu PreparedStatement: o FetchSize e o AutoCommit.
 Se você não alterar essas configurações, muitos drivers JDBC (como o do PostgreSQL) ignoram o comportamento de "iterador" por padrão e baixam todo o resultado da query de uma vez só para a memória da aplicação.
 Aqui está como configurar o iterador do banco de dados para trabalhar em lotes (fetch), integrando-o com o exemplo do Javalin:
+
 ## O Código Java Configurado
 
-import io.javalin.Javalin;import java.sql.Connection;import java.sql.DriverManager;import java.sql.PreparedStatement;import java.sql.ResultSet;
+```java
+import io.javalin.Javalin;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
 public class App {
     private static final String URL = "jdbc:postgresql://localhost:5432/meu_banco";
     private static final String USER = "postgres";
@@ -103,7 +111,7 @@ public class App {
         });
     }
 }
-
+```
 ## O que mudou por baixo dos panos?
 
 * conn.setAutoCommit(false): Diz ao banco para abrir uma transação estável. No PostgreSQL e no MySQL, o mecanismo de cursor interno que permite o avanço em partes (o iterador real) só funciona se uma transação explícita estiver ativa.
@@ -114,9 +122,10 @@ public class App {
 
 Se o seu banco de dados for o MySQL, o driver dele ignora números como 100. Para ativar o modo de streaming (linha por linha) no MySQL, você deve configurar exatamente assim:
 
+```java
 stmt.setFetchSize(Integer.MIN_VALUE); // Truque específico do MySQL para habilitar streaming
+```
 
-Ficou clara a importância do FetchSize no comportamento do iterador? Se quiser, posso ajudar a criar um script de teste para você simular milhares de registros locais e ver o consumo de memória no console, ou prefere focar em como tratar erros de conexão caso o banco caia no meio do streaming?
 
 
 
