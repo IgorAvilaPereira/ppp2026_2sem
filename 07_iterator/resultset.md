@@ -1,8 +1,11 @@
 # Result Set
 
+
 O ResultSet do JDBC funciona exatamente como um Iterator, mas com uma nomenclatura ligeiramente diferente adaptada para bancos de dados. Ele foi desenhado especificamente para lidar com volumes massivos de dados sem estourar a memória ram do seu servidor Java.
 Em vez de trazer todas as linhas do banco de dados de uma vez para a aplicação, o ResultSet atua como um ponteiro (cursor) que aponta para uma linha por vez.
+
 ------------------------------
+
 ## A Equivalência Direta
 Se você comparar o ResultSet com a interface Iterator tradicional do Java, a lógica é idêntica:
 
@@ -13,6 +16,7 @@ Se você comparar o ResultSet com a interface Iterator tradicional do Java, a l�
 
 ------------------------------
 ## Como ele funciona na prática (Memória e Rede)
+
 Quando você executa uma consulta, o banco de dados processa os dados, mas o driver JDBC não baixa tudo de uma vez. Ele utiliza um mecanismo chamado Fetch Size (Tamanho da Busca).
 
    1. O Cursor Inicial: Quando o ResultSet é criado, o cursor fica posicionado antes da primeira linha (posição 0). Por isso, você não pode ler dados imediatamente.
@@ -41,7 +45,9 @@ try (Connection conn = DriverManager.getConnection(URL, USER, PASS);
 }
 
 ------------------------------
+
 ## Por que ele não é um java.util.Iterator oficial?
+
 O ResultSet foi criado na versão 1.1 do Java, enquanto a interface Iterator moderna surgiu no Java 1.2. Além disso, o ResultSet precisa lidar com exceções de infraestrutura (SQLException), mapeamento de tipos complexos do SQL e cursores que podem voltar para trás (em conexões bidirecionais), o que tornaria a interface Iterator simples demais para ele.
 Você sabia que se você esquecer de configurar o Fetch Size em alguns bancos (como o PostgreSQL), ele pode tentar baixar milhões de linhas de uma vez e dar OutOfMemoryError mesmo usando o ResultSet? Quer que eu mostre como configurar o tamanho desse lote de paginação do iterador do banco?
 
@@ -105,6 +111,7 @@ public class App {
 * Consumo de Memória Constante: Se sua tabela tiver 10 milhões de linhas, sua aplicação Java vai consumir exatamente o mesmo espaço de memória que consumiria para processar apenas 100 linhas.
 
 ## ⚠️ Particularidade do MySQL
+
 Se o seu banco de dados for o MySQL, o driver dele ignora números como 100. Para ativar o modo de streaming (linha por linha) no MySQL, você deve configurar exatamente assim:
 
 stmt.setFetchSize(Integer.MIN_VALUE); // Truque específico do MySQL para habilitar streaming
