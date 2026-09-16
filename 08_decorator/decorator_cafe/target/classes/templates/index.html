@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Faça seu Pedido</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            background:
+                radial-gradient(circle at top left, #3b1d5a, transparent 40%),
+                radial-gradient(circle at bottom right, #14213d, transparent 40%),
+                #0b0b12;
+            color: #fff;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            padding: 30px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 520px;
+
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 24px;
+
+            padding: 35px;
+
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+
+            box-shadow:
+                0 25px 70px rgba(0, 0, 0, 0.45),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        }
+
+        .titulo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .titulo .icone {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .titulo h1 {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .titulo p {
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        .campo {
+            margin-bottom: 25px;
+        }
+
+        .campo label {
+            display: block;
+            font-size: 14px;
+            font-weight: bold;
+            color: #ccc;
+            margin-bottom: 9px;
+        }
+
+        select,
+        input[type="number"] {
+            width: 100%;
+
+            padding: 14px 16px;
+
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+
+            background: rgba(0, 0, 0, 0.25);
+            color: white;
+
+            font-size: 16px;
+
+            outline: none;
+
+            transition: 0.2s;
+        }
+
+        select:focus,
+        input[type="number"]:focus {
+            border-color: #a855f7;
+            box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15);
+        }
+
+        select option {
+            background: #19151f;
+            color: white;
+        }
+
+        .ingredientes {
+            margin-top: 10px;
+        }
+
+        .ingredientes h2 {
+            font-size: 17px;
+            margin-bottom: 15px;
+            color: #eee;
+        }
+
+        .ingrediente {
+            display: grid;
+            grid-template-columns: 1fr 110px;
+            align-items: center;
+            gap: 15px;
+
+            padding: 13px 15px;
+            margin-bottom: 10px;
+
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+
+            transition: 0.2s;
+        }
+
+        .ingrediente:hover {
+            background: rgba(255, 255, 255, 0.09);
+            transform: translateX(3px);
+        }
+
+        .ingrediente span {
+            color: #ddd;
+            font-size: 15px;
+        }
+
+        .ingrediente input {
+            padding: 10px;
+            text-align: center;
+        }
+
+        .botao {
+            width: 100%;
+
+            margin-top: 20px;
+            padding: 15px;
+
+            border: none;
+            border-radius: 14px;
+
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            color: white;
+
+            font-size: 16px;
+            font-weight: bold;
+
+            cursor: pointer;
+
+            box-shadow: 0 8px 25px rgba(124, 58, 237, 0.35);
+
+            transition: 0.2s;
+        }
+
+        .botao:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(124, 58, 237, 0.5);
+        }
+
+        .botao:active {
+            transform: translateY(0);
+        }
+
+        .rodape {
+            text-align: center;
+            margin-top: 22px;
+            color: #777;
+            font-size: 12px;
+        }
+
+        @media (max-width: 500px) {
+            body {
+                padding: 15px;
+            }
+
+            .container {
+                padding: 25px 20px;
+            }
+
+            .titulo h1 {
+                font-size: 25px;
+            }
+
+            .ingrediente {
+                grid-template-columns: 1fr 90px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="titulo">
+            <div class="icone">🍹</div>
+            <h1>Monte seu Pedido</h1>
+            <p>Escolha sua bebida e personalize com seus ingredientes.</p>
+        </div>
+
+        <form action="/criar" method="post">
+
+            <div class="campo">
+                <label for="bebida">🥤 Bebida</label>
+
+                <select name="bebida" id="bebida">
+                    {{#vetBebida}}
+                        <option value="{{.}}">{{.}}</option>
+                    {{/vetBebida}}
+                </select>
+            </div>
+
+
+            <div class="ingredientes">
+
+                <h2>🧊 Ingredientes</h2>
+
+                {{#vetIngrediente}}
+
+                    <div class="ingrediente">
+
+                        <span>{{.}}</span>
+
+                        <input
+                            type="number"
+                            name="{{.}}Qtde"
+                            min="0"
+                            value="0"
+                            placeholder="Qtde."
+                        >
+
+                    </div>
+
+                {{/vetIngrediente}}
+
+            </div>
+
+
+            <button type="submit" class="botao">
+                ✨ Realizar Pedido
+            </button>
+
+        </form>
+
+        <div class="rodape">
+            Seu pedido será preparado especialmente para você.
+        </div>
+
+    </div>
+
+</body>
+</html>
+
