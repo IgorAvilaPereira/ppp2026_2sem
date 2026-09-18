@@ -600,3 +600,5 @@ Identificação: O iterador é fácil de reconhecer pelos métodos de navegaçã
 [markdown_igor](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./08_decorator/markdown_igor) <br>
 [starbucks_rg](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./08_decorator/starbucks_rg) <br>
 [subwaycisco](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./08_decorator/subwaycisco) <br>
+## [./09_revisao](https://github.com/IgorAvilaPereira/ppp2026_2sem/tree/main/./09_revisao) <br>
+[lista1.md](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./09_revisao/lista1.md) <br>
