@@ -602,3 +602,4 @@ Identificação: O iterador é fácil de reconhecer pelos métodos de navegaçã
 [subwaycisco](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./08_decorator/subwaycisco) <br>
 ## [./09_revisao](https://github.com/IgorAvilaPereira/ppp2026_2sem/tree/main/./09_revisao) <br>
 [lista1.md](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./09_revisao/lista1.md) <br>
+[lista1](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./09_revisao/lista1) <br>
