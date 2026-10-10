@@ -2,7 +2,9 @@
 ## [./00_guia_rapido](https://github.com/IgorAvilaPereira/ppp2026_2sem/tree/main/./00_guia_rapido) <br>
 [bibliografia.png](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./00_guia_rapido/bibliografia.png) <br>
 [designpatternscard.pdf](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./00_guia_rapido/designpatternscard.pdf) <br>
+[material_doris_ppp2026_1sem.png](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./00_guia_rapido/material_doris_ppp2026_1sem.png) <br>
 [rc008-designpatterns_online.pdf](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./00_guia_rapido/rc008-designpatterns_online.pdf) <br>
+[material_andrei_ppp2026_2sem](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./00_guia_rapido/material_andrei_ppp2026_2sem) <br>
 ## [./01_strategy](https://github.com/IgorAvilaPereira/ppp2026_2sem/tree/main/./01_strategy) <br>
 [01_strategy.pdf](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./01_strategy/01_strategy.pdf) <br>
 [introducao.md](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./01_strategy/introducao.md) <br>
