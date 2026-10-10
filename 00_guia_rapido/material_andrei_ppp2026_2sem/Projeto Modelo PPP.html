@@ -1,0 +1,610 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Projeto Modelo PPP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: mesma identidade do Guia PPP. Barra fixa com busca + abas; à esquerda a árvore do projeto (vira lista no celular); à direita o arquivo aberto como caixa de classe UML, com linhas TROQUE marcadas em amarelo de nota PlantUML */
+:root{
+  --paper:#F4F6F9; --surface:#FFFFFF; --classbox:#EDF1F6; --ink:#17202B; --muted:#586577; --line:#D5DCE5;
+  --accent:#1D56B8; --accent-soft:#E2EAF8; --note:#FEFBD6; --note-line:#D8CF7A; --note-ink:#3A3410;
+  --mark:#FFE08A; --code-bg:#1B2330; --code-ink:#DCE4EE; --kw:#8FB7FF; --str:#B5E29A; --com:#7C8A9E; --typ:#F2C879; --ann:#E9A3E0;
+  --troque-bg:rgba(255,214,90,.16); --troque-bar:#F2C24B; --gutter:#5D6B7E; --term-bg:#10161E; --term-ink:#C9F2D3;
+  --l-apresentacao:#0E7C66; --l-negocio:#1D56B8; --l-persistencia:#8A4FBF;
+  --p-strategy:#1D56B8; --p-observer:#0E7C66; --p-templatemethod:#8A4FBF; --p-command:#B5522B; --p-state:#C0326A; --p-iterator:#2C7FA3; --p-decorator:#8A6A00; --p-geral:#586577;
+  --f-display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body:"Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, "Cascadia Code", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#0F141B; --surface:#161D26; --classbox:#1B2430; --ink:#E3E9F1; --muted:#97A4B6; --line:#2B3542;
+  --accent:#8AB0FF; --accent-soft:#1E2B44; --note:#2B2814; --note-line:#6B6230; --note-ink:#F1E8B4;
+  --mark:#6B5410; --code-bg:#0B1016; --troque-bg:rgba(242,194,75,.13); --term-bg:#070B10;
+  --l-apresentacao:#4FD1B0; --l-negocio:#8AB0FF; --l-persistencia:#C49BEA;
+  --p-strategy:#8AB0FF; --p-observer:#4FD1B0; --p-templatemethod:#C49BEA; --p-command:#F0956B; --p-state:#F07AA8; --p-iterator:#6CC3E8; --p-decorator:#E3C15A; --p-geral:#97A4B6;
+  color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --paper:#0F141B; --surface:#161D26; --classbox:#1B2430; --ink:#E3E9F1; --muted:#97A4B6; --line:#2B3542;
+  --accent:#8AB0FF; --accent-soft:#1E2B44; --note:#2B2814; --note-line:#6B6230; --note-ink:#F1E8B4;
+  --mark:#6B5410; --code-bg:#0B1016; --troque-bg:rgba(242,194,75,.13); --term-bg:#070B10;
+  --l-apresentacao:#4FD1B0; --l-negocio:#8AB0FF; --l-persistencia:#C49BEA;
+  --p-strategy:#8AB0FF; --p-observer:#4FD1B0; --p-templatemethod:#C49BEA; --p-command:#F0956B; --p-state:#F07AA8; --p-iterator:#6CC3E8; --p-decorator:#E3C15A; --p-geral:#97A4B6;
+  color-scheme:dark;}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;line-height:1.15;margin:0}
+code,pre{font-family:var(--f-mono)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.eyebrow{font:600 .75rem var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.lead{color:var(--muted);max-width:70ch;margin:0}
+
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:var(--surface);border-bottom:1px solid var(--line)}
+.top-in{max-width:1240px;margin:0 auto;padding:12px 16px 0;display:grid;gap:10px}
+.brand{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.brand h1{font-size:1.35rem;font-weight:800;letter-spacing:-.01em}
+.brand span{color:var(--muted);font-size:.9rem}
+.search{display:grid;grid-template-columns:1fr auto;gap:8px}
+.search input,.search select{font:inherit;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:9px 12px;min-width:0}
+.search select{max-width:44vw}
+.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:thin;margin:0 -4px}
+.tab{font:600 .92rem var(--f-body);color:var(--muted);background:none;border:0;border-bottom:3px solid transparent;padding:8px 10px;cursor:pointer;white-space:nowrap}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+
+.shell{max-width:1240px;margin:0 auto;padding:20px 16px 64px;display:grid;grid-template-columns:260px minmax(0,1fr);gap:22px;align-items:start}
+@media (max-width:860px){.shell{grid-template-columns:1fr}}
+aside.tree{position:sticky;top:calc(env(safe-area-inset-top,0px) + 150px);max-height:calc(100vh - 170px);overflow:auto;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:10px 6px;font-size:.88rem}
+@media (max-width:860px){aside.tree{position:static;max-height:none}}
+.tree details{margin:0}
+.tree summary{cursor:pointer;list-style:none;padding:3px 8px;border-radius:4px;font-family:var(--f-mono);font-size:.8rem;color:var(--muted);display:flex;gap:6px;align-items:center}
+.tree summary::-webkit-details-marker{display:none}
+.tree summary::before{content:"▸";font-size:.7rem;transition:transform .15s}
+.tree details[open]>summary::before{transform:rotate(90deg)}
+.tree .layer>summary{color:var(--ink);font-weight:600}
+.tree .layer>summary .sw{width:8px;height:8px;border-radius:2px;background:var(--c)}
+.tree .kids{padding-left:14px;display:grid}
+.fileBtn{font:400 .82rem var(--f-mono);text-align:left;background:none;border:0;color:var(--ink);padding:3px 8px;border-radius:4px;cursor:pointer;display:flex;justify-content:space-between;gap:6px;min-width:0}
+.fileBtn span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fileBtn:hover{background:var(--paper)}
+.fileBtn[aria-current="true"]{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.fileBtn .tq{font-size:.7rem;color:var(--note-ink);background:var(--note);border:1px solid var(--note-line);border-radius:3px;padding:0 4px;flex:none}
+
+main{min-width:0;display:grid;gap:20px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:600 .85rem var(--f-body);display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.chip .dot{width:9px;height:9px;border-radius:50%;background:var(--c,var(--accent))}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.chip.static{cursor:default}
+.count{font:600 .8rem var(--f-mono);color:var(--muted)}
+
+.uml{background:var(--surface);border:1.5px solid var(--ink);border-radius:3px;overflow:hidden;min-width:0}
+.uml-head{background:var(--classbox);border-bottom:1.5px solid var(--ink);padding:14px 18px;display:grid;gap:6px}
+.uml-head .stereo{font:italic .85rem var(--f-mono);color:var(--muted);overflow-wrap:anywhere}
+.uml-head h2{font-size:clamp(1.4rem,3.6vw,2rem);font-weight:800;color:var(--c);overflow-wrap:anywhere}
+.uml-head p{margin:0;max-width:72ch}
+.uml-sec{padding:14px 18px;border-top:1px dashed var(--line);min-width:0}
+.uml-sec:first-of-type{border-top:0}
+.uml-sec h3{font:600 .8rem var(--f-mono);color:var(--muted);margin-bottom:8px}
+.uml-sec h3 b{color:var(--c);font-weight:600}
+
+.troques{display:grid;gap:6px;margin:0;padding:0;list-style:none}
+.troques li{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:baseline}
+.troques button{font:600 .78rem var(--f-mono);background:var(--note);color:var(--note-ink);border:1px solid var(--note-line);border-radius:4px;padding:2px 7px;cursor:pointer}
+.troques span{min-width:0;overflow-wrap:anywhere}
+
+.codehead{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.btns{display:flex;gap:6px;flex-wrap:wrap}
+.copy{font:600 .78rem var(--f-body);background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:4px 10px;cursor:pointer}
+.code{background:var(--code-bg);color:var(--code-ink);border-radius:6px;overflow-x:auto;font:400 .82rem/1.55 var(--f-mono);margin:0;padding:10px 0;tab-size:4}
+.code .ln{display:grid;grid-template-columns:3.2em 1fr;padding-right:16px;border-left:3px solid transparent}
+.code .ln>i{font-style:normal;color:var(--gutter);text-align:right;padding-right:12px;user-select:none;font-variant-numeric:tabular-nums}
+.code .ln>span{white-space:pre}
+.code .ln.tq{background:var(--troque-bg);border-left-color:var(--troque-bar)}
+.code .ln.flash{animation:flash 1.2s ease-out}
+@keyframes flash{0%{background:rgba(255,214,90,.45)}100%{background:var(--troque-bg)}}
+@media (prefers-reduced-motion:reduce){.code .ln.flash{animation:none}}
+.code .ln.hit{background:rgba(138,176,255,.18);border-left-color:var(--accent)}
+.code .kw{color:var(--kw)} .code .st{color:var(--str)} .code .cm{color:var(--com);font-style:italic} .code .ty{color:var(--typ)} .code .an{color:var(--ann)}
+.code .cm .tqw{color:var(--troque-bar);font-weight:600;font-style:normal}
+pre.term{background:var(--term-bg);color:var(--term-ink);border-radius:6px;padding:12px 16px;overflow-x:auto;font:400 .8rem/1.5 var(--f-mono);margin:0}
+pre.ascii{font:400 .82rem/1.4 var(--f-mono);background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:12px;overflow-x:auto;margin:0}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:14px 16px;display:grid;gap:6px;align-content:start;min-width:0}
+.card h3{font-size:1.05rem}
+.card .path{font:400 .75rem var(--f-mono);color:var(--muted);overflow-wrap:anywhere}
+.card p{margin:0;font-size:.93rem}
+.card.link{cursor:pointer;text-align:left;font:inherit;color:inherit;border-top:3px solid var(--c,var(--line))}
+.card.link:hover{border-color:var(--c,var(--accent))}
+
+.layers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-items:stretch}
+@media (max-width:700px){.layers{grid-template-columns:1fr}}
+.layer-card{border:1.5px solid var(--c);border-radius:6px;padding:12px 14px;background:var(--surface);display:grid;gap:4px;align-content:start}
+.layer-card b{font-family:var(--f-mono);color:var(--c)}
+.layer-card p{margin:0;font-size:.92rem}
+.arrow{font:600 .8rem var(--f-mono);color:var(--muted);text-align:center}
+
+table.map{border-collapse:collapse;width:100%;font-size:.92rem}
+table.map th,table.map td{border-bottom:1px solid var(--line);padding:7px 8px;text-align:left;vertical-align:top}
+table.map th{font:600 .74rem var(--f-body);text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+table.map td:first-child{white-space:nowrap}
+table.map button{font:400 .84rem var(--f-mono);background:none;border:0;color:var(--accent);cursor:pointer;padding:0;text-align:left}
+.tbl{overflow-x:auto}
+.note{position:relative;background:var(--note);color:var(--note-ink);border:1px solid var(--note-line);padding:12px 16px;clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,0 100%)}
+.note::after{content:"";position:absolute;top:0;right:0;width:16px;height:16px;background:var(--note-line);clip-path:polygon(0 0,0 100%,100% 100%)}
+.note code{font-size:.88em}
+ul.check{margin:0;padding-left:1.1em;display:grid;gap:5px}
+
+.results{display:grid;gap:8px}
+.res{display:grid;gap:3px;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--c,var(--accent));border-radius:4px;padding:9px 14px;cursor:pointer;text-align:left;font:inherit;color:inherit;min-width:0}
+.res .where{font:600 .76rem var(--f-mono);color:var(--muted);overflow-wrap:anywhere}
+.res .snip{font-family:var(--f-mono);font-size:.84rem;white-space:pre-wrap;overflow-wrap:anywhere}
+mark{background:var(--mark);color:inherit;border-radius:2px;padding:0 1px}
+.pager{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.btn{font:600 .88rem var(--f-body);background:none;color:var(--accent);border:1px solid var(--line);border-radius:6px;padding:7px 12px;cursor:pointer}
+
+/* passo a passo */
+.steps{display:grid;gap:0;counter-reset:passo;border:1.5px solid var(--ink);border-radius:3px;background:var(--surface);overflow:hidden}
+.step{display:grid;grid-template-columns:64px minmax(0,1fr);border-top:1px dashed var(--line)}
+.step:first-child{border-top:0}
+.step .n{background:var(--classbox);border-right:1.5px solid var(--ink);display:grid;place-items:start center;padding-top:14px;font:800 1.6rem var(--f-display);color:var(--accent)}
+.step .b{padding:14px 18px;display:grid;gap:8px;min-width:0}
+.step h3{font-size:1.15rem}
+.step p{margin:0;max-width:72ch}
+@media (max-width:560px){.step{grid-template-columns:44px minmax(0,1fr)}.step .n{font-size:1.2rem}}
+.mapper{display:grid;gap:12px}
+.mapgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+@media (max-width:760px){.mapgrid{grid-template-columns:1fr}}
+.field{display:grid;grid-template-columns:minmax(0,1fr);gap:3px}
+.field label{font:600 .8rem var(--f-mono);color:var(--muted);display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.field label span{font-family:var(--f-body);font-weight:400}
+.field input{font:400 .95rem var(--f-mono);color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:7px 10px;min-width:0;width:100%}
+.renames{list-style:none;margin:0;padding:0;display:grid;gap:6px;font:400 .88rem var(--f-mono)}
+.renames li{display:grid;grid-template-columns:auto auto 1fr;gap:8px;align-items:baseline;min-width:0}
+.renames .from{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--note-line)}
+.renames .to{color:var(--accent);font-weight:600;overflow-wrap:anywhere}
+.renames .same{color:var(--muted);font-style:italic;font-family:var(--f-body)}
+.renames .ok::before{content:"✓ ";color:var(--l-apresentacao)}
+@media (prefers-reduced-motion:no-preference){.chip,.tab,.res,.fileBtn,.card.link{transition:background .15s,color .15s,border-color .15s}}
+</style>
+
+<header class="top">
+  <div class="top-in">
+    <div class="brand">
+      <h1>Projeto Modelo PPP</h1>
+      <span>modelo_padroes · Maven, Java 17 · 3 camadas · 7 padrões</span>
+    </div>
+    <form class="search" id="searchForm" role="search">
+      <input id="q" type="search" placeholder="Pesquisar no projeto: Contexto, update, final, Queue, TROQUE…" autocomplete="off" aria-label="Pesquisar no projeto">
+      <select id="attrSel" aria-label="Pesquisar em"></select>
+    </form>
+    <nav class="tabs" role="tablist" id="tabs"></nav>
+  </div>
+</header>
+
+<div class="shell">
+  <aside class="tree" id="tree" aria-label="Arquivos do projeto"></aside>
+  <main id="main"></main>
+</div>
+
+<script>
+const DATA = {"files": [{"path": "src/main/java/apresentacao/Main.java", "content": "package apresentacao;\n\nimport java.util.Scanner;\n\n/**\n * CAMADA DE APRESENTAÇÃO: só recebe a escolha do usuário e chama as demonstrações.\n * Não tem regra de negócio aqui.\n *\n * Rodar tudo direto (sem menu): passe o argumento \"todos\".\n */\npublic class Main {\n    public static void main(String[] args) {\n        if (args.length > 0 && args[0].equalsIgnoreCase(\"todos\")) {\n            executarTodos();\n            return;\n        }\n\n        Scanner sc = new Scanner(System.in);\n        int opcao = -1;\n        while (opcao != 0) {\n            System.out.println();\n            System.out.println(\"===== PADRÕES DE PROJETO =====\");\n            System.out.println(\"1 - Strategy\");\n            System.out.println(\"2 - Observer\");\n            System.out.println(\"3 - Template Method\");\n            System.out.println(\"4 - Command\");\n            System.out.println(\"5 - State\");\n            System.out.println(\"6 - Iterator\");\n            System.out.println(\"7 - Decorator\");\n            System.out.println(\"8 - Todos\");\n            System.out.println(\"0 - Sair\");\n            System.out.print(\"Opção: \");\n            try {\n                opcao = Integer.parseInt(sc.nextLine().trim());\n            } catch (NumberFormatException e) {\n                System.out.println(\"Digite um número de 0 a 8.\");\n                continue;\n            }\n            switch (opcao) {\n                case 1: DemoStrategy.executar(); break;\n                case 2: DemoObserver.executar(); break;\n                case 3: DemoTemplateMethod.executar(); break;\n                case 4: DemoCommand.executar(); break;\n                case 5: DemoState.executar(); break;\n                case 6: DemoIterator.executar(); break;\n                case 7: DemoDecorator.executar(); break;\n                case 8: executarTodos(); break;\n                case 0: System.out.println(\"Até mais!\"); break;\n                default: System.out.println(\"Opção inválida.\");\n            }\n        }\n        sc.close();\n    }\n\n    private static void executarTodos() {\n        DemoStrategy.executar();\n        DemoObserver.executar();\n        DemoTemplateMethod.executar();\n        DemoCommand.executar();\n        DemoState.executar();\n        DemoIterator.executar();\n        DemoDecorator.executar();\n    }\n\n    static void titulo(String nome) {\n        System.out.println();\n        System.out.println(\"################ \" + nome + \" ################\");\n    }\n}"}, {"path": "src/main/java/apresentacao/DemoStrategy.java", "content": "package apresentacao;\n\nimport negocio.strategy.Contexto;\nimport negocio.strategy.EstrategiaA;\nimport negocio.strategy.EstrategiaB;\n\npublic class DemoStrategy {\n    public static void executar() {\n        Main.titulo(\"STRATEGY\");\n        Contexto contexto = new Contexto(\"Pedido 1\", 100);\n\n        contexto.setEstrategia(new EstrategiaA());\n        System.out.printf(\"Com estratégia A: %.2f%n\", contexto.executarEstrategia());\n\n        contexto.setEstrategia(new EstrategiaB()); // troca em tempo de execução\n        System.out.printf(\"Com estratégia B: %.2f%n\", contexto.executarEstrategia());\n    }\n}"}, {"path": "src/main/java/apresentacao/DemoObserver.java", "content": "package apresentacao;\n\nimport negocio.observer.ObservadorA;\nimport negocio.observer.ObservadorB;\nimport negocio.observer.Status;\nimport negocio.observer.SubjectConcreto;\n\npublic class DemoObserver {\n    public static void executar() {\n        Main.titulo(\"OBSERVER\");\n        SubjectConcreto subject = new SubjectConcreto(1001, \"Pedido 1001\");\n\n        ObservadorA ana = new ObservadorA(\"Ana\");\n        subject.addObserver(ana);\n        subject.addObserver(new ObservadorA(\"Bruno\"));\n        subject.addObserver(new ObservadorB());\n\n        subject.changeState(Status.PAGO);\n        System.out.println(\"-- Ana deixou de observar --\");\n        subject.removeObserver(ana);\n        subject.changeState(Status.ENVIADO);\n    }\n}"}, {"path": "src/main/java/apresentacao/DemoTemplateMethod.java", "content": "package apresentacao;\n\nimport negocio.templatemethod.ClasseAbstrata;\nimport negocio.templatemethod.ImplementacaoA;\nimport negocio.templatemethod.ImplementacaoB;\n\npublic class DemoTemplateMethod {\n    public static void executar() {\n        Main.titulo(\"TEMPLATE METHOD\");\n        // a variável é do tipo da classe abstrata; chame SEMPRE o método template\n        ClasseAbstrata objeto = new ImplementacaoA();\n        objeto.executar(\"dados de exemplo\");\n\n        objeto = new ImplementacaoB();\n        objeto.executar(\"dados de exemplo\");\n    }\n}"}, {"path": "src/main/java/apresentacao/DemoCommand.java", "content": "package apresentacao;\n\nimport java.util.List;\n\nimport negocio.command.ComandoAlterarValor;\nimport negocio.command.ComandoLigar;\nimport negocio.command.Invocador;\nimport negocio.command.MacroCommand;\nimport negocio.command.Receptor;\n\npublic class DemoCommand {\n    public static void executar() {\n        Main.titulo(\"COMMAND\");\n        Receptor receptor = new Receptor();\n        Invocador invocador = new Invocador();\n\n        // fila: guarda agora, executa depois\n        invocador.adicionar(new ComandoLigar(receptor));\n        invocador.adicionar(new ComandoAlterarValor(receptor, 10));\n        invocador.adicionar(new ComandoAlterarValor(receptor, 50));\n        System.out.println(\"-- executando a fila --\");\n        invocador.executarTodos();\n\n        // desfazer: volta na ordem inversa\n        System.out.println(\"-- desfazendo --\");\n        invocador.desfazer(); // 50 -> 10\n        invocador.desfazer(); // 10 -> 0\n\n        // macro: um comando que executa vários\n        System.out.println(\"-- macro --\");\n        invocador.executar(new MacroCommand(List.of(new ComandoAlterarValor(receptor, 99), new ComandoLigar(receptor))));\n    }\n}"}, {"path": "src/main/java/apresentacao/DemoState.java", "content": "package apresentacao;\n\nimport negocio.state.ContextoEstado;\n\npublic class DemoState {\n    public static void executar() {\n        Main.titulo(\"STATE\");\n        ContextoEstado contexto = new ContextoEstado(2);\n        System.out.println(\"Estado: \" + contexto.getNomeEstado());\n\n        contexto.eventoB(); // não pode no inicial\n        contexto.eventoA(); // inicial -> intermediário\n        contexto.eventoB(); // 1/2\n        contexto.eventoB(); // 2/2 -> final\n        System.out.println(\"Estado: \" + contexto.getNomeEstado());\n        contexto.cancelar(); // não pode no final\n        contexto.eventoA(); // final -> inicial\n        System.out.println(\"Estado: \" + contexto.getNomeEstado());\n    }\n}"}, {"path": "src/main/java/apresentacao/DemoIterator.java", "content": "package apresentacao;\n\nimport java.util.Iterator;\n\nimport negocio.iterator.Colecao;\nimport negocio.iterator.Item;\nimport persistencia.Repositorio;\nimport persistencia.RepositorioMemoria;\n\npublic class DemoIterator {\n    public static void executar() {\n        Main.titulo(\"ITERATOR\");\n        // persistência: onde os dados ficam (troque por banco sem mexer no resto)\n        Repositorio<Item> repositorio = new RepositorioMemoria<>();\n        repositorio.salvar(new Item(\"Primeiro\", 10));\n        repositorio.salvar(new Item(\"Segundo\", 20));\n        repositorio.salvar(new Item(\"Terceiro\", 30));\n\n        Colecao colecao = new Colecao(repositorio);\n\n        System.out.println(\"-- normal --\");\n        Iterator<Item> it = colecao.iterator();\n        while (it.hasNext()) {\n            System.out.println(it.next());\n        }\n\n        System.out.println(\"-- reverso --\");\n        Iterator<Item> rev = colecao.iteradorReverso();\n        while (rev.hasNext()) {\n            System.out.println(rev.next());\n        }\n\n        System.out.println(\"-- for-each (porque Colecao é Iterable) --\");\n        for (Item item : colecao) {\n            System.out.println(item.getNome());\n        }\n    }\n}"}, {"path": "src/main/java/apresentacao/DemoDecorator.java", "content": "package apresentacao;\n\nimport negocio.decorator.Componente;\nimport negocio.decorator.ComponenteConcreto;\nimport negocio.decorator.DecoradorA;\nimport negocio.decorator.DecoradorB;\n\npublic class DemoDecorator {\n    public static void executar() {\n        Main.titulo(\"DECORATOR\");\n        Componente c = new ComponenteConcreto();\n        c = new DecoradorA(c);\n        c = new DecoradorB(c);\n        c = new DecoradorA(c); // pode repetir o mesmo extra\n        // estrutura: DecoradorA(DecoradorB(DecoradorA(ComponenteConcreto)))\n        System.out.println(c.descricao());\n        System.out.printf(\"Total: R$ %.2f%n\", c.preco());\n    }\n}"}, {"path": "src/main/java/negocio/strategy/Estrategia.java", "content": "package negocio.strategy;\n\n/**\n * PADRÃO STRATEGY — papel: Strategy (interface do algoritmo).\n * \"Tenho várias formas de fazer a mesma coisa e quero trocar entre elas.\"\n *\n * TROQUE: o nome da interface (ex.: CalculoFrete, EstrategiaOrdenacao, FormaPagamento)\n *         e a assinatura do método (ex.: double calcular(double peso, double distancia)).\n */\npublic interface Estrategia {\n    double executar(double valor);\n}"}, {"path": "src/main/java/negocio/strategy/EstrategiaA.java", "content": "package negocio.strategy;\n\n/**\n * PADRÃO STRATEGY — papel: Estratégia concreta.\n * TROQUE: nome (ex.: FretePAC) e a regra dentro do método.\n */\npublic class EstrategiaA implements Estrategia {\n\n    @Override\n    public double executar(double valor) {\n        return valor * 1.10; // TROQUE: regra da estratégia A\n    }\n}"}, {"path": "src/main/java/negocio/strategy/EstrategiaB.java", "content": "package negocio.strategy;\n\n/**\n * PADRÃO STRATEGY — papel: Estratégia concreta.\n * TROQUE: nome (ex.: FreteSedex) e a regra dentro do método.\n * Para mais estratégias: copie este arquivo e mude nome e regra. O Contexto não muda.\n */\npublic class EstrategiaB implements Estrategia {\n\n    @Override\n    public double executar(double valor) {\n        return valor * 0.90; // TROQUE: regra da estratégia B\n    }\n}"}, {"path": "src/main/java/negocio/strategy/Contexto.java", "content": "package negocio.strategy;\n\n/**\n * PADRÃO STRATEGY — papel: Contexto (quem USA a estratégia).\n * Guarda a INTERFACE e delega o trabalho a ela. Não tem nenhum if escolhendo regra.\n *\n * TROQUE: nome da classe (ex.: Pedido, Catalogo), os atributos e o nome dos métodos\n *         (ex.: setCalculoFrete / calcularFrete).\n */\npublic class Contexto {\n    private String descricao;\n    private double valor;\n    private Estrategia estrategia;\n\n    public Contexto(String descricao, double valor) {\n        this.descricao = descricao;\n        this.valor = valor;\n        this.estrategia = new EstrategiaA(); // estratégia padrão: evita NullPointerException\n    }\n\n    public void setEstrategia(Estrategia estrategia) {\n        this.estrategia = estrategia;\n    }\n\n    public Estrategia getEstrategia() {\n        return estrategia;\n    }\n\n    public double executarEstrategia() {\n        return this.estrategia.executar(this.valor); // DELEGA\n    }\n\n    public String getDescricao() {\n        return descricao;\n    }\n\n    public double getValor() {\n        return valor;\n    }\n}"}, {"path": "src/main/java/negocio/observer/Observer.java", "content": "package negocio.observer;\n\n/**\n * PADRÃO OBSERVER — papel: Observer (interface de quem quer ser avisado).\n * \"Quando algo mudar, preciso avisar vários objetos.\"\n * Genérico como o professor faz: o observador recebe o próprio objeto observado.\n *\n * TROQUE (se o enunciado pedir): nome (ex.: Observador) e método (ex.: atualizar(String status)).\n */\npublic interface Observer<T> {\n    void update(T t);\n}"}, {"path": "src/main/java/negocio/observer/Subject.java", "content": "package negocio.observer;\n\n/**\n * PADRÃO OBSERVER — papel: Subject (interface do objeto observado).\n * Mesmos métodos usados pelo professor na lista de revisão.\n */\npublic interface Subject<T> {\n    void addObserver(Observer<T> observer);\n    void removeObserver(Observer<T> observer);\n    void removeObserver(int pos);\n    void notifyObservers();\n    void changeState(Status status);\n}"}, {"path": "src/main/java/negocio/observer/SubjectConcreto.java", "content": "package negocio.observer;\n\nimport java.util.ArrayList;\nimport java.util.List;\n\n/**\n * PADRÃO OBSERVER — papel: Subject concreto (o objeto que muda).\n * Guarda uma LISTA DA INTERFACE Observer e, quando muda, avisa todos.\n *\n * TROQUE: nome (ex.: Pedido, EstacaoMeteorologica, Canal) e os atributos.\n *         Se o estado for um número (temperatura), troque Status por double.\n */\npublic class SubjectConcreto implements Subject<SubjectConcreto> {\n    private int id;\n    private String descricao;\n    private Status status;\n    private List<Observer<SubjectConcreto>> observers;\n\n    public SubjectConcreto(int id, String descricao) {\n        this.id = id;\n        this.descricao = descricao;\n        this.status = Status.CRIADO;\n        this.observers = new ArrayList<>();\n    }\n\n    @Override\n    public void addObserver(Observer<SubjectConcreto> observer) {\n        this.observers.add(observer);\n    }\n\n    @Override\n    public void removeObserver(Observer<SubjectConcreto> observer) {\n        this.observers.remove(observer);\n    }\n\n    @Override\n    public void removeObserver(int pos) {\n        this.observers.remove(pos);\n    }\n\n    @Override\n    public void notifyObservers() {\n        for (Observer<SubjectConcreto> observer : this.observers) {\n            observer.update(this); // manda o próprio objeto: o observador lê o que quiser\n        }\n    }\n\n    @Override\n    public void changeState(Status status) {\n        this.status = status;\n        this.notifyObservers(); // mudou -> avisa todo mundo\n    }\n\n    public int getId() {\n        return id;\n    }\n\n    public String getDescricao() {\n        return descricao;\n    }\n\n    public Status getStatus() {\n        return status;\n    }\n}"}, {"path": "src/main/java/negocio/observer/ObservadorA.java", "content": "package negocio.observer;\n\n/**\n * PADRÃO OBSERVER — papel: Observer concreto.\n * Este reage a TODA mudança.\n * TROQUE: nome (ex.: Cliente, Painel, Inscrito) e a reação dentro do update.\n */\npublic class ObservadorA implements Observer<SubjectConcreto> {\n    private String nome;\n\n    public ObservadorA(String nome) {\n        this.nome = nome;\n    }\n\n    @Override\n    public void update(SubjectConcreto s) {\n        System.out.println(\"[\" + nome + \"] ficou sabendo: \" + s.getDescricao() + \" agora está \" + s.getStatus());\n    }\n\n    public String getNome() {\n        return nome;\n    }\n}"}, {"path": "src/main/java/negocio/observer/ObservadorB.java", "content": "package negocio.observer;\n\n/**\n * PADRÃO OBSERVER — papel: Observer concreto.\n * Este decide sozinho com quais mudanças se importa (o Subject não sabe disso).\n * TROQUE: nome (ex.: Estoque, NotaFiscal, Alerta) e as reações.\n */\npublic class ObservadorB implements Observer<SubjectConcreto> {\n\n    @Override\n    public void update(SubjectConcreto s) {\n        switch (s.getStatus()) {\n            case PAGO:\n                System.out.println(\"[Observador B] reagindo ao PAGO do item \" + s.getId());\n                break;\n            case CANCELADO:\n                System.out.println(\"[Observador B] desfazendo por causa do CANCELADO do item \" + s.getId());\n                break;\n            default:\n                // ignora os outros status\n                break;\n        }\n    }\n}"}, {"path": "src/main/java/negocio/observer/Status.java", "content": "package negocio.observer;\n\n/**\n * Os estados possíveis do objeto observado. Enum evita erro de digitação (\"PGAO\").\n * TROQUE: os valores (ex.: para temperatura, nem precisa de enum; use double).\n */\npublic enum Status {\n    CRIADO,\n    PAGO,\n    ENVIADO,\n    ENTREGUE,\n    CANCELADO\n}"}, {"path": "src/main/java/negocio/templatemethod/ClasseAbstrata.java", "content": "package negocio.templatemethod;\n\n/**\n * PADRÃO TEMPLATE METHOD — papel: Classe abstrata com o esqueleto do algoritmo.\n * \"O processo é fixo, mas algumas etapas variam.\"\n *\n * Tem os três tipos de etapa que costumam cair na prova:\n *   - etapa COMUM (concreta, igual para todos): abrir(), fechar()\n *   - etapa ABSTRATA (cada subclasse é obrigada a implementar): processar()\n *   - GANCHO / hook (tem corpo padrão, a subclasse sobrescreve SE quiser): rodape()\n *\n * TROQUE: nome (ex.: Relatorio, ImportadorDados, Exportador), o nome do método\n *         template (ex.: gerar(), importar()) e as etapas, MANTENDO o final.\n */\npublic abstract class ClasseAbstrata {\n\n    // MÉTODO TEMPLATE: final para nenhuma subclasse mudar a ordem dos passos\n    public final void executar(String entrada) {\n        abrir();\n        String resultado = processar(entrada);\n        System.out.println(resultado);\n        System.out.println(rodape());\n        fechar();\n    }\n\n    // etapa comum\n    protected void abrir() {\n        System.out.println(\"--- abrindo \" + this.getClass().getSimpleName() + \" ---\");\n    }\n\n    // etapa abstrata: muda em cada subclasse\n    protected abstract String processar(String entrada);\n\n    // gancho: corpo padrão, sobrescrever é opcional\n    protected String rodape() {\n        return \"(rodapé padrão)\";\n    }\n\n    // etapa comum\n    protected void fechar() {\n        System.out.println(\"--- fechando ---\");\n    }\n}"}, {"path": "src/main/java/negocio/templatemethod/ImplementacaoA.java", "content": "package negocio.templatemethod;\n\n/**\n * PADRÃO TEMPLATE METHOD — papel: Subclasse concreta.\n * Implementa só a etapa abstrata e usa o gancho padrão.\n * TROQUE: nome (ex.: RelatorioCSV, ImportadorCSV) e o conteúdo de processar().\n */\npublic class ImplementacaoA extends ClasseAbstrata {\n\n    @Override\n    protected String processar(String entrada) {\n        return entrada.toUpperCase(); // TROQUE: lógica específica A\n    }\n}"}, {"path": "src/main/java/negocio/templatemethod/ImplementacaoB.java", "content": "package negocio.templatemethod;\n\n/**\n * PADRÃO TEMPLATE METHOD — papel: Subclasse concreta.\n * Implementa a etapa abstrata E sobrescreve o gancho.\n * TROQUE: nome (ex.: RelatorioHTML, ImportadorXML) e o conteúdo.\n */\npublic class ImplementacaoB extends ClasseAbstrata {\n\n    @Override\n    protected String processar(String entrada) {\n        return \"<dado>\" + entrada + \"<\/dado>\"; // TROQUE: lógica específica B\n    }\n\n    @Override\n    protected String rodape() {\n        return \"<rodape>gerado pela implementação B<\/rodape>\"; // gancho sobrescrito\n    }\n}"}, {"path": "src/main/java/negocio/command/Command.java", "content": "package negocio.command;\n\n/**\n * PADRÃO COMMAND — papel: Command (interface).\n * \"Quero transformar uma ação em objeto\" (para fila, histórico, desfazer, botões).\n *\n * TROQUE (se o enunciado pedir): nomes em português, ex.:\n *   interface Comando { void executar(); void desfazer(); }\n * Se não pedir desfazer, apague undo() daqui e das classes.\n */\npublic interface Command {\n    void execute();\n    void undo();\n}"}, {"path": "src/main/java/negocio/command/Receptor.java", "content": "package negocio.command;\n\n/**\n * PADRÃO COMMAND — papel: Receiver (receptor).\n * Classe comum que faz o trabalho de verdade. Não sabe nada de Command.\n * TROQUE: nome (ex.: Impressora, Editor, TelevisaoSony, Luz) e os métodos.\n */\npublic class Receptor {\n    private boolean ligado = false;\n    private int valor = 0;\n\n    public void ligar() {\n        ligado = true;\n        System.out.println(\"Receptor ligado\");\n    }\n\n    public void desligar() {\n        ligado = false;\n        System.out.println(\"Receptor desligado\");\n    }\n\n    public void setValor(int valor) {\n        this.valor = valor;\n        System.out.println(\"Valor do receptor agora é \" + valor);\n    }\n\n    public int getValor() {\n        return valor;\n    }\n\n    public boolean isLigado() {\n        return ligado;\n    }\n}"}, {"path": "src/main/java/negocio/command/ComandoLigar.java", "content": "package negocio.command;\n\n/**\n * PADRÃO COMMAND — papel: Comando concreto (ação simples).\n * Guarda o receptor no construtor e chama o método dele no execute().\n * TROQUE: nome (ex.: ImprimirCommand, PausarCommand) e o que execute/undo chamam.\n */\npublic class ComandoLigar implements Command {\n    private Receptor receptor;\n\n    public ComandoLigar(Receptor receptor) {\n        this.receptor = receptor;\n    }\n\n    @Override\n    public void execute() {\n        receptor.ligar();\n    }\n\n    @Override\n    public void undo() {\n        receptor.desligar(); // desfazer = a ação contrária\n    }\n}"}, {"path": "src/main/java/negocio/command/ComandoAlterarValor.java", "content": "package negocio.command;\n\n/**\n * PADRÃO COMMAND — papel: Comando concreto que GUARDA O ESTADO ANTERIOR para desfazer.\n * É assim que se faz undo de verdade (ex.: RemoverTextoCommand guarda o texto removido).\n * TROQUE: nome (ex.: InserirTextoCommand, AlterarVolumeCommand) e os dados guardados.\n */\npublic class ComandoAlterarValor implements Command {\n    private Receptor receptor;\n    private int novoValor;\n    private int valorAnterior;\n\n    public ComandoAlterarValor(Receptor receptor, int novoValor) {\n        this.receptor = receptor;\n        this.novoValor = novoValor;\n    }\n\n    @Override\n    public void execute() {\n        valorAnterior = receptor.getValor(); // guarda antes de mudar\n        receptor.setValor(novoValor);\n    }\n\n    @Override\n    public void undo() {\n        receptor.setValor(valorAnterior);\n    }\n}"}, {"path": "src/main/java/negocio/command/MacroCommand.java", "content": "package negocio.command;\n\nimport java.util.List;\n\n/**\n * PADRÃO COMMAND — Macro-comando: um comando que executa vários (ex.: ModoCinemaCommand).\n * Apague se a prova não pedir.\n */\npublic class MacroCommand implements Command {\n    private List<Command> comandos;\n\n    public MacroCommand(List<Command> comandos) {\n        this.comandos = comandos;\n    }\n\n    @Override\n    public void execute() {\n        for (Command c : comandos) {\n            c.execute();\n        }\n    }\n\n    @Override\n    public void undo() {\n        for (int i = comandos.size() - 1; i >= 0; i--) { // desfaz na ordem inversa\n            comandos.get(i).undo();\n        }\n    }\n}"}, {"path": "src/main/java/negocio/command/NoCommand.java", "content": "package negocio.command;\n\n/**\n * Comando que não faz nada (padrão Null Object). Evita if (comando != null).\n */\npublic class NoCommand implements Command {\n\n    @Override\n    public void execute() {\n    }\n\n    @Override\n    public void undo() {\n    }\n}"}, {"path": "src/main/java/negocio/command/Invocador.java", "content": "package negocio.command;\n\nimport java.util.LinkedList;\nimport java.util.Queue;\nimport java.util.Stack;\n\n/**\n * PADRÃO COMMAND — papel: Invoker (invocador).\n * Guarda e dispara comandos SEM saber o que eles fazem. Só conhece a interface Command.\n *   - fila (Queue): primeiro a entrar, primeiro a sair -> \"executar depois\"\n *   - histórico (Stack): último feito, primeiro desfeito -> \"desfazer\"\n *\n * TROQUE: nome (ex.: FilaDeImpressao, Controle, Editor) e apague a parte que não usar.\n */\npublic class Invocador {\n    private Queue<Command> fila = new LinkedList<>();\n    private Stack<Command> historico = new Stack<>();\n\n    // executa na hora e guarda no histórico\n    public void executar(Command comando) {\n        comando.execute();\n        historico.push(comando);\n    }\n\n    // só guarda na fila (nada acontece ainda)\n    public void adicionar(Command comando) {\n        fila.add(comando);\n        System.out.println(\"Comando adicionado à fila. Total: \" + fila.size());\n    }\n\n    // executa tudo que está na fila, em ordem\n    public void executarTodos() {\n        while (!fila.isEmpty()) {\n            executar(fila.poll());\n        }\n    }\n\n    public void desfazer() {\n        if (!historico.isEmpty()) {\n            historico.pop().undo();\n        } else {\n            System.out.println(\"Nada para desfazer\");\n        }\n    }\n}"}, {"path": "src/main/java/negocio/state/Estado.java", "content": "package negocio.state;\n\n/**\n * PADRÃO STATE — papel: State (interface).\n * \"O comportamento muda conforme o estado atual.\"\n * Um método para CADA EVENTO. Cada método devolve o PRÓXIMO estado (estilo do professor).\n *\n * TROQUE: nome (ex.: EstadoMaquina, EstadoPersonagem) e os eventos\n *         (ex.: selecionarProduto, inserirDinheiro, cancelar | andar, pular, atacar).\n *\n * Exemplo de mapeamento para a máquina de venda:\n *   EstadoInicial = SemProduto, EstadoIntermediario = ComProduto/Pagamento, EstadoFinal = ProdutoLiberado\n *   eventoA = selecionarProduto, eventoB = inserirDinheiro/pagar\n */\npublic interface Estado {\n    Estado eventoA(ContextoEstado contexto);\n    Estado eventoB(ContextoEstado contexto);\n    Estado cancelar(ContextoEstado contexto);\n}"}, {"path": "src/main/java/negocio/state/ContextoEstado.java", "content": "package negocio.state;\n\n/**\n * PADRÃO STATE — papel: Contexto (o objeto cujo comportamento muda).\n * Guarda o estado atual e DELEGA. Nenhum if perguntando \"em que estado estou?\".\n * Não tem setEstado público: só os estados decidem a transição.\n *\n * TROQUE: nome (ex.: Maquina, Personagem, Mario, Pedido), atributos e eventos.\n */\npublic class ContextoEstado {\n    private Estado estado;\n    private int valor;\n    private int valorNecessario;\n\n    public ContextoEstado(int valorNecessario) {\n        this.valorNecessario = valorNecessario;\n        this.estado = new EstadoInicial();\n    }\n\n    public void eventoA() {\n        this.estado = this.estado.eventoA(this);\n    }\n\n    public void eventoB() {\n        this.estado = this.estado.eventoB(this);\n    }\n\n    public void cancelar() {\n        this.estado = this.estado.cancelar(this);\n    }\n\n    public String getNomeEstado() {\n        return estado.getClass().getSimpleName();\n    }\n\n    // dados que os estados podem consultar/alterar\n    void adicionarValor(int quanto) {\n        this.valor += quanto;\n    }\n\n    void zerarValor() {\n        this.valor = 0;\n    }\n\n    public int getValor() {\n        return valor;\n    }\n\n    public int getValorNecessario() {\n        return valorNecessario;\n    }\n}"}, {"path": "src/main/java/negocio/state/EstadoInicial.java", "content": "package negocio.state;\n\n/**\n * PADRÃO STATE — papel: Estado concreto.\n * Cada estado responde a TODOS os eventos: ou muda de estado, ou diz que não pode e fica (return this).\n * TROQUE: nome (ex.: SemProduto, Parado, Pequeno) e as transições.\n */\npublic class EstadoInicial implements Estado {\n\n    @Override\n    public Estado eventoA(ContextoEstado contexto) {\n        System.out.println(\"Inicial -> Intermediário\");\n        return new EstadoIntermediario();\n    }\n\n    @Override\n    public Estado eventoB(ContextoEstado contexto) {\n        System.out.println(\"Não pode fazer o evento B no estado inicial\");\n        return this;\n    }\n\n    @Override\n    public Estado cancelar(ContextoEstado contexto) {\n        System.out.println(\"Nada para cancelar\");\n        return this;\n    }\n}"}, {"path": "src/main/java/negocio/state/EstadoIntermediario.java", "content": "package negocio.state;\n\n/**\n * PADRÃO STATE — papel: Estado concreto.\n * Usa dados do contexto para decidir a transição (ex.: saldo suficiente?).\n * TROQUE: nome (ex.: ComProduto, Pagamento, Correndo) e as regras.\n */\npublic class EstadoIntermediario implements Estado {\n\n    @Override\n    public Estado eventoA(ContextoEstado contexto) {\n        System.out.println(\"Já está no estado intermediário\");\n        return this;\n    }\n\n    @Override\n    public Estado eventoB(ContextoEstado contexto) {\n        contexto.adicionarValor(1);\n        if (contexto.getValor() >= contexto.getValorNecessario()) {\n            System.out.println(\"Valor atingido: Intermediário -> Final\");\n            return new EstadoFinal();\n        }\n        System.out.println(\"Valor ainda insuficiente (\" + contexto.getValor() + \"/\" + contexto.getValorNecessario() + \")\");\n        return this;\n    }\n\n    @Override\n    public Estado cancelar(ContextoEstado contexto) {\n        contexto.zerarValor();\n        System.out.println(\"Cancelado: Intermediário -> Inicial\");\n        return new EstadoInicial();\n    }\n}"}, {"path": "src/main/java/negocio/state/EstadoFinal.java", "content": "package negocio.state;\n\n/**\n * PADRÃO STATE — papel: Estado concreto.\n * TROQUE: nome (ex.: ProdutoLiberado, Morto) e as regras.\n * Se for um estado terminal (Morto), faça todos os métodos avisarem e retornarem this.\n */\npublic class EstadoFinal implements Estado {\n\n    @Override\n    public Estado eventoA(ContextoEstado contexto) {\n        contexto.zerarValor();\n        System.out.println(\"Concluído e reiniciado: Final -> Inicial\");\n        return new EstadoInicial();\n    }\n\n    @Override\n    public Estado eventoB(ContextoEstado contexto) {\n        System.out.println(\"Já concluído, não aceita evento B\");\n        return this;\n    }\n\n    @Override\n    public Estado cancelar(ContextoEstado contexto) {\n        System.out.println(\"Já concluído, não dá para cancelar\");\n        return this;\n    }\n}"}, {"path": "src/main/java/negocio/iterator/Item.java", "content": "package negocio.iterator;\n\n/**\n * O elemento da coleção.\n * TROQUE: nome (ex.: Aluno, Musica, MenuItem) e atributos.\n */\npublic class Item {\n    private String nome;\n    private double valor;\n\n    public Item(String nome, double valor) {\n        this.nome = nome;\n        this.valor = valor;\n    }\n\n    public String getNome() {\n        return nome;\n    }\n\n    public double getValor() {\n        return valor;\n    }\n\n    @Override\n    public String toString() {\n        return \"Item [nome=\" + nome + \", valor=\" + valor + \"]\";\n    }\n}"}, {"path": "src/main/java/negocio/iterator/Colecao.java", "content": "package negocio.iterator;\n\nimport java.util.Iterator;\nimport java.util.List;\n\nimport persistencia.Repositorio;\n\n/**\n * PADRÃO ITERATOR — papel: Coleção (agregado).\n * \"Quero percorrer sem que o cliente saiba como os itens estão guardados.\"\n * A estrutura interna (aqui um ARRAY) fica escondida. Quem usa só vê hasNext/next.\n * Implementa Iterable: permite usar for (Item i : colecao).\n *\n * Também mostra as 3 camadas: o negócio busca os dados na persistência pela interface Repositorio.\n *\n * TROQUE: nome (ex.: Turma, Playlist, Cardapio) e o tipo Item.\n */\npublic class Colecao implements Iterable<Item> {\n    private Item[] itens;\n\n    public Colecao(Repositorio<Item> repositorio) {\n        List<Item> lista = repositorio.listarTodos();\n        this.itens = lista.toArray(new Item[0]);\n    }\n\n    @Override\n    public Iterator<Item> iterator() {\n        return new IteradorNormal(itens);\n    }\n\n    public Iterator<Item> iteradorReverso() {\n        return new IteradorReverso(itens);\n    }\n}"}, {"path": "src/main/java/negocio/iterator/IteradorNormal.java", "content": "package negocio.iterator;\n\nimport java.util.Iterator;\n\n/**\n * PADRÃO ITERATOR — papel: Iterador concreto.\n * hasNext() só PERGUNTA (não avança nada). next() devolve e avança.\n * TROQUE: nome (ex.: TurmaIterator) e o tipo Item.\n */\npublic class IteradorNormal implements Iterator<Item> {\n    private Item[] itens;\n    private int pos;\n\n    public IteradorNormal(Item[] itens) {\n        this.itens = itens;\n        this.pos = 0;\n    }\n\n    @Override\n    public boolean hasNext() {\n        return pos < itens.length;\n    }\n\n    @Override\n    public Item next() {\n        return itens[pos++];\n    }\n}"}, {"path": "src/main/java/negocio/iterator/IteradorReverso.java", "content": "package negocio.iterator;\n\nimport java.util.Iterator;\n\n/**\n * PADRÃO ITERATOR — papel: Iterador concreto (outra forma de percorrer a mesma coleção).\n * Apague se a prova não pedir. Para aleatório: embaralhe uma CÓPIA do array no construtor.\n */\npublic class IteradorReverso implements Iterator<Item> {\n    private Item[] itens;\n    private int pos;\n\n    public IteradorReverso(Item[] itens) {\n        this.itens = itens;\n        this.pos = itens.length - 1;\n    }\n\n    @Override\n    public boolean hasNext() {\n        return pos >= 0;\n    }\n\n    @Override\n    public Item next() {\n        return itens[pos--];\n    }\n}"}, {"path": "src/main/java/negocio/decorator/Componente.java", "content": "package negocio.decorator;\n\n/**\n * PADRÃO DECORATOR — papel: Componente (o tipo base comum).\n * \"Quero adicionar extras combináveis sem criar uma subclasse por combinação.\"\n * TROQUE: nome (ex.: Bebida, Notificacao, Lanche) e os métodos (ex.: descricao/preco, enviar).\n */\npublic interface Componente {\n    String descricao();\n    double preco();\n}"}, {"path": "src/main/java/negocio/decorator/ComponenteConcreto.java", "content": "package negocio.decorator;\n\n/**\n * PADRÃO DECORATOR — papel: Componente concreto (o objeto do centro, sem extras).\n * TROQUE: nome (ex.: Cafe, Email, Pizza), descrição e preço base.\n * Para mais bases (Chá, Chocolate): copie este arquivo.\n */\npublic class ComponenteConcreto implements Componente {\n\n    @Override\n    public String descricao() {\n        return \"Base\";\n    }\n\n    @Override\n    public double preco() {\n        return 5.0;\n    }\n}"}, {"path": "src/main/java/negocio/decorator/Decorador.java", "content": "package negocio.decorator;\n\n/**\n * PADRÃO DECORATOR — papel: Decorador abstrato.\n * A ASSINATURA DO PADRÃO: ele É um Componente (implements) e TEM um Componente (atributo).\n * Por padrão repassa tudo para quem está dentro; os decoradores concretos acrescentam.\n *\n * TROQUE: nome (ex.: DecoradorBebida, CondimentDecorator, NotificacaoDecorator).\n */\npublic abstract class Decorador implements Componente {\n    protected Componente componente; // o que está embrulhado\n\n    public Decorador(Componente componente) {\n        this.componente = componente;\n    }\n\n    @Override\n    public String descricao() {\n        return componente.descricao();\n    }\n\n    @Override\n    public double preco() {\n        return componente.preco();\n    }\n}"}, {"path": "src/main/java/negocio/decorator/DecoradorA.java", "content": "package negocio.decorator;\n\n/**\n * PADRÃO DECORATOR — papel: Decorador concreto.\n * Pergunta para quem está dentro e SOMA a sua parte.\n * TROQUE: nome (ex.: Leite, SMS, Bacon), texto e valor.\n */\npublic class DecoradorA extends Decorador {\n\n    public DecoradorA(Componente componente) {\n        super(componente);\n    }\n\n    @Override\n    public String descricao() {\n        return componente.descricao() + \" + Extra A\";\n    }\n\n    @Override\n    public double preco() {\n        return componente.preco() + 2.0;\n    }\n}"}, {"path": "src/main/java/negocio/decorator/DecoradorB.java", "content": "package negocio.decorator;\n\n/**\n * PADRÃO DECORATOR — papel: Decorador concreto.\n * TROQUE: nome (ex.: Caramelo, Push, QueijoExtra), texto e valor.\n * Para mais adicionais: copie este arquivo.\n */\npublic class DecoradorB extends Decorador {\n\n    public DecoradorB(Componente componente) {\n        super(componente);\n    }\n\n    @Override\n    public String descricao() {\n        return componente.descricao() + \" + Extra B\";\n    }\n\n    @Override\n    public double preco() {\n        return componente.preco() + 3.0;\n    }\n}"}, {"path": "src/main/java/persistencia/Repositorio.java", "content": "package persistencia;\n\nimport java.util.List;\n\n/**\n * CAMADA DE PERSISTÊNCIA: o contrato de onde os dados ficam guardados.\n * O negócio depende desta interface, nunca da implementação.\n * Para trocar memória por banco, crie outra classe que implemente esta interface.\n */\npublic interface Repositorio<T> {\n    void salvar(T objeto);\n    void remover(T objeto);\n    List<T> listarTodos();\n}"}, {"path": "src/main/java/persistencia/RepositorioMemoria.java", "content": "package persistencia;\n\nimport java.util.ArrayList;\nimport java.util.List;\n\n/**\n * Implementação em memória (uma lista). Serve para qualquer tipo T.\n * TROQUE (opcional): crie um RepositorioPostgres<T> com JDBC se a prova pedir banco.\n */\npublic class RepositorioMemoria<T> implements Repositorio<T> {\n    private List<T> dados = new ArrayList<>();\n\n    @Override\n    public void salvar(T objeto) {\n        dados.add(objeto);\n    }\n\n    @Override\n    public void remover(T objeto) {\n        dados.remove(objeto);\n    }\n\n    @Override\n    public List<T> listarTodos() {\n        return new ArrayList<>(dados); // devolve uma cópia: ninguém mexe na lista interna\n    }\n}"}, {"path": "pom.xml", "content": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project xmlns=\"http://maven.apache.org/POM/4.0.0\"\n         xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n         xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\">\n    <modelVersion>4.0.0<\/modelVersion>\n\n    <!-- TROQUE: groupId e artifactId pelo nome do seu projeto -->\n    <groupId>modelo_padroes<\/groupId>\n    <artifactId>modelo_padroes<\/artifactId>\n    <version>1.0-SNAPSHOT<\/version>\n\n    <properties>\n        <maven.compiler.source>17<\/maven.compiler.source>\n        <maven.compiler.target>17<\/maven.compiler.target>\n        <project.build.sourceEncoding>UTF-8<\/project.build.sourceEncoding>\n    <\/properties>\n\n    <build>\n        <plugins>\n            <!-- permite rodar com: mvn compile exec:java -->\n            <plugin>\n                <groupId>org.codehaus.mojo<\/groupId>\n                <artifactId>exec-maven-plugin<\/artifactId>\n                <version>3.1.0<\/version>\n                <configuration>\n                    <mainClass>apresentacao.Main<\/mainClass>\n                <\/configuration>\n            <\/plugin>\n        <\/plugins>\n    <\/build>\n<\/project>"}, {"path": "README.md", "content": "# Modelo de projeto: padrões de projeto em 3 camadas\n\nProjeto Maven (Java 17, sem dependências externas) com um modelo pronto de cada padrão\nvisto na disciplina: Strategy, Observer, Template Method, Command, State, Iterator e Decorator.\n\nCada arquivo tem um comentário no topo dizendo **qual papel ele tem no padrão** e\n**o que trocar** (linhas marcadas com `TROQUE`).\n\n## Como rodar\n\nNa IDE (VS Code, IntelliJ, NetBeans): abra a pasta do projeto e rode `apresentacao.Main`.\nAparece um menu para escolher o padrão.\n\nNo terminal, dentro da pasta do projeto:\n\n```bash\nmvn compile\njava -cp target/classes apresentacao.Main          # com menu\njava -cp target/classes apresentacao.Main todos    # roda todos direto\n```\n\n## As três camadas\n\n```text\nsrc/main/java/\n├── apresentacao/   -> Main (menu) + uma Demo por padrão. Só chama o negócio e mostra o resultado.\n├── negocio/        -> as classes e regras. Um subpacote por padrão.\n│   ├── strategy/\n│   ├── observer/\n│   ├── templatemethod/\n│   ├── command/\n│   ├── state/\n│   ├── iterator/\n│   └── decorator/\n└── persistencia/   -> Repositorio<T> (interface) + RepositorioMemoria<T> (lista em memória).\n```\n\nRegra: apresentacao → negocio → persistencia. Nunca ao contrário.\nO exemplo do Iterator mostra as três camadas juntas: a Demo cria o repositório,\no negócio (`Colecao`) lê os itens dele pela interface `Repositorio`.\n\n## O que trocar em cada padrão\n\n| Padrão | Arquivo | Papel | Troque por (exemplos) |\n|---|---|---|---|\n| Strategy | `Estrategia` | interface do algoritmo | `CalculoFrete`, `EstrategiaOrdenacao` |\n| | `EstrategiaA`, `EstrategiaB` | estratégias concretas | `FretePAC`, `FreteSedex`, `OrdenarPorNome` |\n| | `Contexto` | quem usa a estratégia | `Pedido`, `Catalogo` |\n| Observer | `Observer<T>`, `Subject<T>` | interfaces | `Observador.atualizar(...)` se o enunciado pedir |\n| | `SubjectConcreto` | objeto observado | `Pedido`, `EstacaoMeteorologica`, `Canal` |\n| | `ObservadorA`, `ObservadorB` | observadores | `Cliente`, `Estoque`, `Painel`, `Alerta` |\n| | `Status` | enum dos estados | os status do enunciado |\n| Template Method | `ClasseAbstrata` | esqueleto com método `final` | `Relatorio.gerar()`, `ImportadorDados.importar()` |\n| | `ImplementacaoA`, `ImplementacaoB` | subclasses | `RelatorioPDF`, `ImportadorCSV` |\n| Command | `Command` | interface | `Comando { executar(); desfazer(); }` |\n| | `Receptor` | quem faz o trabalho | `Impressora`, `Editor`, `Televisao` |\n| | `ComandoLigar`, `ComandoAlterarValor` | comandos concretos | `ImprimirCommand`, `InserirTextoCommand` |\n| | `Invocador` | fila + histórico | `FilaDeImpressao`, `Controle` |\n| | `MacroCommand`, `NoCommand` | extras | apague se não precisar |\n| State | `Estado` | interface (um método por evento) | `EstadoMaquina`, `EstadoPersonagem` |\n| | `EstadoInicial`, `EstadoIntermediario`, `EstadoFinal` | estados | `SemProduto`, `ComProduto`, `ProdutoLiberado` |\n| | `ContextoEstado` | objeto que muda de comportamento | `Maquina`, `Personagem` |\n| Iterator | `Item` | elemento | `Aluno`, `Musica` |\n| | `Colecao` | coleção que esconde a estrutura | `Turma`, `Playlist` |\n| | `IteradorNormal`, `IteradorReverso` | iteradores | `TurmaIterator` |\n| Decorator | `Componente` | tipo base | `Bebida`, `Notificacao` |\n| | `ComponenteConcreto` | objeto do centro | `Cafe`, `Email` |\n| | `Decorador` | decorador abstrato (É e TEM um Componente) | `DecoradorBebida` |\n| | `DecoradorA`, `DecoradorB` | extras | `Leite`, `Caramelo`, `SMS` |\n\n## Dica para renomear sem quebrar nada\n\nUse o \"Rename\" da IDE (F2 no VS Code e no NetBeans, Shift+F6 no IntelliJ) em cima do nome da\nclasse. Ele renomeia o arquivo e todas as referências de uma vez. Renomear só o texto à mão\ndeixa o nome do arquivo diferente do nome da classe e o Java não compila.\n\nPara criar mais um item (outra estratégia, outro observador, outro adicional),\ncopie o arquivo concreto, renomeie e mude só o conteúdo. As classes \"de cima\"\n(Contexto, Subject, Invocador...) não precisam mudar: é o princípio aberto/fechado.\n\n## Checklist rápido por padrão\n\n- **Strategy**: contexto guarda a interface, tem `set...` e delega. Estratégia padrão no construtor.\n- **Observer**: lista do tipo da interface, `add`/`remove`, laço chamando `update`, `changeState` altera e notifica.\n- **Template Method**: método template `final`, pelo menos uma etapa `abstract`, gancho opcional. Na Main, chame o método template.\n- **Command**: comando guarda o receptor no construtor; invocador só conhece a interface; fila = `Queue`, desfazer = `Stack`.\n- **State**: um método por evento em todos os estados; contexto delega; sem `setEstado` público.\n- **Iterator**: `hasNext` não avança; a coleção cria o iterador; estrutura interna escondida.\n- **Decorator**: decorador É e TEM um componente; cada camada chama a de dentro e soma a sua parte."}], "demos": {"strategy": "################ STRATEGY ################\nCom estratégia A: 110.00\nCom estratégia B: 90.00", "observer": "################ OBSERVER ################\n[Ana] ficou sabendo: Pedido 1001 agora está PAGO\n[Bruno] ficou sabendo: Pedido 1001 agora está PAGO\n[Observador B] reagindo ao PAGO do item 1001\n-- Ana deixou de observar --\n[Bruno] ficou sabendo: Pedido 1001 agora está ENVIADO", "templatemethod": "################ TEMPLATE METHOD ################\n--- abrindo ImplementacaoA ---\nDADOS DE EXEMPLO\n(rodapé padrão)\n--- fechando ---\n--- abrindo ImplementacaoB ---\n<dado>dados de exemplo<\/dado>\n<rodape>gerado pela implementação B<\/rodape>\n--- fechando ---", "command": "################ COMMAND ################\nComando adicionado à fila. Total: 1\nComando adicionado à fila. Total: 2\nComando adicionado à fila. Total: 3\n-- executando a fila --\nReceptor ligado\nValor do receptor agora é 10\nValor do receptor agora é 50\n-- desfazendo --\nValor do receptor agora é 10\nValor do receptor agora é 0\n-- macro --\nValor do receptor agora é 99\nReceptor ligado", "state": "################ STATE ################\nEstado: EstadoInicial\nNão pode fazer o evento B no estado inicial\nInicial -> Intermediário\nValor ainda insuficiente (1/2)\nValor atingido: Intermediário -> Final\nEstado: EstadoFinal\nJá concluído, não dá para cancelar\nConcluído e reiniciado: Final -> Inicial\nEstado: EstadoInicial", "iterator": "################ ITERATOR ################\n-- normal --\nItem [nome=Primeiro, valor=10.0]\nItem [nome=Segundo, valor=20.0]\nItem [nome=Terceiro, valor=30.0]\n-- reverso --\nItem [nome=Terceiro, valor=30.0]\nItem [nome=Segundo, valor=20.0]\nItem [nome=Primeiro, valor=10.0]\n-- for-each (porque Colecao é Iterable) --\nPrimeiro\nSegundo\nTerceiro", "decorator": "################ DECORATOR ################\nBase + Extra A + Extra B + Extra A\nTotal: R$ 12.00"}};
+
+/* ===================== METADADOS ===================== */
+const PADROES = {
+ strategy:{nome:"Strategy",frase:"Várias formas de fazer a mesma coisa; quem está de fora escolhe qual usar.",
+  uml:`«interface» Estrategia ◀──── Contexto
+  + executar(valor)           - estrategia: Estrategia
+        ▲                     + setEstrategia(e)
+   ┌────┴─────┐               + executarEstrategia() → estrategia.executar(valor)
+EstrategiaA EstrategiaB`,
+  check:["Contexto guarda a INTERFACE e tem setEstrategia(...)","executarEstrategia() só delega, sem if","Estratégia padrão no construtor (evita NullPointerException)","Nova regra = novo arquivo copiando EstrategiaA; o Contexto não muda"],
+  vira:"Pedido + CalculoFrete + FretePAC/FreteSedex · Catalogo + EstrategiaOrdenacao + OrdenarPorNome"},
+ observer:{nome:"Observer",frase:"Quando o objeto muda, todos os inscritos são avisados.",
+  uml:`«interface» Subject<T>              «interface» Observer<T>
+ addObserver / removeObserver          + update(T t)
+ notifyObservers / changeState               ▲
+        ▲                            ┌───────┴──────┐
+ SubjectConcreto ── List<Observer> ─▶ ObservadorA  ObservadorB
+ changeState(s): status = s; notifyObservers();`,
+  check:["Lista do tipo da interface: List<Observer<...>>","addObserver e removeObserver","notifyObservers() percorre a lista chamando update(this)","changeState() altera E notifica","Cada observador decide sozinho o que fazer"],
+  vira:"Pedido + Cliente/Estoque/NotaFiscal · EstacaoMeteorologica + Painel/Alerta (troque Status por double)"},
+ templatemethod:{nome:"Template Method",frase:"Processo fixo num método final; as subclasses mudam só algumas etapas.",
+  uml:`«abstract» ClasseAbstrata
+ + executar(entrada) {final} ── abrir(); processar(); rodape(); fechar();
+ # abrir()                 etapa comum
+ # processar() {abstract}  etapa que varia
+ # rodape()                gancho (opcional)
+            ▲
+   ┌────────┴────────┐
+ImplementacaoA   ImplementacaoB (sobrescreve o gancho)`,
+  check:["Método template é final","Pelo menos uma etapa abstract","Gancho tem corpo padrão (sobrescrever é opcional)","Na Main, chame SEMPRE o método template, nunca uma etapa direto"],
+  vira:"Relatorio.gerar() + RelatorioPDF/HTML/CSV · ImportadorDados.importar() + ImportadorCSV/JSON/XML"},
+ command:{nome:"Command",frase:"Cada ação vira um objeto: pode ir para fila, histórico e ser desfeita.",
+  uml:`«interface» Command          Invocador (Invoker)
+ + execute() / undo()        - fila: Queue<Command>
+        ▲                    - historico: Stack<Command>
+ ┌──────┼──────────┬──────────┐
+ComandoLigar ComandoAlterarValor MacroCommand NoCommand
+      │ guarda o receptor
+      ▼
+  Receptor (Receiver): ligar() / desligar() / setValor()`,
+  check:["Comando guarda o receptor (e os dados) no construtor","execute() chama o método do receptor","Invocador só conhece a interface Command","Fila = Queue (FIFO); desfazer = Stack (LIFO)","Undo de verdade guarda o estado anterior (ComandoAlterarValor)"],
+  vira:"Impressora + ImprimirCommand + FilaDeImpressao · Editor + InserirTextoCommand + histórico"},
+ state:{nome:"State",frase:"O comportamento depende do estado atual; os próprios estados decidem a transição.",
+  uml:`ContextoEstado ──────▶ «interface» Estado
+ - estado               + eventoA(c): Estado
+ eventoA():             + eventoB(c): Estado
+  estado = estado.eventoA(this)   + cancelar(c): Estado
+                              ▲
+        ┌─────────────────────┼────────────────┐
+  EstadoInicial ─A→ EstadoIntermediario ─B (valor ok)→ EstadoFinal ─A→ EstadoInicial`,
+  check:["Um método por evento, em TODOS os estados","Cada método devolve o próximo estado (ou this)","Contexto delega: estado = estado.evento(this)","Sem setEstado público","Estado terminal (Morto): todos os métodos retornam this"],
+  vira:"Maquina + SemProduto/ComProduto/Pagamento/ProdutoLiberado · Personagem + Parado/Correndo/Pulando/Morto"},
+ iterator:{nome:"Iterator",frase:"Percorrer a coleção sem saber como ela guarda os itens.",
+  uml:`Colecao implements Iterable<Item> ── cria ──▶ «interface» Iterator<Item>
+ - itens: Item[]  (escondido)                  + hasNext() / + next()
+ + iterator()                                          ▲
+ + iteradorReverso()                       ┌───────────┴──────────┐
+        │ lê da persistência          IteradorNormal      IteradorReverso
+        ▼
+ Repositorio<Item> (camada persistencia)`,
+  check:["hasNext() só pergunta, não avança","next() devolve e avança","A coleção cria o iterador (iterator())","Implementar Iterable libera o for-each","Estrutura interna escondida (array, lista ou banco)"],
+  vira:"Turma + Aluno · Playlist + Musica + IteradorNormal/IteradorReverso"},
+ decorator:{nome:"Decorator",frase:"Extras combináveis embrulhando o objeto, sem uma subclasse por combinação.",
+  uml:`         «interface» Componente
+         + descricao() / + preco()
+                   ▲
+       ┌───────────┴─────────────┐
+ComponenteConcreto     «abstract» Decorador ◆──▶ Componente
+                        # componente  (É e TEM um Componente)
+                               ▲
+                        ┌──────┴──────┐
+                    DecoradorA    DecoradorB
+              preco() = componente.preco() + extra`,
+  check:["Decorador É um Componente (implements) e TEM um (atributo)","Cada camada chama a de dentro e soma a sua parte","Pode repetir e combinar em qualquer ordem","Mais extras = copiar DecoradorA"],
+  vira:"Bebida + Cafe + Leite/Caramelo · Notificacao + Email + SMS/Push/Log"}
+};
+const DEMO_OF = {strategy:"DemoStrategy",observer:"DemoObserver",templatemethod:"DemoTemplateMethod",command:"DemoCommand",state:"DemoState",iterator:"DemoIterator",decorator:"DemoDecorator"};
+const LAYERS = [["apresentacao","Apresentação","Main com menu e uma Demo por padrão. Recebe a escolha, chama o negócio e mostra o resultado. Sem regra."],["negocio","Negócio","As classes e regras, um subpacote por padrão. É aqui que você troca nomes e conteúdo."],["persistencia","Persistência","Repositorio<T> (interface) e RepositorioMemoria<T>. Troque por banco sem mexer no negócio."]];
+
+const FILES = DATA.files.map(f=>{
+  const parts=f.path.split("/");
+  let layer="raiz", pad="geral";
+  const j=parts.indexOf("java");
+  if(j>=0){ layer=parts[j+1]; if(layer==="negocio") pad=parts[j+2]; }
+  const name=parts[parts.length-1];
+  if(layer==="apresentacao"){ for(const [k,v] of Object.entries(DEMO_OF)) if(name===v+".java") pad=k; }
+  const lines=f.content.split("\n");
+  let papel=""; for(const l of lines){ const m=l.match(/papel:\s*(.+)$/i); if(m){papel=m[1].replace(/\*\/\s*$/,"").trim();break;} }
+  let resumo=""; const jd=f.content.match(/\/\*\*([\s\S]*?)\*\//); if(jd){ resumo=jd[1].split("\n").map(s=>s.replace(/^\s*\*\s?/,"")).filter(s=>s.trim()&&!/TROQUE/.test(s)&&!/PADRÃO|papel:/i.test(s)).slice(0,3).join(" ").trim(); }
+  if(!papel && layer==="persistencia") papel = name.startsWith("Repositorio.")?"Interface da persistência":"Implementação em memória";
+  if(!papel && layer==="apresentacao") papel = name==="Main.java"?"Menu da aplicação":"Demonstração do padrão";
+  if(!papel && name==="pom.xml") papel="Configuração do Maven";
+  if(!papel && name==="README.md") papel="Instruções e mapa de trocas";
+  if(!papel && name==="Status.java") papel="Enum dos estados observados";
+  if(!papel && name==="Item.java") papel="Elemento da coleção";
+  const troques=[]; lines.forEach((l,i)=>{ if(/TROQUE/.test(l)) troques.push({n:i+1,t:l.replace(/^\s*(\/\/|\*|<!--)\s*/,"").replace(/-->\s*$/,"").trim()}); });
+  return {...f,parts,layer,pad,name,lines,papel,resumo,troques};
+});
+const byPath = Object.fromEntries(FILES.map(f=>[f.path,f]));
+const demoOut = DATA.demos;
+
+/* ===================== UTIL ===================== */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const norm=s=>String(s).normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
+const padColor=p=>`var(--p-${p})`;
+const layerColor=l=>`var(--l-${l},var(--muted))`;
+function highlight(text,q){
+  const raw=String(text); const words=norm(q).trim().split(/\s+/).filter(w=>w.length>1);
+  if(!words.length) return esc(raw);
+  const nt=norm(raw); const rs=[];
+  for(const w of words){let k=nt.indexOf(w);while(k>=0){rs.push([k,k+w.length]);k=nt.indexOf(w,k+w.length);}}
+  if(!rs.length) return esc(raw);
+  rs.sort((a,b)=>a[0]-b[0]); const m=[]; for(const r of rs){ if(m.length&&r[0]<=m[m.length-1][1]) m[m.length-1][1]=Math.max(m[m.length-1][1],r[1]); else m.push(r.slice()); }
+  let out="",i=0; for(const [a,b] of m){ out+=esc(raw.slice(i,a))+"<mark>"+esc(raw.slice(a,b))+"</mark>"; i=b; } return out+esc(raw.slice(i));
+}
+const KW=new Set("public private protected class interface abstract extends implements return new void final static if else for while this super null true false import package enum try catch throw throws switch case default break continue".split(" "));
+const TY=new Set("String double int boolean List ArrayList LinkedList Queue Stack Iterator Iterable Scanner Integer System Math NumberFormatException Override".split(" "));
+function cmt(s){ return '<span class="cm">'+esc(s).replace(/TROQUE/g,'<span class="tqw">TROQUE</span>')+"</span>"; }
+function hlLine(line,st,lang){
+  if(lang==="xml"){ return {html: line.includes("<!--")? cmt(line) : esc(line).replace(/(&lt;\/?)([\w.:-]+)/g,'$1<span class="kw">$2</span>'), st}; }
+  if(lang==="md"){ return {html: /^#/.test(line)?'<span class="ty">'+esc(line)+"</span>":esc(line), st}; }
+  let out="", i=0;
+  if(st.block){ const e=line.indexOf("*/"); if(e<0) return {html:cmt(line),st}; out+=cmt(line.slice(0,e+2)); i=e+2; st.block=false; }
+  const re=/(\/\*)|(\/\/.*)|("(?:[^"\\]|\\.)*")|(@\w+)|([A-Za-z_]\w*)/g; re.lastIndex=i; let m, last=i;
+  while((m=re.exec(line))){
+    out+=esc(line.slice(last,m.index));
+    if(m[1]){ const e=line.indexOf("*/",m.index+2); if(e<0){ out+=cmt(line.slice(m.index)); st.block=true; last=line.length; break; } out+=cmt(line.slice(m.index,e+2)); re.lastIndex=e+2; last=e+2; continue; }
+    if(m[2]) out+=cmt(m[2]);
+    else if(m[3]) out+='<span class="st">'+esc(m[3])+"</span>";
+    else if(m[4]) out+='<span class="an">'+esc(m[4])+"</span>";
+    else if(KW.has(m[5])) out+='<span class="kw">'+m[5]+"</span>";
+    else if(TY.has(m[5])) out+='<span class="ty">'+m[5]+"</span>";
+    else out+=esc(m[5]);
+    last=re.lastIndex;
+  }
+  if(last<line.length) out+=esc(line.slice(last));
+  return {html:out,st};
+}
+function codeView(f,hitLines){
+  const lang=f.name.endsWith(".xml")?"xml":f.name.endsWith(".md")?"md":"java";
+  const st={block:false}; const tq=new Set(f.troques.map(t=>t.n)); const hits=new Set(hitLines||[]);
+  const rows=f.lines.map((l,i)=>{ const r=hlLine(l,st,lang); return `<div class="ln${tq.has(i+1)?" tq":""}${hits.has(i+1)?" hit":""}" id="L${i+1}"><i>${i+1}</i><span>${r.html||" "}</span></div>`; }).join("");
+  return `<pre class="code" id="codeBox" aria-label="Código de ${esc(f.name)}">${rows}</pre>`;
+}
+function copyText(btn,text){
+  const done=m=>{btn.textContent=m; setTimeout(()=>btn.textContent=btn.dataset.label,1500);};
+  try{ navigator.clipboard.writeText(text).then(()=>done("Copiado"),()=>fallback()); }catch(_){ fallback(); }
+  function fallback(){ const box=$("#codeBox"); if(box){ const r=document.createRange(); r.selectNodeContents(box); const s=getSelection(); s.removeAllRanges(); s.addRange(r);} done("Selecionado: use Ctrl+C"); }
+}
+
+/* ===================== ÍNDICE DE BUSCA ===================== */
+const ATTRS=[["tudo","Tudo"],["nome","Nome do arquivo"],["papel","Papel no padrão"],["troque","Só linhas TROQUE"],["codigo","Código"],["comentario","Comentários"],["saida","Saída das demos"]];
+const ATTR_LABEL=Object.fromEntries(ATTRS);
+const INDEX=[];
+for(const f of FILES){
+  INDEX.push({f,attr:"nome",line:null,text:f.path});
+  if(f.papel) INDEX.push({f,attr:"papel",line:null,text:f.papel+(f.resumo?" — "+f.resumo:"")});
+  f.lines.forEach((l,i)=>{ const t=l.trim(); if(t.length<2) return;
+    const isC=/^(\/\/|\/\*|\*|<!--)/.test(t)||/\/\/\s/.test(t);
+    INDEX.push({f,attr:/TROQUE/.test(l)?"troque":(isC?"comentario":"codigo"),line:i+1,text:t}); });
+}
+for(const [k,txt] of Object.entries(demoOut)) txt.split("\n").forEach(l=>{ if(l.trim()) INDEX.push({f:byPath[Object.keys(byPath).find(p=>p.endsWith(DEMO_OF[k]+".java"))],attr:"saida",line:null,text:l,pad:k}); });
+INDEX.forEach(it=>it.n=norm(it.text));
+
+/* ===================== PASSO A PASSO ===================== */
+// [nome no modelo, papel, exemplo do que pode virar]
+const RENAME = {
+ strategy:[["Estrategia","interface do algoritmo","Plano"],["executar","método da interface","calcular"],["EstrategiaA","estratégia concreta 1","PlanoMensal"],["EstrategiaB","estratégia concreta 2","PlanoTrimestral"],["Contexto","quem usa a estratégia","Matricula"],["setEstrategia","método para trocar","setPlano"],["executarEstrategia","método que delega","calcularMensalidade"],["DemoStrategy","demonstração","DemoAcademia"]],
+ observer:[["SubjectConcreto","objeto observado","Pedido"],["Status","enum dos estados","StatusPedido"],["ObservadorA","observador 1","Cliente"],["ObservadorB","observador 2","Estoque"],["DemoObserver","demonstração","DemoPedido"]],
+ templatemethod:[["ClasseAbstrata","classe com o esqueleto","Relatorio"],["executar","método template (final)","gerar"],["processar","etapa que varia","dados"],["rodape","gancho","rodape"],["ImplementacaoA","subclasse 1","RelatorioPDF"],["ImplementacaoB","subclasse 2","RelatorioHTML"],["DemoTemplateMethod","demonstração","DemoRelatorio"]],
+ command:[["Command","interface do comando","Comando"],["execute / undo","métodos da interface","executar / desfazer"],["Receptor","quem faz o trabalho","Impressora"],["ComandoLigar","comando simples","ImprimirCommand"],["ComandoAlterarValor","comando com desfazer","CancelarCommand"],["Invocador","fila + histórico","FilaDeImpressao"],["DemoCommand","demonstração","DemoImpressao"]],
+ state:[["Estado","interface do estado","EstadoMaquina"],["eventoA","evento 1","selecionarProduto"],["eventoB","evento 2","inserirDinheiro"],["ContextoEstado","objeto que muda","Maquina"],["EstadoInicial","estado inicial","SemProduto"],["EstadoIntermediario","estado do meio","Pagamento"],["EstadoFinal","estado final","ProdutoLiberado"],["DemoState","demonstração","DemoMaquina"]],
+ iterator:[["Item","elemento","Aluno"],["Colecao","coleção que esconde a estrutura","Turma"],["IteradorNormal","iterador","TurmaIterator"],["IteradorReverso","iterador reverso (opcional)","TurmaIteratorReverso"],["DemoIterator","demonstração","DemoTurma"]],
+ decorator:[["Componente","tipo base","Bebida"],["ComponenteConcreto","objeto do centro","Cafe"],["Decorador","decorador abstrato","DecoradorBebida"],["DecoradorA","extra 1","Leite"],["DecoradorB","extra 2","Caramelo"],["DemoDecorator","demonstração","DemoCafeteria"]]
+};
+const GATILHOS=[["“formas diferentes de calcular / ordenar / pagar”, “o cliente escolhe”","strategy"],["“avisar / notificar vários quando mudar”, “inscritos”","observer"],["“sempre segue as etapas… só X muda”, “a ordem nunca muda”","templatemethod"],["“desfazer”, “fila”, “histórico”, “executar depois”","command"],["“não pode X enquanto Y”, “passa para”, “depende da situação”","state"],["“percorrer sem saber como está guardado”, “array ou lista”","iterator"],["“adicionais combináveis”, “extras”, “sem uma classe por combinação”","decorator"]];
+let mapPad="strategy"; const mapVals={};
+
+function vPasso(){
+  const step=(n,t,body)=>`<div class="step"><div class="n">${n}</div><div class="b"><h3>${t}</h3>${body}</div></div>`;
+  return `<section style="display:grid;gap:10px"><span class="eyebrow">roteiro para a prova</span><h2 style="font-size:clamp(1.6rem,4vw,2.3rem);font-weight:800">O professor pediu um sistema com um padrão. E agora?</h2><p class="lead">Siga sempre os mesmos 6 passos, usando este projeto como ponto de partida. Os passos 1 e 2 você faz no papel, antes de abrir a IDE.</p></section>
+  <div class="steps">
+   ${step(1,"Ache o padrão no enunciado",`<p>Sublinhe as palavras-gatilho:</p><div class="tbl"><table class="map"><thead><tr><th>Se o enunciado fala em…</th><th>Padrão</th></tr></thead><tbody>${GATILHOS.map(([g,k])=>`<tr><td style="white-space:normal">${esc(g)}</td><td><button type="button" class="chip" data-tab="${k}" style="--c:${padColor(k)}"><span class="dot"></span>${PADROES[k].nome}</button></td></tr>`).join("")}</tbody></table></div>`)}
+   ${step(2,"Ligue cada coisa do enunciado a um papel do padrão",`<p>Pergunte: quem é o Contexto? Quem são as estratégias? Quem é o Receptor? Essa tabela é o seu projeto. Monte a sua logo abaixo, na <b>Tabela de papéis</b>.</p>`)}
+   ${step(3,"Copie o projeto e apague o que não usar",`<p>Se a prova pede só um padrão, apague os outros pacotes de <code>negocio</code>, as Demos deles e as opções do menu na <code>Main</code>. Projeto enxuto mostra que você sabe o que está fazendo. Se pedir dois padrões, mantenha os dois.</p>`)}
+   ${step(4,"Renomeie com o Rename da IDE",`<p>Uma classe por vez, seguindo a tabela do passo 2 (F2 no VS Code e NetBeans, Shift+F6 no IntelliJ). Depois troque as linhas marcadas com <code>TROQUE</code>: atributos, regras, textos. A aba <button type="button" class="chip" data-tab="trocar">O que trocar</button> lista todas.</p>`)}
+   ${step(5,"Faça a Demo contar a história do enunciado",`<p>A <code>Main</code> precisa mostrar o padrão funcionando: trocar a estratégia, cancelar uma inscrição, desfazer um comando, passar por vários estados, empilhar extras.</p>`)}
+   ${step(6,"Rode e confira o checklist do padrão",`<p>Cada aba de padrão tem o checklist. Se um item não estiver no seu código, o professor vai notar.</p>`)}
+  </div>
+
+  <section class="uml mapper" style="--c:${padColor(mapPad)}" id="mapper"><div class="uml-head"><span class="stereo">passo 2 + passo 4</span><h2 style="font-size:1.4rem">Tabela de papéis</h2><p>Escolha o padrão e digite os nomes do seu enunciado. A lista ao lado mostra o que renomear, na ordem. Os campos em branco usam o exemplo cinza.</p></div>
+   <div class="uml-sec"><div class="chips" id="mapChips">${Object.keys(RENAME).map(k=>`<button type="button" class="chip" data-mappad="${k}" aria-pressed="${mapPad===k}" style="--c:${padColor(k)}"><span class="dot"></span>${PADROES[k].nome}</button>`).join("")}</div></div>
+   <div class="uml-sec"><div class="mapgrid"><div style="display:grid;gap:10px" id="mapFields"></div><div style="display:grid;gap:10px;align-content:start"><div class="codehead"><span class="eyebrow">renomeie, nesta ordem</span><button type="button" class="copy" id="copyRen" data-label="Copiar lista">Copiar lista</button></div><ul class="renames" id="mapOut"></ul></div></div></div>
+  </section>
+
+  <section class="uml" style="--c:${padColor("strategy")}"><div class="uml-head"><span class="stereo">exemplo completo · Strategy</span><h2 style="font-size:1.4rem">Academia com planos de mensalidade</h2><p><i>“Uma academia cobra a mensalidade de formas diferentes: plano mensal sem desconto, trimestral com 10% e anual com 25%. O aluno pode mudar de plano. A classe Matricula não deve conhecer a regra de cada plano.”</i></p></div>
+   <div class="uml-sec"><h3><b>passo1</b>.padrao</h3><p style="margin:0">“formas diferentes de cobrar”, “pode mudar”, “não deve conhecer a regra” → <b>Strategy</b>.</p></div>
+   <div class="uml-sec"><h3><b>passo2</b>.tabelaDePapeis</h3><div class="tbl"><table class="map"><thead><tr><th>No modelo</th><th>Vira</th></tr></thead><tbody>${[["Estrategia","Plano"],["executar(double valor)","calcular(double valorBase)"],["EstrategiaA","PlanoMensal"],["EstrategiaB","PlanoTrimestral"],["(cópia da B)","PlanoAnual"],["Contexto","Matricula"],["setEstrategia / executarEstrategia","setPlano / calcularMensalidade"],["DemoStrategy","DemoAcademia"]].map(([a,b])=>`<tr><td><code>${esc(a)}</code></td><td><code>${esc(b)}</code></td></tr>`).join("")}</tbody></table></div><button type="button" class="btn" data-loadex="1" style="margin-top:10px">Carregar este exemplo na Tabela de papéis</button></div>
+   <div class="uml-sec"><h3><b>passos3e4</b>.codigo — depois de apagar e renomear</h3>${codeView({name:"Academia.java",lines:EX_ACADEMIA.split("\n"),troques:[]})}</div>
+   <div class="uml-sec"><h3><b>passo5</b>.demo</h3>${codeView({name:"DemoAcademia.java",lines:EX_DEMO.split("\n"),troques:[]})}<pre class="term" style="margin-top:8px">Mensal: 100,00
+Anual: 75,00</pre></div>
+   <div class="uml-sec"><h3><b>passo6</b>.checklist</h3><ul class="check"><li>Matricula guarda a interface Plano ✓</li><li>Tem setPlano ✓</li><li>Delega sem if ✓</li><li>Plano padrão no construtor ✓</li><li>Plano novo é só um arquivo novo ✓</li></ul></div>
+  </section>
+
+  <section style="display:grid;gap:10px"><h2 style="font-size:1.4rem">Três cuidados que valem nota</h2>
+   <div class="note"><b>Não deixe nome genérico sobrando.</b> Se ficar um <code>Contexto</code> ou <code>EstrategiaA</code> no código, parece que você só copiou. Antes de entregar, pesquise no projeto por <code>Estrategia</code>, <code>Contexto</code>, <code>Componente</code>, <code>Receptor</code>, <code>Subject</code>.</div>
+   <div class="note"><b>Se o enunciado der nomes, use exatamente esses nomes.</b> Se ele diz <code>interface Comando { void executar(); }</code>, troque o <code>execute()</code> do modelo por <code>executar()</code>. O modelo é uma base, o enunciado manda.</div>
+   <div class="note"><b>Se pedirem dois padrões juntos</b>, como o professor fez no <code>Pedido</code> da revisão (Strategy de frete e Observer de status), mantenha os dois pacotes e faça a mesma classe cumprir os dois papéis: <code>Pedido</code> é o <code>Contexto</code> do Strategy e também o <code>SubjectConcreto</code> do Observer.</div>
+  </section>`;
+}
+const EX_ACADEMIA=`public interface Plano {
+    double calcular(double valorBase);
+}
+
+public class PlanoMensal implements Plano {
+    public double calcular(double valorBase) { return valorBase; }
+}
+
+public class PlanoTrimestral implements Plano {
+    public double calcular(double valorBase) { return valorBase * 0.90; }
+}
+
+public class PlanoAnual implements Plano {   // copiei PlanoTrimestral e mudei a regra
+    public double calcular(double valorBase) { return valorBase * 0.75; }
+}
+
+public class Matricula {
+    private String aluno;
+    private double valorBase;
+    private Plano plano;
+
+    public Matricula(String aluno, double valorBase) {
+        this.aluno = aluno;
+        this.valorBase = valorBase;
+        this.plano = new PlanoMensal();          // plano padrão
+    }
+    public void setPlano(Plano plano) { this.plano = plano; }
+    public double calcularMensalidade() {
+        return plano.calcular(valorBase);        // delega, sem if
+    }
+}`;
+const EX_DEMO=`Matricula m = new Matricula("Ana", 100);
+System.out.printf("Mensal: %.2f%n", m.calcularMensalidade());
+m.setPlano(new PlanoAnual());                 // aluno mudou de plano
+System.out.printf("Anual: %.2f%n", m.calcularMensalidade());`;
+
+function renderMapper(){
+  const box=$("#mapFields"); if(!box) return;
+  const vals=mapVals[mapPad]||(mapVals[mapPad]={});
+  box.innerHTML=RENAME[mapPad].map(([m,papel,ex],i)=>`<div class="field"><label for="map-${mapPad}-${i}">${esc(m)} <span>${esc(papel)}</span></label><input id="map-${mapPad}-${i}" data-mapi="${i}" placeholder="${esc(ex)}" value="${esc(vals[i]||"")}" autocomplete="off" spellcheck="false"></div>`).join("");
+  $("#mapper").style.setProperty("--c",padColor(mapPad));
+  document.querySelectorAll("#mapChips .chip").forEach(c=>c.setAttribute("aria-pressed",c.dataset.mappad===mapPad));
+  renderMapOut();
+}
+function mapList(){
+  const vals=mapVals[mapPad]||{};
+  return RENAME[mapPad].map(([m,,ex],i)=>{ const v=(vals[i]||"").trim(); return {m,to:v||ex,typed:!!v}; });
+}
+function renderMapOut(){
+  const out=$("#mapOut"); if(!out) return;
+  out.innerHTML=mapList().map(r=>r.to===r.m?`<li><span class="from" style="text-decoration:none">${esc(r.m)}</span><span>→</span><span class="same">mantém o nome</span></li>`:`<li><span class="from">${esc(r.m)}</span><span>→</span><span class="to${r.typed?" ok":""}">${esc(r.to)}</span></li>`).join("");
+}
+
+/* ===================== ESTADO ===================== */
+const TABS=[["inicio","Visão geral"],["passo","Passo a passo"],...Object.entries(PADROES).map(([k,v])=>[k,v.nome]),["camadas","3 camadas"],["trocar","O que trocar"]];
+let state={view:"inicio",file:null,q:"",attr:"tudo",pf:new Set(),hit:null,page:0};
+const h0=(location.hash||"").slice(1); if(TABS.some(t=>t[0]===h0)) state.view=h0;
+
+/* ===================== ÁRVORE ===================== */
+function renderTree(){
+  const order=["apresentacao","negocio","persistencia"];
+  const sec=l=>FILES.filter(f=>f.layer===l);
+  const fbtn=f=>`<button type="button" class="fileBtn" data-file="${esc(f.path)}" aria-current="${state.file===f.path}"><span>${esc(f.name)}</span>${f.troques.length?`<span class="tq" title="linhas TROQUE">${f.troques.length}</span>`:""}</button>`;
+  let html=`<div class="eyebrow" style="padding:2px 8px 6px">modelo-padroes/src/main/java</div>`;
+  for(const l of order){
+    const fs=sec(l); const open=!state.file || byPath[state.file]?.layer===l;
+    if(l==="negocio"){
+      const groups=[...new Set(fs.map(f=>f.pad))];
+      html+=`<details class="layer" ${open?"open":""} style="--c:${layerColor(l)}"><summary><span class="sw"></span>${l}/</summary><div class="kids">`+
+        groups.map(g=>{ const gf=fs.filter(f=>f.pad===g); const go=state.file?byPath[state.file]?.pad===g&&byPath[state.file]?.layer==="negocio":false;
+          return `<details ${go?"open":""}><summary>${g}/</summary><div class="kids">${gf.map(fbtn).join("")}</div></details>`; }).join("")+`</div></details>`;
+    } else {
+      html+=`<details class="layer" ${open?"open":""} style="--c:${layerColor(l)}"><summary><span class="sw"></span>${l}/</summary><div class="kids">${fs.map(fbtn).join("")}</div></details>`;
+    }
+  }
+  const raiz=FILES.filter(f=>f.layer==="raiz");
+  html+=`<div class="eyebrow" style="padding:10px 8px 4px">raiz do projeto</div>`+raiz.map(fbtn).join("");
+  $("#tree").innerHTML=html;
+}
+
+/* ===================== VIEWS ===================== */
+function vInicio(){
+  const nJava=FILES.filter(f=>f.name.endsWith(".java")).length, nTq=FILES.reduce((a,f)=>a+f.troques.length,0);
+  return `<section style="display:grid;gap:10px"><span class="eyebrow">modelo-padroes.zip</span><h2 style="font-size:clamp(1.6rem,4vw,2.3rem);font-weight:800">Um projeto pronto para você só trocar o conteúdo</h2>
+  <p class="lead">${nJava} arquivos Java em três camadas, um modelo de cada padrão no estilo do professor. Cada arquivo diz o papel que tem no padrão, e as ${nTq} linhas marcadas com <b>TROQUE</b> mostram exatamente o que substituir. Escolha um padrão nas abas ou um arquivo na árvore.</p></section>
+  <button type="button" class="card link" data-tab="passo" style="--c:var(--accent)"><span class="eyebrow" style="color:var(--accent)">comece por aqui na prova</span><h3 style="font-size:1.3rem">Passo a passo: do enunciado ao sistema pronto</h3><p>Os 6 passos, uma tabela de papéis que monta a lista do que renomear e um exemplo completo.</p></button>
+  <div class="grid">${Object.entries(PADROES).map(([k,p])=>{const n=FILES.filter(f=>f.pad===k).length;return `<button type="button" class="card link" data-tab="${k}" style="--c:${padColor(k)}"><span class="eyebrow" style="color:${padColor(k)}">negocio/${k}</span><h3>${p.nome}</h3><p>${esc(p.frase)}</p><span class="path">${n} arquivos · vira: ${esc(p.vira.split(" · ")[0])}</span></button>`}).join("")}
+  <button type="button" class="card link" data-tab="camadas" style="--c:var(--l-persistencia)"><span class="eyebrow">apresentacao · negocio · persistencia</span><h3>As 3 camadas</h3><p>Quem chama quem, e onde fica cada coisa.</p></button></div>
+  <section class="uml" style="--c:var(--accent)"><div class="uml-head"><h2 style="font-size:1.3rem">Como rodar</h2></div>
+  <div class="uml-sec"><p style="margin:0 0 8px">Descompacte, abra a pasta na IDE (VS Code, IntelliJ ou NetBeans) e rode <code>apresentacao.Main</code>. Aparece um menu de 1 a 8. Pelo terminal, dentro da pasta:</p><pre class="term">mvn compile
+java -cp target/classes apresentacao.Main          # com menu
+java -cp target/classes apresentacao.Main todos    # roda todos os padrões</pre></div>
+  <div class="uml-sec"><div class="note">Para renomear uma classe use o <b>Rename</b> da IDE (F2 no VS Code e NetBeans, Shift+F6 no IntelliJ). Ele renomeia o arquivo e todas as referências. Mudar só o texto deixa o arquivo com nome diferente da classe e o Java não compila.</div></div></section>`;
+}
+
+function vPadrao(k){
+  const p=PADROES[k]; const fs=FILES.filter(f=>f.pad===k&&f.layer==="negocio"); const demo=FILES.find(f=>f.name===DEMO_OF[k]+".java");
+  return `<article class="uml" style="--c:${padColor(k)}"><div class="uml-head"><span class="stereo">«pacote» negocio.${k}</span><h2>${p.nome}</h2><p>${esc(p.frase)}</p></div>
+   <div class="uml-sec"><h3><b>${k}</b>.arquivos — clique para abrir</h3><div class="grid">${fs.map(f=>`<button type="button" class="card link" data-file="${esc(f.path)}" style="--c:${padColor(k)}"><h3 style="font-family:var(--f-mono);font-size:.95rem">${esc(f.name)}</h3><p>${esc(f.papel||"")}</p><span class="path">${f.troques.length} linha${f.troques.length===1?"":"s"} TROQUE</span></button>`).join("")}${demo?`<button type="button" class="card link" data-file="${esc(demo.path)}" style="--c:var(--l-apresentacao)"><h3 style="font-family:var(--f-mono);font-size:.95rem">${esc(demo.name)}</h3><p>Camada de apresentação: monta e roda o exemplo.</p><span class="path">apresentacao/</span></button>`:""}</div></div>
+   <div class="uml-sec"><h3><b>${k}</b>.estrutura</h3><pre class="ascii">${esc(p.uml)}</pre></div>
+   <div class="uml-sec"><h3><b>${k}</b>.checklist</h3><ul class="check">${p.check.map(c=>`<li>${esc(c)}</li>`).join("")}</ul></div>
+   <div class="uml-sec"><h3><b>${k}</b>.viraNaProva</h3><p style="margin:0">${esc(p.vira)}</p></div>
+   <div class="uml-sec"><h3><b>${k}</b>.saidaReal — o que aparece ao escolher no menu</h3><pre class="term">${esc(demoOut[k]||"")}</pre></div>
+  </article>`;
+}
+
+function vArquivo(path){
+  const f=byPath[path]; const c=f.layer==="negocio"?padColor(f.pad):layerColor(f.layer);
+  const sib=FILES.filter(x=>x.layer===f.layer&&x.pad===f.pad); const i=sib.indexOf(f);
+  const prev=sib[i-1], next=sib[i+1];
+  const pkg=f.layer==="raiz"?"raiz do projeto":f.parts.slice(f.parts.indexOf("java")+1,-1).join(".");
+  return `<article class="uml" style="--c:${c}"><div class="uml-head"><span class="stereo">${esc(pkg)} · ${esc(f.path)}</span><h2>${esc(f.name)}</h2>${f.papel?`<p><b>Papel:</b> ${esc(f.papel)}</p>`:""}${f.resumo?`<p style="color:var(--muted)">${esc(f.resumo)}</p>`:""}
+    <div class="chips">${f.pad!=="geral"?`<button type="button" class="chip" data-tab="${f.pad}" style="--c:${padColor(f.pad)}"><span class="dot"></span>${PADROES[f.pad].nome}</button>`:""}<span class="chip static" style="--c:${layerColor(f.layer)}"><span class="dot"></span>${esc(f.layer)}</span><span class="chip static">${f.lines.length} linhas</span></div></div>
+   ${f.troques.length?`<div class="uml-sec"><h3><b>${esc(f.name.replace(/\..*$/,""))}</b>.oQueTrocar — clique para ir à linha</h3><ul class="troques">${f.troques.map(t=>`<li><button type="button" data-line="${t.n}">linha ${t.n}</button><span>${esc(t.t)}</span></li>`).join("")}</ul></div>`:""}
+   <div class="uml-sec"><div class="codehead"><span class="eyebrow">${f.name.endsWith(".java")?"Java":f.name.endsWith(".xml")?"XML":"Markdown"}</span><div class="btns"><button type="button" class="copy" data-copy="${esc(f.path)}" data-label="Copiar arquivo">Copiar arquivo</button></div></div>${codeView(f,state.hit&&state.hit.path===f.path?[state.hit.line]:[])}</div>
+   ${f.pad!=="geral"&&f.layer==="apresentacao"?`<div class="uml-sec"><h3>saída ao rodar</h3><pre class="term">${esc(demoOut[f.pad]||"")}</pre></div>`:""}
+  </article>
+  <div class="pager">${prev?`<button type="button" class="btn" data-file="${esc(prev.path)}">← ${esc(prev.name)}</button>`:"<span></span>"}${next?`<button type="button" class="btn" data-file="${esc(next.path)}">${esc(next.name)} →</button>`:""}</div>`;
+}
+
+function vCamadas(){
+  return `<section style="display:grid;gap:10px"><span class="eyebrow">arquitetura</span><h2 style="font-size:1.8rem">As 3 camadas do projeto</h2><p class="lead">As chamadas vão sempre num sentido só: apresentação chama o negócio, negócio chama a persistência. Teste rápido: trocar o terminal por uma tela Swing só mexe em <code>apresentacao</code>; trocar a lista por banco só mexe em <code>persistencia</code>.</p></section>
+  <div class="layers">${LAYERS.map(([k,t,d],i)=>`<div class="layer-card" style="--c:${layerColor(k)}"><b>${k}/</b><h3 style="font-size:1.1rem">${t}</h3><p>${esc(d)}</p><span class="count">${FILES.filter(f=>f.layer===k).length} arquivos${i<2?"  ·  chama →":""}</span></div>`).join("")}</div>
+  <section class="uml" style="--c:var(--l-persistencia)"><div class="uml-head"><h2 style="font-size:1.3rem">O exemplo que usa as três juntas</h2><p>DemoIterator (apresentação) cria um RepositorioMemoria e salva itens; Colecao (negócio) lê pela interface Repositorio; a Demo percorre com o iterador.</p></div>
+  <div class="uml-sec"><pre class="ascii">apresentacao.DemoIterator
+   │  new RepositorioMemoria<Item>()  →  repositorio.salvar(...)
+   │  new Colecao(repositorio)
+   ▼
+negocio.iterator.Colecao  ──usa a interface──▶  persistencia.Repositorio&lt;Item&gt;
+   │  iterator() / iteradorReverso()                     ▲
+   ▼                                          persistencia.RepositorioMemoria&lt;T&gt;
+IteradorNormal / IteradorReverso</pre></div>
+  <div class="uml-sec"><div class="chips">${["Repositorio.java","RepositorioMemoria.java","Colecao.java","DemoIterator.java","Main.java"].map(n=>{const f=FILES.find(x=>x.name===n);return `<button type="button" class="chip" data-file="${esc(f.path)}" style="--c:${layerColor(f.layer)}"><span class="dot"></span>${n}</button>`}).join("")}</div></div>
+  <div class="uml-sec"><div class="note">Se a prova pedir banco: crie <code>RepositorioPostgres&lt;T&gt; implements Repositorio&lt;T&gt;</code> com JDBC e troque só a linha <code>new RepositorioMemoria&lt;&gt;()</code> na Demo. O negócio não muda. É o mesmo princípio do Strategy: programar para a interface.</div></div></section>`;
+}
+
+function vTrocar(){
+  const rows=FILES.filter(f=>f.troques.length).map(f=>`<tr><td><button type="button" data-file="${esc(f.path)}">${esc(f.name)}</button></td><td>${f.pad!=="geral"?`<span class="chip static" style="--c:${padColor(f.pad)}"><span class="dot"></span>${PADROES[f.pad].nome}</span>`:esc(f.layer)}</td><td>${esc(f.papel)}</td><td>${f.troques.map(t=>esc(t.t.replace(/^TROQUE(\s*\(opcional\))?:\s*/,""))).join("<br>")}</td></tr>`).join("");
+  return `<section style="display:grid;gap:10px"><span class="eyebrow">mapa completo</span><h2 style="font-size:1.8rem">O que trocar em cada arquivo</h2><p class="lead">Todas as linhas TROQUE do projeto num lugar só. Clique no arquivo para abrir com as linhas destacadas.</p></section>
+  <div class="tbl"><table class="map"><thead><tr><th>Arquivo</th><th>Padrão</th><th>Papel</th><th>Troque</th></tr></thead><tbody>${rows}</tbody></table></div>
+  <div class="note">Para criar mais um item (outra estratégia, outro observador, outro adicional), copie o arquivo concreto, renomeie e mude só o conteúdo. As classes de cima (Contexto, SubjectConcreto, Invocador, Decorador) não mudam: é o princípio aberto/fechado.</div>`;
+}
+
+function vBusca(){
+  const q=state.q.trim(); const words=norm(q).split(/\s+/).filter(Boolean);
+  let hits=INDEX.filter(it=>{
+    if(state.attr!=="tudo"&&it.attr!==state.attr) return false;
+    const p=it.pad||it.f.pad; if(state.pf.size&&!state.pf.has(p)) return false;
+    return words.every(w=>it.n.includes(w));
+  });
+  const by={}; hits.forEach(h=>by[h.attr]=(by[h.attr]||0)+1);
+  const chips=`<div class="chips">${Object.entries(PADROES).map(([k,p])=>`<button type="button" class="chip" data-pf="${k}" aria-pressed="${state.pf.has(k)}" style="--c:${padColor(k)}"><span class="dot"></span>${p.nome}</button>`).join("")}</div>`;
+  const facets=`<div class="chips">${Object.entries(by).sort((a,b)=>b[1]-a[1]).map(([a,n])=>`<button type="button" class="chip" data-attr="${a}" aria-pressed="${state.attr===a}">${ATTR_LABEL[a]} <span class="count">${n}</span></button>`).join("")}</div>`;
+  const shown=hits.slice(0,150);
+  return `<section style="display:grid;gap:8px"><span class="eyebrow">Pesquisa no projeto</span><h2 style="font-size:1.8rem">${hits.length} resultado${hits.length===1?"":"s"}</h2><p class="lead">Em: ${esc(ATTR_LABEL[state.attr])}${state.pf.size?" · "+[...state.pf].map(k=>PADROES[k].nome).join(", "):""}${q?" · “"+esc(q)+"”":""}. Clique para abrir o arquivo na linha exata.</p></section>
+  ${chips}${facets}
+  <div class="results">${shown.map(it=>{const p=it.pad||it.f.pad;return `<button type="button" class="res" style="--c:${p!=="geral"?padColor(p):layerColor(it.f.layer)}" data-hit="${esc(it.f.path)}|${it.line||""}"><span class="where">${esc(it.f.path.replace(/^src\/main\/java\//,""))}${it.line?" : linha "+it.line:""} · ${ATTR_LABEL[it.attr]}</span><span class="snip">${highlight(it.text.length>220?it.text.slice(0,220)+"…":it.text,q)}</span></button>`}).join("")||'<p class="lead">Nada encontrado. Tente um termo mais curto ou troque o filtro para “Tudo”.</p>'}</div>
+  ${hits.length>150?`<p class="count">Mostrando 150 de ${hits.length}. Refine o termo.</p>`:""}`;
+}
+
+/* ===================== RENDER ===================== */
+function renderTabs(){ $("#tabs").innerHTML=TABS.map(([id,l])=>`<button type="button" class="tab" role="tab" data-tab="${id}" aria-selected="${state.view===id}">${esc(l)}</button>`).join(""); }
+function render(){
+  renderTabs(); renderTree();
+  const v=state.view; let html="";
+  if(v==="busca") html=vBusca();
+  else if(v==="arquivo") html=vArquivo(state.file);
+  else if(PADROES[v]) html=vPadrao(v);
+  else if(v==="camadas") html=vCamadas();
+  else if(v==="trocar") html=vTrocar();
+  else if(v==="passo") html=vPasso();
+  else html=vInicio();
+  $("#main").innerHTML=html;
+  if(v==="passo") renderMapper();
+}
+function setHash(t){ try{history.replaceState(null,"","#"+t);}catch(_){} }
+function openFile(path,line){
+  state.view="arquivo"; state.file=path; state.hit=line?{path,line}:null; render();
+  if(line){ const el=document.getElementById("L"+line); if(el){ el.scrollIntoView({block:"center"}); return; } }
+  window.scrollTo({top:0});
+}
+
+/* ===================== EVENTOS ===================== */
+$("#attrSel").innerHTML=ATTRS.map(([v,l])=>`<option value="${v}">${l}</option>`).join("");
+$("#searchForm").addEventListener("submit",e=>e.preventDefault());
+$("#q").addEventListener("input",e=>{ state.q=e.target.value; state.view=state.q.trim()||state.attr!=="tudo"?"busca":"inicio"; render(); });
+$("#attrSel").addEventListener("change",e=>{ state.attr=e.target.value; state.view="busca"; render(); });
+document.addEventListener("click",e=>{
+  const b=e.target.closest("button"); if(!b) return;
+  if(b.dataset.tab){ state.view=b.dataset.tab; state.file=null; state.hit=null; setHash(state.view); render(); window.scrollTo({top:0}); return; }
+  if(b.dataset.file){ openFile(b.dataset.file); return; }
+  if(b.dataset.hit){ const [p,l]=b.dataset.hit.split("|"); openFile(p,l?+l:null); return; }
+  if(b.dataset.pf){ const k=b.dataset.pf; state.pf.has(k)?state.pf.delete(k):state.pf.add(k); render(); return; }
+  if(b.dataset.attr){ state.attr=state.attr===b.dataset.attr?"tudo":b.dataset.attr; $("#attrSel").value=state.attr; render(); return; }
+  if(b.dataset.line){ const el=document.getElementById("L"+b.dataset.line); if(el){ el.scrollIntoView({block:"center"}); el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash"); } return; }
+  if(b.dataset.copy){ copyText(b, byPath[b.dataset.copy].content); return; }
+  if(b.dataset.mappad){ mapPad=b.dataset.mappad; renderMapper(); return; }
+  if(b.dataset.loadex){ mapPad="strategy"; mapVals.strategy={0:"Plano",1:"calcular",2:"PlanoMensal",3:"PlanoTrimestral",4:"Matricula",5:"setPlano",6:"calcularMensalidade",7:"DemoAcademia"}; renderMapper(); $("#mapper").scrollIntoView({block:"start"}); return; }
+  if(b.id==="copyRen"){ copyText(b, "Padrão: "+PADROES[mapPad].nome+"\n"+mapList().map(r=>r.m+" -> "+r.to).join("\n")); return; }
+});
+document.addEventListener("input",e=>{
+  const i=e.target.dataset&&e.target.dataset.mapi; if(i===undefined) return;
+  (mapVals[mapPad]||(mapVals[mapPad]={}))[i]=e.target.value; renderMapOut();
+});
+render();
+</script>
+
+</body></html>

@@ -1,0 +1,1260 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Guia PPP 2026/2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: barra fixa com busca + abas; conteúdo em coluna única; padrões desenhados como caixas de classe UML, pegadinhas como notas amarelas do PlantUML */
+:root{
+  --paper:#F4F6F9; --surface:#FFFFFF; --classbox:#EDF1F6; --ink:#17202B; --muted:#586577; --line:#D5DCE5;
+  --accent:#1D56B8; --accent-soft:#E2EAF8; --note:#FEFBD6; --note-line:#D8CF7A; --note-ink:#3A3410;
+  --mark:#FFE08A; --ok:#1E7A4C; --code-bg:#1B2330; --code-ink:#DCE4EE; --kw:#8FB7FF; --str:#B5E29A; --com:#7C8A9E; --typ:#F2C879;
+  --p-strategy:#1D56B8; --p-observer:#0E7C66; --p-template:#8A4FBF; --p-command:#B5522B; --p-state:#C0326A; --p-iterator:#2C7FA3; --p-decorator:#8A6A00;
+  --f-display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body:"Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, "Cascadia Code", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#0F141B; --surface:#161D26; --classbox:#1B2430; --ink:#E3E9F1; --muted:#97A4B6; --line:#2B3542;
+  --accent:#8AB0FF; --accent-soft:#1E2B44; --note:#2B2814; --note-line:#6B6230; --note-ink:#F1E8B4;
+  --mark:#6B5410; --ok:#6FD3A0; --code-bg:#0B1016; --code-ink:#DCE4EE;
+  --p-strategy:#8AB0FF; --p-observer:#4FD1B0; --p-template:#C49BEA; --p-command:#F0956B; --p-state:#F07AA8; --p-iterator:#6CC3E8; --p-decorator:#E3C15A;
+  color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --paper:#0F141B; --surface:#161D26; --classbox:#1B2430; --ink:#E3E9F1; --muted:#97A4B6; --line:#2B3542;
+  --accent:#8AB0FF; --accent-soft:#1E2B44; --note:#2B2814; --note-line:#6B6230; --note-ink:#F1E8B4;
+  --mark:#6B5410; --ok:#6FD3A0; --code-bg:#0B1016; --code-ink:#DCE4EE;
+  --p-strategy:#8AB0FF; --p-observer:#4FD1B0; --p-template:#C49BEA; --p-command:#F0956B; --p-state:#F07AA8; --p-iterator:#6CC3E8; --p-decorator:#E3C15A;
+  color-scheme:dark;}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;line-height:1.15;margin:0}
+code,pre,kbd{font-family:var(--f-mono)}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* barra superior */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:var(--surface);border-bottom:1px solid var(--line)}
+.top-in{max-width:1080px;margin:0 auto;padding:12px 16px 0;display:grid;gap:10px}
+.brand{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.brand h1{font-size:1.35rem;font-weight:800;letter-spacing:-.01em}
+.brand span{color:var(--muted);font-size:.9rem}
+.search{display:grid;grid-template-columns:1fr auto;gap:8px}
+.search input,.search select,textarea{font:inherit;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:9px 12px;min-width:0}
+.search input{font-size:1rem}
+.search select{max-width:44vw}
+.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:thin;margin:0 -4px}
+.tab{font:600 .92rem var(--f-body);color:var(--muted);background:none;border:0;border-bottom:3px solid transparent;padding:8px 10px;cursor:pointer;white-space:nowrap}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+
+main{max-width:1080px;margin:0 auto;padding:24px 16px 64px}
+.view{display:grid;gap:22px}
+.lead{color:var(--muted);max-width:68ch;margin:0}
+.eyebrow{font:600 .75rem var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+
+/* chips */
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:600 .85rem var(--f-body);display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.chip .dot{width:9px;height:9px;border-radius:50%;background:var(--c,var(--accent))}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.chip.small{font-size:.78rem;padding:3px 9px;cursor:default}
+
+/* caixa de classe UML */
+.uml{background:var(--surface);border:1.5px solid var(--ink);border-radius:3px;overflow:hidden}
+.uml-head{background:var(--classbox);border-bottom:1.5px solid var(--ink);padding:14px 18px;display:grid;gap:4px}
+.uml-head .stereo{font:italic .9rem var(--f-mono);color:var(--muted)}
+.uml-head h2{font-size:clamp(1.6rem,4vw,2.3rem);font-weight:800;color:var(--c)}
+.uml-head p{margin:0;font-size:1.08rem;max-width:68ch}
+.attrs{display:grid}
+.attr{padding:16px 18px;border-top:1px dashed var(--line);display:grid;grid-template-columns:170px 1fr;gap:16px}
+.attr:first-child{border-top:0}
+.attr>.k{font:600 .8rem var(--f-mono);color:var(--muted);padding-top:3px}
+.attr>.k b{color:var(--c);font-weight:600}
+.attr>.v{min-width:0}
+.attr ul{margin:0;padding-left:1.1em;display:grid;gap:4px}
+.attr p{margin:0 0 6px;max-width:72ch}
+.attr.hit{background:var(--accent-soft)}
+@media (max-width:640px){.attr{grid-template-columns:1fr;gap:6px}}
+
+table.roles{border-collapse:collapse;width:100%;font-size:.95rem}
+table.roles td,table.roles th{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+table.roles th{font:600 .75rem var(--f-body);text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.tbl{overflow-x:auto}
+
+pre.code{background:var(--code-bg);color:var(--code-ink);border-radius:6px;padding:14px 16px;overflow-x:auto;font-size:.84rem;line-height:1.5;margin:6px 0 0;tab-size:4}
+pre.code .kw{color:var(--kw)} pre.code .st{color:var(--str)} pre.code .cm{color:var(--com);font-style:italic} pre.code .ty{color:var(--typ)}
+.codehead{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:4px}
+.copy{font:600 .78rem var(--f-body);background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:4px 10px;cursor:pointer}
+pre.ascii{font-size:.82rem;line-height:1.35;background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:12px;overflow-x:auto;margin:0}
+
+/* nota PlantUML */
+.note{position:relative;background:var(--note);color:var(--note-ink);border:1px solid var(--note-line);padding:12px 16px 12px 16px;clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,0 100%)}
+.note::after{content:"";position:absolute;top:0;right:0;width:16px;height:16px;background:var(--note-line);clip-path:polygon(0 0,0 100%,100% 100%)}
+.note ul{margin:0}
+.notes{display:grid;gap:10px}
+
+details.qa{border:1px solid var(--line);border-radius:6px;background:var(--paper);padding:8px 12px}
+details.qa+details.qa{margin-top:6px}
+details.qa summary{cursor:pointer;font-weight:600}
+details.qa div{padding-top:6px}
+
+/* cards de lista */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:16px;display:grid;gap:8px;align-content:start;min-width:0}
+.card h3{font-size:1.1rem}
+.card .meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.num{font:600 .8rem var(--f-mono);color:var(--muted)}
+.btn{font:600 .9rem var(--f-body);background:var(--accent);color:var(--surface);border:0;border-radius:6px;padding:8px 14px;cursor:pointer;justify-self:start}
+.btn.ghost{background:none;color:var(--accent);border:1px solid var(--line)}
+
+/* exercício aberto */
+.ex{background:var(--surface);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.ex>header{padding:16px 18px;border-bottom:1px solid var(--line);display:grid;gap:6px}
+.ex>header h2{font-size:1.5rem}
+.ex section{padding:14px 18px;border-top:1px dashed var(--line)}
+.ex section:first-of-type{border-top:0}
+.ex h3{font:600 .8rem var(--f-mono);color:var(--muted);margin-bottom:6px}
+.spoiler[hidden]{display:none!important}
+
+/* resultados de busca */
+.results{display:grid;gap:8px}
+.res{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--c,var(--accent));border-radius:4px;padding:10px 14px;cursor:pointer;text-align:left;font:inherit;color:inherit}
+.res:hover{border-color:var(--c,var(--accent))}
+.res .where{font:600 .78rem var(--f-mono);color:var(--muted);grid-column:1/-1}
+.res .snip{grid-column:1/-1;min-width:0;overflow-wrap:anywhere}
+mark{background:var(--mark);color:inherit;border-radius:2px;padding:0 1px}
+.count{font:600 .85rem var(--f-mono);color:var(--muted)}
+.facets{display:flex;flex-wrap:wrap;gap:6px}
+
+/* identificador */
+.idf{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+@media (max-width:760px){.idf{grid-template-columns:1fr}}
+textarea{width:100%;min-height:200px;resize:vertical;line-height:1.5}
+.bar{display:grid;grid-template-columns:130px 1fr 34px;gap:10px;align-items:center;font-size:.92rem}
+.bar .track{height:12px;background:var(--paper);border:1px solid var(--line);border-radius:3px;overflow:hidden}
+.bar .fill{height:100%;background:var(--c)}
+.bar .n{font:600 .8rem var(--f-mono);text-align:right;font-variant-numeric:tabular-nums}
+.why{font-size:.88rem;color:var(--muted);grid-column:1/-1;margin:-4px 0 6px}
+
+/* comparação */
+.cmp{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:16px 18px;display:grid;gap:10px}
+.cmp h3{font-size:1.2rem}
+.cmp .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:640px){.cmp .two{grid-template-columns:1fr}}
+.cmp .side{border-top:3px solid var(--c);padding-top:8px;min-width:0}
+.cmp .side b{color:var(--c)}
+.rule{font-weight:600}
+
+.princ{display:grid;gap:12px}
+.footer-note{color:var(--muted);font-size:.85rem}
+@media (prefers-reduced-motion:no-preference){.chip,.tab,.res{transition:background .15s,color .15s,border-color .15s}}
+</style>
+
+<header class="top">
+  <div class="top-in">
+    <div class="brand">
+      <h1>Guia PPP 2026/2</h1>
+      <span>Padrões de Projeto em Java · baseado no repositório da disciplina</span>
+    </div>
+    <form class="search" id="searchForm" role="search">
+      <input id="q" type="search" placeholder="Pesquisar: undo, fila, final, interface, hasNext, enum…" autocomplete="off" aria-label="Pesquisar no guia">
+      <select id="attrSel" aria-label="Pesquisar em qual atributo"></select>
+    </form>
+    <nav class="tabs" role="tablist" id="tabs"></nav>
+  </div>
+</header>
+
+<main id="main"></main>
+
+<script>
+/* ===================== DADOS ===================== */
+const PATTERNS = [
+{
+ id:"strategy", nome:"Strategy", cat:"Comportamental", cor:"--p-strategy",
+ frase:"Tenho vários algoritmos para fazer a mesma coisa e quero trocar entre eles.",
+ intencao:"Definir uma família de algoritmos, encapsular cada um numa classe e torná-los intercambiáveis. O objeto principal (contexto) guarda uma interface e delega o trabalho a ela.",
+ problema:"Uma classe cheia de if/else ou switch escolhendo o jeito de fazer algo (tipo de frete, de ordenação, de pagamento). Cada variação nova obriga a editar a classe que já funciona.",
+ gatilhos:["diferentes formas de calcular","diferentes critérios de ordenação","trocar o algoritmo","modalidade","forma de pagamento","o cliente escolhe","a classe não deve conhecer as regras de cada","várias regras para a mesma tarefa","em tempo de execução"],
+ papeis:[["Strategy (interface)","CalculoFrete, EstrategiaOrdenacao, ComportamentoVoo"],["Estratégias concretas","FretePAC, FreteSedex, OrdenarPorNome, VoarBasico"],["Contexto","Pedido, Catalogo, Pato: guarda a interface e delega"],["Cliente","Main: escolhe a estratégia com setX(...)"]],
+ principios:["Encapsule o que varia","Programe para interface","Composição em vez de herança","Aberto/fechado (OCP)"],
+ usar:["Várias variações de um algoritmo para a mesma tarefa","Escolha ou troca do algoritmo em tempo de execução","Eliminar condicionais que escolhem comportamento","Reaproveitar o mesmo comportamento em classes sem parentesco (Peru usando o voo do Pato)"],
+ naoUsar:["Só existe uma forma e não há sinal de outras","O algoritmo é fixo e só algumas etapas mudam (aí é Template Method)","Quem muda o comportamento é o próprio objeto, por transição de situação (aí é State)"],
+ uml:`        «interface»
+       CalculoFrete
+     + calcular(peso, dist)
+            ▲
+   ┌────────┼─────────┐
+FretePAC FreteSedex FreteRetirada
+
+Pedido ───────▶ CalculoFrete
+ - calculoFrete: CalculoFrete
+ + setCalculoFrete(c)
+ + calcularFrete()  → calculoFrete.calcular(...)`,
+ codigo:`public interface CalculoFrete {
+    double calcular(double peso, double distancia);
+}
+
+public class FretePAC implements CalculoFrete {
+    public double calcular(double peso, double distancia) {
+        return peso * 2 + distancia * 0.05;
+    }
+}
+
+public class FreteSedex implements CalculoFrete {
+    public double calcular(double peso, double distancia) {
+        return peso * 4 + distancia * 0.10;
+    }
+}
+
+public class Pedido {                       // Contexto
+    private double peso, distancia;
+    private CalculoFrete calculoFrete = new FretePAC(); // padrão: evita NullPointerException
+
+    public Pedido(double peso, double distancia) {
+        this.peso = peso; this.distancia = distancia;
+    }
+    public void setCalculoFrete(CalculoFrete c) { this.calculoFrete = c; }
+    public double calcularFrete() {
+        return calculoFrete.calcular(peso, distancia); // delega, sem if
+    }
+}
+
+// Main
+Pedido pedido = new Pedido(3, 500);
+pedido.setCalculoFrete(new FreteSedex());
+System.out.println(pedido.calcularFrete());`,
+ repo:[["01_strategy/aula/notificacoes","Notificacao troca entre PopUpErro, PopUpNormal e NotificacaoJson com setEstrategia"],["01_strategy/aula/strategy","Patos com ComportamentoVoo e ComportamentoSom; o Peru reaproveita as mesmas estratégias"],["09_revisao/lista1 · exe_strategy2","Solução do professor: IFrete com FretePAC, FreteSedex, FreteDrone; Pedido já começa com FretePAC"]],
+ pegadinhas:["Strategy e State têm o mesmo desenho UML. A diferença é quem troca: no Strategy é o cliente de fora (setX); no State são os próprios estados.","Strategy usa composição e troca o algoritmo inteiro. Template Method usa herança e varia só algumas etapas.","Se o contexto não tiver estratégia definida, calcularFrete() dá NullPointerException. Inicialize uma estratégia padrão no construtor, como o professor fez com FretePAC."],
+ perguntas:[["Qual a diferença entre Strategy e herança simples?","Com herança o comportamento fica fixo na compilação (a subclasse é aquilo para sempre). Com Strategy o objeto tem uma referência para a interface e pode trocar a implementação em tempo de execução."],["Por que o contexto guarda o tipo da interface e não da classe concreta?","Para depender da abstração: qualquer nova estratégia funciona sem mudar o contexto (princípio aberto/fechado)."]],
+ ex:[1,2]
+},
+{
+ id:"observer", nome:"Observer", cat:"Comportamental", cor:"--p-observer",
+ frase:"Quando algo mudar, preciso avisar vários objetos.",
+ intencao:"Definir uma dependência um-para-muitos: quando o Subject (observado) muda de estado, todos os Observers inscritos são notificados automaticamente, sem que o Subject conheça as classes concretas deles.",
+ problema:"O objeto que muda precisaria chamar diretamente cada interessado (cliente, estoque, nota fiscal…), ficando acoplado a todos. Um interessado novo obrigaria a editar o objeto observado.",
+ gatilhos:["notificar","avisar","sempre que mudar","todos os interessados","inscritos","seguidores","assinantes","atualizados automaticamente","quando o status mudar","quando a temperatura mudar","um-para-muitos","evento"],
+ papeis:[["Subject (interface)","addObserver, removeObserver, notifyObservers"],["Subject concreto","Pedido, DefesaCivil, EstacaoMeteorologica: guarda List<Observer>"],["Observer (interface)","update(...) / atualizar(...)"],["Observers concretos","Cliente, Estoque, ReceitaFederal, Aluno, SiteDoIFRS"]],
+ principios:["Baixo acoplamento","Programe para interface","Aberto/fechado (OCP)","Polimorfismo"],
+ usar:["Um objeto muda e vários outros precisam reagir","A lista de interessados muda em tempo de execução (inscrever e cancelar)","Eventos, notificações, gráficos que acompanham dados, listeners de botões"],
+ naoUsar:["Só existe um interessado fixo: uma chamada direta é mais simples","Muitas cadeias de notificação deixam difícil rastrear quem disparou o quê"],
+ uml:`  «interface» Subject            «interface» Observer<T>
+ + addObserver(o)                + update(T t)
+ + removeObserver(o)                    ▲
+ + notifyObservers()          ┌─────────┼──────────┐
+        ▲                   Cliente  Estoque  ReceitaFederal
+        │
+     Pedido ──── vetObservers: List<Observer> ────▶ Observer
+  changeState(s): status = s; notifyObservers();`,
+ codigo:`public interface Observer<T> {           // estilo do professor (genérico)
+    void update(T t);
+}
+
+public interface Subject {
+    void addObserver(Observer o);
+    void removeObserver(Observer o);
+    void notifyObservers();
+}
+
+public enum Status { PAGO, ENVIADO, ENTREGUE, CANCELADO }
+
+public class Pedido implements Subject {
+    private Status status;
+    private List<Observer> observers = new ArrayList<>();
+
+    public Status getStatus() { return status; }
+    public void addObserver(Observer o)    { observers.add(o); }
+    public void removeObserver(Observer o) { observers.remove(o); }
+
+    public void notifyObservers() {
+        for (Observer o : observers) o.update(this);  // manda o próprio pedido
+    }
+    public void changeState(Status novo) {
+        this.status = novo;
+        notifyObservers();                             // mudou -> avisa todos
+    }
+}
+
+public class Cliente implements Observer<Pedido> {
+    private String nome;
+    public Cliente(String nome) { this.nome = nome; }
+    public void update(Pedido p) {
+        System.out.println(nome + ": novo status " + p.getStatus());
+    }
+}
+
+// Main
+Pedido p = new Pedido();
+p.addObserver(new Cliente("Ana"));
+p.addObserver(new ReceitaFederal());
+p.changeState(Status.ENVIADO);`,
+ repo:[["02_observer/defesa_civil","DefesaCivil consulta o clima de Rio Grande e avisa Aluno e SiteDoIFRS"],["02_observer/instagram_up","Perfil notifica seguidores ao postar"],["02_observer/controle_bolsa","Gráficos atualizados quando o preço muda"],["09_revisao/lista1 · exe_observer + exe_strategy2","Solução do professor: Observer<T>, Subject com changeState(Status), Pedido avisa Cliente e ReceitaFederal"]],
+ pegadinhas:["O Subject guarda List<Observer> (a interface), nunca List<Cliente>. Se aparecer a classe concreta na lista, não é Observer de verdade.","Observer não é Decorator: no exercício 8 o tema também é notificação, mas lá um único objeto ganha camadas (new SMS(notificacao)).","Duas formas de passar o dado: push (update(status)) ou mandando o próprio objeto (update(this)). O professor usa update(this) com Observer<Pedido>.","No exemplo da Defesa Civil, changedState() zera climaAtual antes de comparar, então notifica sempre. Para avisar só quando muda, o valor anterior deve ficar guardado."],
+ perguntas:[["O que acontece ao chamar changeState?","O Subject atualiza o atributo e chama notifyObservers(), que percorre a lista chamando update() em cada observador. Cada um decide o que fazer."],["Como adicionar um novo interessado sem mexer no Subject?","Criar uma classe que implementa Observer e inscrevê-la com addObserver na Main."]],
+ ex:[3,4]
+},
+{
+ id:"template", nome:"Template Method", cat:"Comportamental", cor:"--p-template",
+ frase:"O processo é fixo, mas algumas etapas variam.",
+ intencao:"Definir o esqueleto de um algoritmo num método final da superclasse abstrata, deixando etapas específicas para as subclasses implementarem. A ordem dos passos nunca muda.",
+ problema:"Várias classes repetem o mesmo processo (abrir, ler, transformar, gravar) e só diferem em uma ou duas etapas. Código duplicado e risco de alguém mudar a ordem.",
+ gatilhos:["mesmo processo","mesmas etapas","sequência fixa","a ordem nunca muda","algumas etapas variam","esqueleto do algoritmo","1. 2. 3. passos","todos os relatórios seguem","importar de diferentes formatos","exportar"],
+ papeis:[["Classe abstrata","Relatorio, Exportador, ImportadorDados, Texto"],["Método template (final)","gerar(), exportar(), importar(), organizarTexto()"],["Operações abstratas","as etapas que cada subclasse implementa"],["Gancho (hook)","método com corpo padrão (vazio ou default) que a subclasse pode sobrescrever: gancho(), rodape()"],["Subclasses concretas","RelatorioPDF, ExportarJSON, TextoMarkdown"]],
+ principios:["Princípio de Hollywood: não nos chame, nós chamamos você","Reuso por herança (DRY)","Aberto/fechado (OCP)"],
+ usar:["Processos com etapas fixas e partes variáveis","Importadores, exportadores, relatórios","Fluxos tipo setup → executar → teardown"],
+ naoUsar:["Precisa trocar o algoritmo inteiro em tempo de execução (Strategy)","Muitas subclasses ignoram ou reescrevem o esqueleto inteiro: o template não encaixa"],
+ uml:`        «abstract» Relatorio
+ + gerar() {final}  ── abrir(); cabecalho(); dados(); rodape(); fechar();
+ # abrir()                 (comum)
+ # cabecalho() {abstract}
+ # dados()     {abstract}
+ # rodape()                (gancho, pode sobrescrever)
+              ▲
+   ┌──────────┼──────────┐
+RelatorioPDF RelatorioHTML RelatorioCSV`,
+ codigo:`public abstract class Relatorio {
+    public final void gerar() {          // final: ninguém muda a ordem
+        abrir();
+        cabecalho();
+        dados();
+        rodape();
+        fechar();
+    }
+    protected void abrir()  { System.out.println("Abrindo relatório"); }
+    protected void fechar() { System.out.println("Fechando relatório"); }
+    protected abstract void cabecalho();
+    protected abstract void dados();
+    protected void rodape() { }           // gancho: opcional
+}
+
+public class RelatorioHTML extends Relatorio {
+    protected void cabecalho() { System.out.println("<h1>Vendas</h1>"); }
+    protected void dados()     { System.out.println("<table>...</table>"); }
+    protected void rodape()    { System.out.println("<footer>2026</footer>"); }
+}
+
+// Main
+Relatorio r = new RelatorioHTML();
+r.gerar();     // chame SEMPRE o método template`,
+ repo:[["03_template_method/exportador","Exportador lê CSV; ExportarJSON, ExportarXML, ExportarPDF, ExportarODS implementam transformar(); PDF usa o gancho"],["03_template_method/templatemethod_vs_strategy.pdf","Comparação com Strategy"],["09_revisao/lista1 · exe_templatemethod","Solução do professor: Texto com organizarTexto() final, rodape() como gancho, formatacao() e gravacao() abstratos"]],
+ pegadinhas:["O método template deve ser final, senão uma subclasse pode bagunçar a ordem.","Na Main, chame o método template (gerar(), organizarTexto()). Chamar uma etapa direto (como gravacao()) pula o esqueleto. A MainTemplateMethod da revisão faz isso; na prova, não repita.","Gancho tem corpo (mesmo vazio); etapa abstrata não tem. Saber essa diferença costuma valer ponto.","Usa herança. Se a pergunta falar em trocar em tempo de execução, é Strategy."],
+ perguntas:[["Por que o método template é final?","Para impedir que as subclasses alterem a sequência; elas só podem mudar as etapas deixadas abertas."],["O que é um gancho (hook)?","Um método da superclasse com implementação padrão (às vezes vazia) que a subclasse pode sobrescrever se quiser, sem ser obrigada."],["O que é o princípio de Hollywood?","\"Não nos chame, nós chamamos você\": a superclasse controla o fluxo e chama os métodos das subclasses na hora certa."]],
+ ex:[5,6]
+},
+{
+ id:"command", nome:"Command", cat:"Comportamental", cor:"--p-command",
+ frase:"Quero transformar uma ação em objeto.",
+ intencao:"Encapsular uma solicitação como objeto, com tudo que ela precisa para executar. Assim a ação pode ser guardada, enfileirada, registrada em histórico, repetida ou desfeita.",
+ problema:"Uma chamada de método roda na hora; não dá para guardar numa fila, desfazer ou configurar num botão. Quem dispara a ação também ficaria acoplado a quem a executa.",
+ gatilhos:["desfazer","undo","Ctrl+Z","refazer","fila","histórico","executar posteriormente","executado depois","solicitação vira objeto","botão configurável","controle remoto","macro","rotas","log de operações"],
+ papeis:[["Command (interface)","Comando com executar() (e desfazer())"],["Comandos concretos","ImprimirCommand, PausarCommand, TvSonyCommand"],["Receiver (receptor)","Impressora, TelevisaoSony, Editor: faz o trabalho real"],["Invoker (invocador)","FilaDeImpressao, Controle: guarda comandos e chama executar() sem saber o que fazem"],["Client","Main: cria os comandos e entrega ao invocador"]],
+ principios:["Baixo acoplamento entre quem pede e quem executa","Responsabilidade única","Aberto/fechado (OCP)"],
+ usar:["Desfazer/refazer","Filas e agendamento de tarefas","Histórico e log de operações","Botões e menus configuráveis","Roteamento web (cada rota um comando)","Macro-comandos (um comando que executa vários)"],
+ naoUsar:["Ações simples, chamadas uma vez, sem fila nem desfazer: um método direto basta"],
+ uml:`  «interface» Comando           Invoker: FilaDeImpressao
+  + executar()                  - fila: Queue<Comando>
+  + desfazer()                  + adicionar(c) / executarTodos()
+        ▲
+ ┌──────┼────────┐
+Imprimir Pausar Cancelar  ───▶  Receiver: Impressora
+ - impressora                    + imprimir(doc) / pausar() ...
+ executar() → impressora.imprimir(doc)`,
+ codigo:`public interface Comando {
+    void executar();
+    void desfazer();
+}
+
+public class Impressora {                 // Receiver
+    public void imprimir(String doc) { System.out.println("Imprimindo " + doc); }
+    public void cancelar(String doc) { System.out.println("Cancelado " + doc); }
+}
+
+public class ImprimirCommand implements Comando {
+    private Impressora impressora;        // guarda o receiver
+    private String documento;             // e os dados da ação
+    public ImprimirCommand(Impressora i, String d) { impressora = i; documento = d; }
+    public void executar() { impressora.imprimir(documento); }
+    public void desfazer() { impressora.cancelar(documento); }
+}
+
+public class Controle {                   // Invoker
+    private Queue<Comando> fila = new LinkedList<>();
+    private Stack<Comando> historico = new Stack<>();
+
+    public void adicionar(Comando c) { fila.add(c); }
+    public void executarTodos() {
+        while (!fila.isEmpty()) {
+            Comando c = fila.poll();
+            c.executar();
+            historico.push(c);
+        }
+    }
+    public void desfazer() {
+        if (!historico.isEmpty()) historico.pop().desfazer();
+    }
+}`,
+ repo:[["04_command/command_controle","Controle com 7 slots, TvSonyCommand, ModoCinemaCommand (macro) e NoCommand (Null Object)"],["04_command/command_rotas e command_web","Cada rota web vira um comando"],["09_revisao/lista1 · exe_command","Solução do professor: Impressora com setComando() e realizarComando(); comandos recebem um Documento"]],
+ pegadinhas:["Saber os papéis: Invoker só chama executar(); Receiver é quem trabalha de verdade. No controle remoto, Controle = Invoker e TV = Receiver.","Fila usa Queue (primeiro a entrar, primeiro a sair). Desfazer usa Stack (último feito, primeiro desfeito).","Para desfazer de verdade, o comando guarda o estado anterior antes de executar (texto removido, volume antigo).","NoCommand é um comando que não faz nada, usado para evitar if (slot != null)."],
+ perguntas:[["Qual a diferença entre Command e Observer?","Observer: algo aconteceu e vários são avisados. Command: uma ação é empacotada como objeto para ser executada depois, enfileirada ou desfeita."],["Por que o comando guarda o receiver no construtor?","Para poder executar mais tarde: o objeto lembra quem fará o trabalho e com quais dados."]],
+ ex:[9,10]
+},
+{
+ id:"state", nome:"State", cat:"Comportamental", cor:"--p-state",
+ frase:"O comportamento muda conforme o estado atual.",
+ intencao:"Permitir que um objeto altere seu comportamento quando o estado interno muda. Cada estado vira uma classe; o contexto delega ao estado atual, e os estados decidem a transição para o próximo.",
+ problema:"Métodos cheios de if (estado == X) … else if (estado == Y), repetidos em todas as ações. Cada estado novo obriga a mexer em todos os ifs.",
+ gatilhos:["depende do estado atual","depende da situação","não pode X enquanto estiver Y","passa a","muda para","volta ao estado","máquina de estados","máquina de venda","semáforo","personagem","status do pedido muda o que pode ser feito","transição"],
+ papeis:[["Contexto","Maquina, Mario, Personagem: guarda o estado atual e delega"],["State (interface)","Estado, EstadoMaquina: um método por evento"],["Estados concretos","SemProduto, ComProduto, Pagamento; Pequeno, Grande, Morto"]],
+ principios:["Encapsule o que varia","Responsabilidade única (cada estado cuida do seu comportamento)","Aberto/fechado (OCP)","Elimina condicionais"],
+ usar:["Objeto com comportamento diferente por situação","Regras de transição claras (diagrama de estados)","Jogos, pedidos, semáforos, conexões, máquinas de venda"],
+ naoUsar:["Só dois estados e pouca lógica: um boolean resolve","O estado não muda o comportamento, só um valor exibido"],
+ uml:`  Maquina ──────▶ «interface» Estado
+  - estado         + selecionarProduto(m): Estado
+  inserirDinheiro()  + inserirDinheiro(m, v): Estado
+   estado = estado.inserirDinheiro(this, v)
+                         ▲
+        ┌────────────┬───┴──────┬───────────────┐
+   SemProduto   ComProduto   Pagamento   ProdutoLiberado
+   SemProduto ─sel→ ComProduto ─pagar→ Pagamento ─ok→ Liberado ─→ SemProduto`,
+ codigo:`// Estilo do professor: cada evento devolve o PRÓXIMO estado
+public interface Estado {
+    Estado selecionarProduto(Maquina m);
+    Estado inserirDinheiro(Maquina m, double valor);
+    Estado cancelar(Maquina m);
+}
+
+public class SemProduto implements Estado {
+    public Estado selecionarProduto(Maquina m) { return new ComProduto(); }
+    public Estado inserirDinheiro(Maquina m, double v) {
+        System.out.println("Selecione um produto antes"); return this;
+    }
+    public Estado cancelar(Maquina m) { return this; }
+}
+
+public class ComProduto implements Estado {
+    public Estado selecionarProduto(Maquina m) { return this; }
+    public Estado inserirDinheiro(Maquina m, double v) { return new Pagamento(); }
+    public Estado cancelar(Maquina m) { return new SemProduto(); }
+}
+
+public class Maquina {                     // Contexto
+    private Estado estado = new SemProduto();
+    // sem setEstado público: só os estados decidem a transição
+    public void selecionarProduto() { estado = estado.selecionarProduto(this); }
+    public void inserirDinheiro(double v) { estado = estado.inserirDinheiro(this, v); }
+    public void cancelar() { estado = estado.cancelar(this); }
+    public Estado getEstado() { return estado; }
+}`,
+ repo:[["06_state/exemplo_state","Mario: Pequeno, Grande, Fogo, Pena, Estrela, Morto; cada item devolve o próximo estado; Pequeno.INSTANCE é Singleton"],["06_state/mario-finite-state-machine.jpg","A máquina de estados desenhada"],["06_state/comparacao.md","State x Strategy"],["09_revisao/lista1 · exe_state","Solução do professor: Estado com métodos que recebem Maquina e retornam Estado; setEstado comentado"]],
+ pegadinhas:["Strategy x State é a pergunta clássica. Strategy: quem está de fora escolhe. State: os estados mudam sozinhos durante o funcionamento.","Duas formas válidas: o método do estado retorna o próximo (estilo do professor) ou chama maquina.setEstado(new X()) (estilo da lista, com void). Escolha uma e mantenha.","Todo estado precisa responder a todos os eventos, mesmo que seja 'não pode' e return this.","No Mario da aula, sofriDano() tira vida ao perder o cogumelo; só deveria tirar quando o estado vira Morto."],
+ perguntas:[["Por que o setEstado fica comentado na Maquina do professor?","Porque no State quem decide a transição são os próprios estados (pelo retorno dos métodos). Ninguém de fora deve forçar um estado."],["Como o State elimina condicionais?","Em vez de perguntar 'em que estado estou?' com if, o contexto chama o método no objeto estado atual, e o polimorfismo executa o comportamento certo."]],
+ ex:[13,14]
+},
+{
+ id:"iterator", nome:"Iterator", cat:"Comportamental", cor:"--p-iterator",
+ frase:"Quero percorrer uma coleção sem conhecer sua estrutura interna.",
+ intencao:"Fornecer um jeito único de acessar os elementos de uma coleção em sequência (hasNext/next) sem expor se ela é array, lista, banco ou outra estrutura.",
+ problema:"Coleções guardadas de formas diferentes (array no café, ArrayList no almoço, ResultSet na janta) exigiriam um laço diferente para cada uma, e o cliente ficaria dependente da estrutura interna.",
+ gatilhos:["percorrer","sem conhecer como está armazenado","array, ArrayList ou LinkedList","hasNext","next","iterador","playlist","coleção","navegação","ordem reversa","aleatório","for-each"],
+ papeis:[["Iterator (interface)","java.util.Iterator<T>: hasNext() e next()"],["Iterador concreto","TurmaIterator, IteratorReverso, CardapioAlmocoInvertidoIterador"],["Coleção (agregado)","Turma, Playlist, Cardapio: cria e devolve o iterador"],["Cliente","Main: usa só hasNext/next"]],
+ principios:["Encapsulamento","Responsabilidade única (coleção guarda, iterador navega)","Programe para interface"],
+ usar:["Esconder a estrutura interna de uma coleção","Oferecer formas diferentes de percorrer (normal, reversa, aleatória)","Percorrer coleções diferentes com o mesmo código"],
+ naoUsar:["Coleção interna simples, só usada dentro da própria classe: um for basta"],
+ uml:`  Playlist ── cria ──▶ «interface» Iterator<Musica>
+  - musicas: Musica[]          + hasNext(): boolean
+  + iterator()                 + next(): Musica
+  + iteratorReverso()                 ▲
+                           ┌──────────┴─────────┐
+                     IteratorNormal      IteratorReverso
+                     - pos = 0           - pos = length-1`,
+ codigo:`public class Playlist implements Iterable<Musica> {
+    private Musica[] musicas;                 // estrutura escondida
+
+    public Playlist(Musica... musicas) { this.musicas = musicas; }
+
+    public Iterator<Musica> iterator() { return new IteradorNormal(); }
+    public Iterator<Musica> iteratorReverso() { return new IteradorReverso(); }
+
+    private class IteradorNormal implements Iterator<Musica> {
+        private int pos = 0;
+        public boolean hasNext() { return pos < musicas.length; }
+        public Musica next() { return musicas[pos++]; }
+    }
+    private class IteradorReverso implements Iterator<Musica> {
+        private int pos = musicas.length - 1;
+        public boolean hasNext() { return pos >= 0; }
+        public Musica next() { return musicas[pos--]; }
+    }
+}
+
+// Main
+Iterator<Musica> it = playlist.iterator();
+while (it.hasNext()) System.out.println(it.next());
+for (Musica m : playlist) System.out.println(m);   // funciona por ser Iterable`,
+ repo:[["07_iterator/aula_iterator","Café da manhã (array), almoço (ArrayList) e janta (PostgreSQL/ResultSet) percorridos pelo mesmo método; iteradores invertido e aleatório"],["07_iterator/resultset.md","ResultSet como iterador"],["09_revisao/lista1 · exe_iterator","Solução do professor: Playlist implements Iterator<Musica> com pos"]],
+ pegadinhas:["hasNext() não deve avançar nada. No CardapioJanta, hasNext() chama resultSet.next(), então chamar duas vezes pula itens.","Separar coleção e iterador é o ideal: a coleção cria o iterador (iterator()). Na solução do professor a Playlist é o próprio iterador, o que impede percorrer duas vezes sem recriar.","Implementar Iterable<T> permite usar for-each.","Embaralhar a lista original para o iterador aleatório altera a coleção; embaralhe uma cópia."],
+ perguntas:[["Quais métodos um Iterator precisa ter?","hasNext() (ainda há elementos?) e next() (devolve o próximo e avança)."],["Qual a vantagem para o cliente?","O mesmo laço while(hasNext) funciona para array, lista ou banco; a estrutura pode mudar sem quebrar o cliente."]],
+ ex:[11,12]
+},
+{
+ id:"decorator", nome:"Decorator", cat:"Estrutural", cor:"--p-decorator",
+ frase:"Quero adicionar responsabilidades dinamicamente, combinando extras.",
+ intencao:"Anexar responsabilidades a um objeto em tempo de execução, embrulhando-o em outro objeto do mesmo tipo. Cada camada repassa a chamada para dentro e acrescenta algo.",
+ problema:"Uma subclasse para cada combinação (CafeComLeite, CafeComLeiteECaramelo…) causa explosão de classes: com n extras são 2ⁿ combinações.",
+ gatilhos:["adicionais","combinar","qualquer combinação","acrescentar funcionalidade sem alterar a classe","embrulhar","ingredientes","extras","camadas","new X(new Y(obj))","preço soma os adicionais","explosão de subclasses","negrito","maiúsculas","filtros"],
+ papeis:[["Componente (tipo base)","Bebida, Beverage, Notificacao, Email"],["Componente concreto","Cafe, Espresso, Email: o objeto do centro"],["Decorador abstrato","DecoradorBebida, CondimentDecorator: É do tipo base e TEM um objeto do tipo base"],["Decoradores concretos","Leite, Sugar, SMS, EmailBold: repassam e acrescentam"]],
+ principios:["Composição em vez de herança","Aberto/fechado (OCP)","Responsabilidade única por camada"],
+ usar:["Extras combináveis em qualquer ordem e quantidade","Acrescentar comportamento sem mexer na classe original","Filtros, formatações, log, cache, compressão em volta de algo"],
+ naoUsar:["Poucas variações fixas, sem combinação","Quando o código depende do tipo concreto do objeto (o embrulho esconde o tipo)"],
+ uml:`             «interface» Bebida
+           + descricao() / + preco()
+                    ▲
+        ┌───────────┴──────────────┐
+      Cafe            «abstract» DecoradorBebida ◆──▶ Bebida
+                     # bebida: Bebida   (É uma e TEM uma)
+                            ▲
+               ┌────────────┼───────────┐
+             Leite      Chantilly    Caramelo
+   preco() = bebida.preco() + 2.0`,
+ codigo:`public interface Bebida {
+    String descricao();
+    double preco();
+}
+
+public class Cafe implements Bebida {
+    public String descricao() { return "Café"; }
+    public double preco() { return 5.0; }
+}
+
+public abstract class DecoradorBebida implements Bebida {
+    protected Bebida bebida;                  // TEM uma Bebida
+    public DecoradorBebida(Bebida b) { this.bebida = b; }
+}
+
+public class Leite extends DecoradorBebida {
+    public Leite(Bebida b) { super(b); }
+    public String descricao() { return bebida.descricao() + " + leite"; }
+    public double preco() { return bebida.preco() + 2.0; }
+}
+
+public class Caramelo extends DecoradorBebida {
+    public Caramelo(Bebida b) { super(b); }
+    public String descricao() { return bebida.descricao() + " + caramelo"; }
+    public double preco() { return bebida.preco() + 3.0; }
+}
+
+// Main
+Bebida b = new Cafe();
+b = new Leite(b);
+b = new Caramelo(b);          // Caramelo(Leite(Cafe))
+System.out.println(b.descricao() + " = " + b.preco());  // 10.0`,
+ repo:[["08_decorator/decorator_cafe","Starbuzz: Beverage, CondimentDecorator, Sugar e Milk; MainJavalin monta o pedido numa página web"],["08_decorator/decorator.svg","Diagrama UML do café"],["08_decorator/subwaycisco, editor_imagem, markdown_igor","Adicionais de lanche, filtros de imagem, formatação de texto"],["09_revisao/lista1 · exe_decorator","Solução do professor: EmailDecorator abstrato estende Email; EmailBold e EmailUpper embrulham getMensagem()"]],
+ pegadinhas:["A assinatura do padrão: o decorador É do tipo base (herda/implementa) e TEM um objeto do tipo base (atributo). No UML aparecem duas setas entre eles.","No GoF o Decorator é estrutural, não comportamental. O resumo da lista coloca todos como comportamentais; se perguntarem a categoria, a resposta do livro é estrutural.","new BufferedReader(new FileReader(...)) é Decorator da própria biblioteca Java.","Se o decorador herda de uma classe concreta (como EmailDecorator extends Email), os getters não sobrescritos devolvem os campos vazios do próprio decorador. Com interface isso não acontece.","Ordem da saída: imprimir depois de chamar o de dentro dá a ordem de montagem; imprimir antes inverte."],
+ perguntas:[["Por que o decorador precisa ser do mesmo tipo do objeto embrulhado?","Para poder ser tratado como o original e ser embrulhado de novo, formando a cadeia."],["Como funciona o cálculo do preço?","Cada camada soma seu valor ao preco() de quem está dentro; a chamada desce até o componente concreto e os valores se acumulam na volta."]],
+ ex:[7,8]
+}
+];
+
+const EXERCICIOS = [
+{n:1,p:"strategy",titulo:"Ordenação de produtos",cenario:"Catálogo exibe produtos por menor preço, maior preço, nome ou avaliação. Catalogo não deve conhecer as regras de cada ordenação.",por:"Algoritmos diferentes para a mesma tarefa (ordenar), escolhidos de fora.",classes:"EstrategiaOrdenacao, OrdenarPorMenorPreco, OrdenarPorMaiorPreco, OrdenarPorNome, OrdenarPorAvaliacao, Catalogo, Produto",
+code:`public interface EstrategiaOrdenacao {
+    void ordenar(List<Produto> produtos);
+}
+
+public class OrdenarPorMenorPreco implements EstrategiaOrdenacao {
+    public void ordenar(List<Produto> p) {
+        p.sort(Comparator.comparingDouble(Produto::getPreco));
+    }
+}
+public class OrdenarPorMaiorPreco implements EstrategiaOrdenacao {
+    public void ordenar(List<Produto> p) {
+        p.sort(Comparator.comparingDouble(Produto::getPreco).reversed());
+    }
+}
+public class OrdenarPorNome implements EstrategiaOrdenacao {
+    public void ordenar(List<Produto> p) {
+        p.sort(Comparator.comparing(Produto::getNome));
+    }
+}
+public class OrdenarPorAvaliacao implements EstrategiaOrdenacao {
+    public void ordenar(List<Produto> p) {
+        p.sort(Comparator.comparingDouble(Produto::getAvaliacao).reversed());
+    }
+}
+
+public class Catalogo {
+    private List<Produto> produtos = new ArrayList<>();
+    private EstrategiaOrdenacao estrategia = new OrdenarPorNome();
+
+    public void adicionar(Produto p) { produtos.add(p); }
+    public void setEstrategia(EstrategiaOrdenacao e) { this.estrategia = e; }
+    public void ordenar() {
+        estrategia.ordenar(produtos);
+        produtos.forEach(System.out::println);
+    }
+}`,dica:"Sem Comparator, dá para fazer um bubble sort simples dentro de cada estratégia; o que importa é cada regra numa classe."},
+{n:2,p:"strategy",titulo:"Cálculo de frete",cenario:"PAC, SEDEX, retirada na loja e transportadora, cada um com regra própria. Pedido usa a estratégia sem conhecer os detalhes.",por:"Várias formas de calcular o mesmo valor, escolhidas pelo cliente.",classes:"CalculoFrete, FretePAC, FreteSedex, FreteRetirada, FreteTransportadora, Pedido",
+code:`public interface CalculoFrete {
+    double calcular(double peso, double distancia);
+}
+public class FretePAC implements CalculoFrete {
+    public double calcular(double peso, double d) { return peso * 2 + d * 0.05; }
+}
+public class FreteSedex implements CalculoFrete {
+    public double calcular(double peso, double d) { return peso * 4 + d * 0.10; }
+}
+public class FreteRetirada implements CalculoFrete {
+    public double calcular(double peso, double d) { return 0; }
+}
+public class FreteTransportadora implements CalculoFrete {
+    public double calcular(double peso, double d) { return 30 + peso * 1.5; }
+}
+
+public class Pedido {
+    private double peso = 3, distancia = 500;
+    private CalculoFrete calculoFrete = new FretePAC();
+    public void setCalculoFrete(CalculoFrete c) { this.calculoFrete = c; }
+    public double calcularFrete() { return calculoFrete.calcular(peso, distancia); }
+}
+
+// Main
+Pedido pedido = new Pedido();
+pedido.setCalculoFrete(new FretePAC());
+System.out.println(pedido.calcularFrete());
+pedido.setCalculoFrete(new FreteSedex());
+System.out.println(pedido.calcularFrete());`,dica:"Se o enunciado falar em adicionais sobre o frete (seguro, embrulho), seria Decorator; status da entrega mudando o que pode ser feito seria State."},
+{n:3,p:"observer",titulo:"Notificações de pedido",cenario:"Pedido muda de status (PAGO, ENVIADO, ENTREGUE, CANCELADO) e cliente, estoque, entrega e nota fiscal precisam saber.",por:"Um objeto muda e vários interessados são avisados sem acoplamento.",classes:"Observador, Subject, Pedido, Cliente, Estoque, Transportadora, NotaFiscal",
+code:`public interface Observador { void atualizar(String status); }
+
+public class Pedido {
+    private String status = "CRIADO";
+    private List<Observador> observadores = new ArrayList<>();
+
+    public void adicionarObservador(Observador o) { observadores.add(o); }
+    public void removerObservador(Observador o)   { observadores.remove(o); }
+    private void notificar() {
+        for (Observador o : observadores) o.atualizar(status);
+    }
+    public void alterarStatus(String novo) { status = novo; notificar(); }
+}
+
+public class Estoque implements Observador {
+    public void atualizar(String s) {
+        if (s.equals("PAGO")) System.out.println("[Estoque] baixa nos produtos");
+        else if (s.equals("CANCELADO")) System.out.println("[Estoque] devolve produtos");
+    }
+}
+public class Cliente implements Observador {
+    private String nome;
+    public Cliente(String n) { nome = n; }
+    public void atualizar(String s) { System.out.println(nome + ", seu pedido está " + s); }
+}
+
+// Main
+Pedido p = new Pedido();
+Cliente ana = new Cliente("Ana");
+p.adicionarObservador(ana);
+p.adicionarObservador(new Estoque());
+p.alterarStatus("PAGO");
+p.removerObservador(ana);
+p.alterarStatus("ENVIADO");`,dica:"O professor resolveu este com enum Status, Observer<Pedido> e update(this), e juntou com Strategy de frete no mesmo Pedido. Use enum para ganhar ponto extra."},
+{n:4,p:"observer",titulo:"Estação de temperatura",cenario:"Sensor de temperatura; painel, gráfico, alerta e app mobile atualizam quando a temperatura muda.",por:"Mudança de estado de um objeto notifica vários componentes.",classes:"EstacaoMeteorologica (Subject), Observer, Painel, Grafico, Alerta, AppMobile",
+code:`public interface Observer { void atualizar(double temperatura); }
+
+public class EstacaoMeteorologica {
+    private double temperatura;
+    private List<Observer> observers = new ArrayList<>();
+
+    public void adicionar(Observer o) { observers.add(o); }
+    public void remover(Observer o)   { observers.remove(o); }
+    public void setTemperatura(double t) {
+        this.temperatura = t;
+        for (Observer o : observers) o.atualizar(t);
+    }
+}
+
+public class Painel implements Observer {
+    public void atualizar(double t) { System.out.println("Painel: " + t + "°C"); }
+}
+public class Alerta implements Observer {
+    public void atualizar(double t) {
+        if (t > 30) System.out.println("ALERTA: calor de " + t + "°C");
+    }
+}
+
+// Main
+EstacaoMeteorologica estacao = new EstacaoMeteorologica();
+estacao.adicionar(new Painel());
+estacao.adicionar(new Alerta());
+estacao.setTemperatura(25);
+estacao.setTemperatura(31);
+estacao.setTemperatura(18);`,dica:"O setTemperatura é o 'changeState': altera e notifica. O Alerta só reage acima de 30, mostrando que cada observador decide sozinho."},
+{n:5,p:"template",titulo:"Geração de relatórios",cenario:"Todo relatório: abrir, cabeçalho, dados, rodapé, fechar. PDF, HTML e CSV mudam a forma de cada etapa.",por:"Sequência fixa com etapas variáveis.",classes:"Relatorio (abstrata), RelatorioPDF, RelatorioHTML, RelatorioCSV",
+code:`public abstract class Relatorio {
+    public final void gerar() {
+        abrir(); cabecalho(); dados(); rodape(); fechar();
+    }
+    protected abstract void abrir();
+    protected abstract void cabecalho();
+    protected abstract void dados();
+    protected abstract void rodape();
+    protected abstract void fechar();
+}
+
+public class RelatorioCSV extends Relatorio {
+    protected void abrir()     { System.out.println("[abrindo vendas.csv]"); }
+    protected void cabecalho() { System.out.println("produto;valor"); }
+    protected void dados()     { System.out.println("cafe;5.0"); }
+    protected void rodape()    { System.out.println("total;5.0"); }
+    protected void fechar()    { System.out.println("[fechando]"); }
+}
+// RelatorioPDF e RelatorioHTML seguem o mesmo molde
+
+// Main
+Relatorio r = new RelatorioPDF();
+r.gerar();
+r = new RelatorioHTML();
+r.gerar();`,dica:"A lista deixa todas as etapas abstratas. Para mostrar domínio, comente que abrir/fechar poderiam ser concretos na superclasse e rodape() um gancho."},
+{n:6,p:"template",titulo:"Importação de arquivos",cenario:"Importar CSV, JSON e XML: abrir, ler, processar, validar, salvar, fechar. importar() controla o algoritmo.",por:"Processo fixo de seis passos; só a leitura/processamento muda por formato.",classes:"ImportadorDados (abstrata), ImportadorCSV, ImportadorJSON, ImportadorXML",
+code:`public abstract class ImportadorDados {
+    public final void importar(String arquivo) {
+        abrir(arquivo);
+        String bruto = ler();
+        List<String> registros = processar(bruto);
+        if (validar(registros)) salvar(registros);
+        fechar();
+    }
+    protected void abrir(String a) { System.out.println("Abrindo " + a); }
+    protected abstract String ler();
+    protected abstract List<String> processar(String bruto);
+    protected boolean validar(List<String> r) { return !r.isEmpty(); } // gancho
+    protected void salvar(List<String> r) { System.out.println("Salvos: " + r.size()); }
+    protected void fechar() { System.out.println("Fechado"); }
+}
+
+public class ImportadorCSV extends ImportadorDados {
+    protected String ler() { return "ana;8\\nbia;9"; }
+    protected List<String> processar(String b) { return Arrays.asList(b.split("\\n")); }
+}
+
+// Main
+ImportadorDados imp = new ImportadorCSV();
+imp.importar("alunos.csv");`,dica:"Bom exemplo para mostrar etapa comum (abrir, salvar, fechar), etapa abstrata (ler, processar) e gancho (validar)."},
+{n:7,p:"decorator",titulo:"Sistema de café",cenario:"Bebidas (Café, Chá, Chocolate) e adicionais (Leite, Canela, Chantilly, Caramelo) combináveis.",por:"Extras combináveis em qualquer quantidade, sem uma subclasse por combinação.",classes:"Bebida, Cafe, Cha, Chocolate, DecoradorBebida, Leite, Canela, Chantilly, Caramelo",
+code:`public interface Bebida { String descricao(); double preco(); }
+
+public class Cha implements Bebida {
+    public String descricao() { return "Chá"; }
+    public double preco() { return 4.0; }
+}
+
+public abstract class DecoradorBebida implements Bebida {
+    protected Bebida bebida;
+    public DecoradorBebida(Bebida b) { bebida = b; }
+}
+
+public class Chantilly extends DecoradorBebida {
+    public Chantilly(Bebida b) { super(b); }
+    public String descricao() { return bebida.descricao() + " + chantilly"; }
+    public double preco() { return bebida.preco() + 2.5; }
+}
+
+// Main
+Bebida bebida = new Cafe();
+bebida = new Leite(bebida);
+bebida = new Chantilly(bebida);
+bebida = new Caramelo(bebida);
+System.out.println(bebida.descricao());
+System.out.println(bebida.preco());`,dica:"Desenhe o embrulho: Caramelo(Chantilly(Leite(Cafe))). A variável aponta para a camada de fora."},
+{n:8,p:"decorator",titulo:"Notificações combináveis",cenario:"Notificação básica por Email; o usuário empilha SMS, WhatsApp, Push e Log.",por:"Um único objeto ganha camadas de funcionalidade (new SMS(notificacao)).",classes:"Notificacao, Email, NotificacaoDecorator, SMS, WhatsApp, Push, Log",
+code:`public interface Notificacao { void enviar(String msg); }
+
+public class Email implements Notificacao {
+    public void enviar(String msg) { System.out.println("[Email] " + msg); }
+}
+
+public abstract class NotificacaoDecorator implements Notificacao {
+    protected Notificacao notificacao;
+    public NotificacaoDecorator(Notificacao n) { notificacao = n; }
+    public void enviar(String msg) { notificacao.enviar(msg); }
+}
+
+public class SMS extends NotificacaoDecorator {
+    public SMS(Notificacao n) { super(n); }
+    public void enviar(String msg) {
+        super.enviar(msg);                     // primeiro o de dentro
+        System.out.println("[SMS] " + msg);    // depois o extra
+    }
+}
+
+// Main
+Notificacao n = new Email();
+n = new SMS(n);
+n = new Push(n);
+n = new Log(n);
+n.enviar("Pedido enviado");   // Email, SMS, Push, Log`,dica:"Tema de notificação, mas não é Observer: não há lista de inscritos, há um objeto embrulhando outro."},
+{n:9,p:"command",titulo:"Sistema de impressão",cenario:"Imprimir, cancelar, pausar e retomar viram objetos colocados numa fila para executar depois.",por:"Solicitação transformada em objeto para enfileirar.",classes:"Comando, Impressora (Receiver), ImprimirCommand, CancelarCommand, PausarCommand, RetomarCommand, FilaDeImpressao (Invoker)",
+code:`public interface Comando { void executar(); }
+
+public class PausarCommand implements Comando {
+    private Impressora impressora;
+    public PausarCommand(Impressora i) { impressora = i; }
+    public void executar() { impressora.pausar(); }
+}
+
+public class ImprimirCommand implements Comando {
+    private Impressora impressora; private String doc;
+    public ImprimirCommand(Impressora i, String d) { impressora = i; doc = d; }
+    public void executar() { impressora.imprimir(doc); }
+}
+
+public class FilaDeImpressao {
+    private Queue<Comando> fila = new LinkedList<>();
+    public void adicionar(Comando c) { fila.add(c); }
+    public void executarTodos() {
+        while (!fila.isEmpty()) fila.poll().executar();
+    }
+}
+
+// Main
+Impressora imp = new Impressora();
+FilaDeImpressao fila = new FilaDeImpressao();
+fila.adicionar(new ImprimirCommand(imp, "trabalho.pdf"));
+fila.adicionar(new PausarCommand(imp));
+fila.executarTodos();`,dica:"Na solução do professor a própria Impressora faz o papel de invoker (setComando + realizarComando). A FilaDeImpressao do desafio é a versão completa."},
+{n:10,p:"command",titulo:"Editor de texto com desfazer",cenario:"Inserir, remover e salvar como comandos; desafio: desfazer().",por:"Ações como objetos permitem histórico e undo.",classes:"Comando, Editor (Receiver), InserirTextoCommand, RemoverTextoCommand, SalvarCommand, Historico/Invoker com Stack",
+code:`public interface Comando { void executar(); void desfazer(); }
+
+public class Editor {
+    private StringBuilder texto = new StringBuilder();
+    public void inserir(String s) { texto.append(s); }
+    public String remover(int n) {
+        int ini = Math.max(0, texto.length() - n);
+        String removido = texto.substring(ini);
+        texto.delete(ini, texto.length());
+        return removido;
+    }
+    public String getTexto() { return texto.toString(); }
+}
+
+public class InserirTextoCommand implements Comando {
+    private Editor editor; private String s;
+    public InserirTextoCommand(Editor e, String s) { editor = e; this.s = s; }
+    public void executar() { editor.inserir(s); }
+    public void desfazer() { editor.remover(s.length()); }
+}
+
+public class RemoverTextoCommand implements Comando {
+    private Editor editor; private int n; private String removido;
+    public RemoverTextoCommand(Editor e, int n) { editor = e; this.n = n; }
+    public void executar() { removido = editor.remover(n); } // guarda o estado
+    public void desfazer() { editor.inserir(removido); }
+}
+
+public class Invoker {
+    private Stack<Comando> historico = new Stack<>();
+    public void executar(Comando c) { c.executar(); historico.push(c); }
+    public void desfazer() { if (!historico.isEmpty()) historico.pop().desfazer(); }
+}`,dica:"O RemoverTextoCommand guarda o texto removido no executar() para conseguir desfazer. Esse detalhe mostra que você entendeu o undo."},
+{n:11,p:"iterator",titulo:"Coleção de alunos",cenario:"Turma guarda alunos internamente; o usuário não deve saber se é ArrayList, array ou LinkedList.",por:"Percorrer sem expor a estrutura interna.",classes:"Turma, Aluno, TurmaIterator (ou iterador interno)",
+code:`public class Turma implements Iterable<Aluno> {
+    private Aluno[] alunos = new Aluno[40];
+    private int qtd = 0;
+
+    public void adicionar(Aluno a) { alunos[qtd++] = a; }
+
+    public Iterator<Aluno> iterator() {
+        return new Iterator<Aluno>() {
+            private int pos = 0;
+            public boolean hasNext() { return pos < qtd; }
+            public Aluno next() { return alunos[pos++]; }
+        };
+    }
+}
+
+// Main
+Iterator<Aluno> iterator = turma.iterator();
+while (iterator.hasNext()) {
+    Aluno aluno = iterator.next();
+    System.out.println(aluno.getNome());
+}`,dica:"Note hasNext() usando qtd e não alunos.length: o array tem posições vazias. Trocar o array por ArrayList não muda nada na Main."},
+{n:12,p:"iterator",titulo:"Playlist",cenario:"Playlist de Musica (titulo, artista, duracao); desafio: iterador normal e reverso.",por:"Navegação separada do armazenamento, com mais de uma forma de percorrer.",classes:"Playlist, Musica, IteratorNormal, IteratorReverso",
+code:`public class IteratorReverso implements Iterator<Musica> {
+    private Musica[] musicas;
+    private int pos;
+    public IteratorReverso(Musica[] m) { musicas = m; pos = m.length - 1; }
+    public boolean hasNext() { return pos >= 0; }
+    public Musica next() { return musicas[pos--]; }
+}
+
+public class Playlist {
+    private Musica[] musicas = {
+        new Musica("Chão de giz", "Zé Ramalho", 300),
+        new Musica("Garçom", "Reginaldo Rossi", 240)
+    };
+    public Iterator<Musica> iterator()        { return new IteratorNormal(musicas); }
+    public Iterator<Musica> iteratorReverso() { return new IteratorReverso(musicas); }
+}`,dica:"O professor fez Playlist implements Iterator direto. Funciona, mas só percorre uma vez; para o desafio do reverso, separe os iteradores."},
+{n:13,p:"state",titulo:"Máquina de venda automática",cenario:"Estados SEM_PRODUTO, COM_PRODUTO, PAGAMENTO, PRODUTO_LIBERADO; comportamento depende do estado.",por:"Comportamento muda com o estado e as transições acontecem durante o uso.",classes:"EstadoMaquina, EstadoSemProduto, EstadoComProduto, EstadoPagamento, EstadoProdutoLiberado, Maquina",
+code:`public interface EstadoMaquina {             // versão da lista (void + setEstado)
+    void selecionarProduto(Maquina m);
+    void inserirDinheiro(Maquina m, double valor);
+    void cancelar(Maquina m);
+    void liberarProduto(Maquina m);
+}
+
+public class EstadoPagamento implements EstadoMaquina {
+    public void selecionarProduto(Maquina m) { System.out.println("Já selecionado"); }
+    public void inserirDinheiro(Maquina m, double v) {
+        m.adicionarSaldo(v);
+        if (m.getSaldo() >= m.getPreco()) m.setEstado(new EstadoProdutoLiberado());
+    }
+    public void cancelar(Maquina m) { m.devolverSaldo(); m.setEstado(new EstadoSemProduto()); }
+    public void liberarProduto(Maquina m) { System.out.println("Saldo insuficiente"); }
+}
+
+public class Maquina {
+    private EstadoMaquina estado = new EstadoSemProduto();
+    private double saldo, preco = 5.0;
+    void setEstado(EstadoMaquina e) { estado = e; }
+    public void selecionarProduto()      { estado.selecionarProduto(this); }
+    public void inserirDinheiro(double v){ estado.inserirDinheiro(this, v); }
+    public void cancelar()               { estado.cancelar(this); }
+    public void liberarProduto()         { estado.liberarProduto(this); }
+    // getSaldo, getPreco, adicionarSaldo, devolverSaldo ...
+}`,dica:"A lista usa void + maquina.setEstado(...); o professor usou métodos que retornam Estado. Os dois são State. O ProdutoLiberado, ao liberar, volta para SemProduto."},
+{n:14,p:"state",titulo:"Personagem de jogo",cenario:"PARADO, CORRENDO, PULANDO, ATACANDO, MORTO; andar(), pular(), atacar() dependem do estado.",por:"Regras do tipo 'morto não ataca', 'pulando não pula de novo'.",classes:"EstadoPersonagem, Parado, Correndo, Pulando, Atacando, Morto, Personagem",
+code:`public interface EstadoPersonagem {
+    EstadoPersonagem andar();
+    EstadoPersonagem pular();
+    EstadoPersonagem atacar();
+}
+
+public class Parado implements EstadoPersonagem {
+    public EstadoPersonagem andar()  { return new Correndo(); }
+    public EstadoPersonagem pular()  { return new Pulando(); }
+    public EstadoPersonagem atacar() { return new Atacando(); }
+}
+public class Pulando implements EstadoPersonagem {
+    public EstadoPersonagem andar()  { return this; }
+    public EstadoPersonagem pular()  { System.out.println("Já está pulando"); return this; }
+    public EstadoPersonagem atacar() { return new Atacando(); }
+}
+public class Morto implements EstadoPersonagem {
+    public EstadoPersonagem andar()  { System.out.println("Morto"); return this; }
+    public EstadoPersonagem pular()  { System.out.println("Morto"); return this; }
+    public EstadoPersonagem atacar() { System.out.println("Morto não ataca"); return this; }
+}
+
+public class Personagem {
+    private EstadoPersonagem estado = new Parado();
+    public void andar()  { estado = estado.andar(); }
+    public void pular()  { estado = estado.pular(); }
+    public void atacar() { estado = estado.atacar(); }
+}`,dica:"É o mesmo raciocínio do Mario da aula. Cada estado responde a todos os eventos."}
+];
+
+const COMPARACOES = [
+{a:"strategy",b:"state",t:"Strategy × State",regra:"Mesmo desenho UML. A diferença é quem troca o comportamento.",sa:"Quem está de fora escolhe (pedido.setCalculoFrete(new FreteSedex())). Pergunta: qual algoritmo vou usar?",sb:"Os próprios estados decidem a transição (return new ComProduto()). Pergunta: em que estado estou e o que posso fazer agora?"},
+{a:"strategy",b:"template",t:"Strategy × Template Method",regra:"Composição trocando tudo × herança variando partes.",sa:"Composição. Troca o algoritmo inteiro, inclusive em tempo de execução.",sb:"Herança. Esqueleto fixo num método final; subclasses mudam só algumas etapas, definido na compilação."},
+{a:"observer",b:"command",t:"Observer × Command",regra:"Avisar muitos × empacotar uma ação.",sa:"Algo aconteceu: vários objetos inscritos são notificados.",sb:"Uma ação vira objeto para ser executada depois, enfileirada ou desfeita."},
+{a:"decorator",b:"observer",t:"Decorator × Observer (exercício 8)",regra:"Um objeto em camadas × vários objetos numa lista.",sa:"Um único objeto embrulhado: new SMS(new Email()). Cada camada repassa e acrescenta.",sb:"Vários observadores independentes numa List; um evento avisa todos."},
+{a:"decorator",b:"strategy",t:"Decorator × Strategy",regra:"Muda a 'pele' × muda as 'entranhas'.",sa:"Acrescenta comportamento por fora, empilhando camadas do mesmo tipo.",sb:"Troca o algoritmo interno que o objeto usa."},
+{a:"strategy",b:"observer",t:"Strategy × Observer",regra:"Um delega como fazer × um avisa muitos.",sa:"O contexto delega a uma única estratégia a forma de fazer algo.",sb:"O subject avisa N observadores que algo mudou."},
+{a:"iterator",b:"template",t:"Iterator × laço for comum",regra:"Por que não usar só um for?",sa:"Com Iterator o cliente usa hasNext/next e não sabe se é array, lista ou banco.",sb:"Com for por índice, o cliente depende da estrutura (length, get(i)) e quebra se ela mudar."}
+];
+
+const PRINCIPIOS = [
+{nome:"Encapsule o que varia",txt:"Isole a parte que muda das partes estáveis. O jeito de voar do pato muda; o nome e o peso, não.",pad:["strategy","state","template"]},
+{nome:"Programe para uma interface",txt:"O cliente depende de CalculoFrete, não de FretePAC. Assim a implementação troca sem mexer no cliente.",pad:["strategy","observer","command","iterator"]},
+{nome:"Composição em vez de herança",txt:"'Tem um' em vez de 'é um'. Composição troca em tempo de execução; herança fica fixa na compilação.",pad:["strategy","decorator","state"]},
+{nome:"Aberto/fechado (OCP)",txt:"Aberto para extensão, fechado para modificação: comportamento novo = classe nova, sem editar if/else de classes prontas.",pad:["strategy","observer","decorator","command","state","template"]},
+{nome:"Baixo acoplamento",txt:"Objetos que colaboram sabem o mínimo uns dos outros. O Subject só conhece a interface Observer; o Invoker só conhece Comando.",pad:["observer","command"]},
+{nome:"Princípio de Hollywood",txt:"'Não nos chame, nós chamamos você.' A superclasse controla o fluxo e chama as subclasses.",pad:["template"]},
+{nome:"Responsabilidade única",txt:"Cada classe com um motivo para mudar: a coleção guarda, o iterador navega; cada estado cuida do seu comportamento.",pad:["iterator","state","command"]},
+{nome:"Polimorfismo",txt:"A mesma chamada (o.update(), estado.dano(), bebida.preco()) executa código diferente conforme o objeto. É o motor de todos os padrões.",pad:["observer","state","decorator","strategy"]},
+{nome:"Três camadas",txt:"apresentacao (Main, telas) → negocio (classes e regras, onde moram os padrões) → persistencia (lista, arquivo, banco, atrás de uma interface DAO). Nunca ao contrário.",pad:[]}
+];
+
+const ESTILO = [
+["Observer genérico","interface Observer<T> { void update(T t); } e o Pedido manda a si mesmo: o.update(this). O Cliente implementa Observer<Pedido>."],
+["Subject com changeState","addObserver, removeObserver(Observer), removeObserver(int pos), notifyObservers() e changeState(Status) que altera e notifica."],
+["Status como enum","enum Status { PAGO, ENVIADO, ENTREGUE, CANCELADO } em vez de String. Evita erro de digitação."],
+["Dois padrões na mesma classe","O Pedido da revisão é ao mesmo tempo contexto de Strategy (IFrete) e Subject de Observer. Prepare-se para um cenário que pede dois padrões juntos."],
+["Estratégia padrão no construtor","this.frete = new FretePAC(); garante que valorFrete() nunca dê NullPointerException."],
+["State retornando o próximo estado","Estado selecionarProduto(Maquina m) devolve o novo estado; a Maquina faz estado = estado.selecionarProduto(this) e não expõe setEstado."],
+["Command com Documento","Comandos recebem um Documento; a Impressora guarda um Command e tem realizarComando()."],
+["Decorator herdando a classe concreta","EmailDecorator é abstract, estende Email, guarda protected Email email e sobrescreve getMensagem()."],
+["Template com gancho","Texto tem organizarTexto() final, rodape() com corpo padrão (gancho) e formatacao()/gravacao() abstratos."],
+["Iterator direto na coleção","Playlist implements Iterator<Musica> com um int pos."],
+["Organização em pacotes","Projetos Maven com pacotes apresentacao, negocio e persistencia; uma Main por padrão."]
+];
+
+const ATTRS = [
+ ["tudo","Tudo"],["frase","Resumo em uma frase"],["intencao","Intenção"],["problema","Problema que resolve"],["gatilhos","Palavras-gatilho"],["papeis","Papéis / participantes"],["principios","Princípios"],["usar","Quando usar"],["naoUsar","Quando não usar"],["uml","Estrutura UML"],["codigo","Código"],["repo","Exemplos do repositório"],["pegadinhas","Pegadinhas"],["perguntas","Perguntas de prova"],["exercicios","Exercícios da lista"],["comparacoes","Comparações"],["principiosGerais","Princípios (aba)"],["estilo","Estilo do professor"]
+];
+const ATTR_LABEL = Object.fromEntries(ATTRS);
+const P = Object.fromEntries(PATTERNS.map(p=>[p.id,p]));
+
+/* ===================== UTIL ===================== */
+const $ = s=>document.querySelector(s);
+const esc = s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const norm = s=>String(s).normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
+function highlightText(text, q){
+  const t = esc(text); if(!q) return t;
+  const nt = norm(text); const nq = norm(q).trim(); if(!nq) return t;
+  // mapear posições no texto original (mesmo comprimento após NFD removido? usar abordagem caractere a caractere)
+  const raw = String(text); let out="", i=0;
+  const words = nq.split(/\s+/).filter(w=>w.length>1);
+  if(!words.length) return t;
+  const ranges=[];
+  for(const w of words){ let k=nt.indexOf(w); while(k>=0){ranges.push([k,k+w.length]); k=nt.indexOf(w,k+w.length);} }
+  if(!ranges.length) return t;
+  ranges.sort((a,b)=>a[0]-b[0]);
+  const merged=[]; for(const r of ranges){ if(merged.length&&r[0]<=merged[merged.length-1][1]) merged[merged.length-1][1]=Math.max(merged[merged.length-1][1],r[1]); else merged.push(r.slice()); }
+  for(const [a,b] of merged){ out+=esc(raw.slice(i,a))+"<mark>"+esc(raw.slice(a,b))+"</mark>"; i=b; }
+  return out+esc(raw.slice(i));
+}
+const KW = /\b(public|private|protected|class|interface|abstract|extends|implements|return|new|void|final|static|if|else|for|while|this|super|null|true|false|import|package|enum|try|catch|throw|throws)\b/;
+const TY = /\b(String|double|int|boolean|List|ArrayList|LinkedList|Queue|Stack|Iterator|Iterable|Comparator|Arrays|StringBuilder|Math|System)\b/;
+function hlJava(src){
+  const re = /(\/\/[^\n]*)|("(?:[^"\\]|\\.)*")|\b([A-Za-z_]\w*)\b/g;
+  let out="", last=0, m;
+  while((m=re.exec(src))){
+    out+=esc(src.slice(last,m.index)); last=re.lastIndex;
+    if(m[1]) out+='<span class="cm">'+esc(m[1])+"</span>";
+    else if(m[2]) out+='<span class="st">'+esc(m[2])+"</span>";
+    else if(KW.test(m[3]) && m[3].match(KW)[0]===m[3]) out+='<span class="kw">'+m[3]+"</span>";
+    else if(TY.test(m[3]) && m[3].match(TY)[0]===m[3]) out+='<span class="ty">'+m[3]+"</span>";
+    else out+=esc(m[3]);
+  }
+  return out+esc(src.slice(last));
+}
+function codeBlock(src,label){
+  const id="c"+Math.random().toString(36).slice(2,8);
+  return `<div class="codehead"><span class="eyebrow">${esc(label||"Java")}</span><button class="copy" type="button" data-copy="${id}">Copiar</button></div><pre class="code" id="${id}">${hlJava(src)}</pre>`;
+}
+const dot = p=>`<span class="dot" style="--c:var(${P[p].cor})"></span>`;
+
+/* ===================== ÍNDICE DE BUSCA ===================== */
+const INDEX=[];
+function add(tipo,alvo,padrao,attr,texto){ INDEX.push({tipo,alvo,padrao,attr,texto,n:norm(texto)}); }
+for(const p of PATTERNS){
+  add("padrao",p.id,p.id,"frase",p.frase);
+  add("padrao",p.id,p.id,"intencao",p.intencao);
+  add("padrao",p.id,p.id,"problema",p.problema);
+  p.gatilhos.forEach(g=>add("padrao",p.id,p.id,"gatilhos",g));
+  p.papeis.forEach(r=>add("padrao",p.id,p.id,"papeis",r[0]+": "+r[1]));
+  p.principios.forEach(x=>add("padrao",p.id,p.id,"principios",x));
+  p.usar.forEach(x=>add("padrao",p.id,p.id,"usar",x));
+  p.naoUsar.forEach(x=>add("padrao",p.id,p.id,"naoUsar",x));
+  add("padrao",p.id,p.id,"uml",p.uml);
+  p.codigo.split("\n").forEach(l=>{ if(l.trim().length>3) add("padrao",p.id,p.id,"codigo",l.trim()); });
+  p.repo.forEach(r=>add("padrao",p.id,p.id,"repo",r[0]+" — "+r[1]));
+  p.pegadinhas.forEach(x=>add("padrao",p.id,p.id,"pegadinhas",x));
+  p.perguntas.forEach(q=>add("padrao",p.id,p.id,"perguntas",q[0]+" "+q[1]));
+  add("padrao",p.id,p.id,"cat","Categoria: "+p.cat);
+}
+for(const e of EXERCICIOS){
+  add("ex",e.n,e.p,"exercicios",`Exercício ${e.n} — ${e.titulo}: ${e.cenario}`);
+  add("ex",e.n,e.p,"exercicios",`Ex. ${e.n} — por que ${P[e.p].nome}: ${e.por}`);
+  add("ex",e.n,e.p,"exercicios",`Ex. ${e.n} — classes: ${e.classes}`);
+  add("ex",e.n,e.p,"exercicios",`Ex. ${e.n} — dica: ${e.dica}`);
+  e.code.split("\n").forEach(l=>{ if(l.trim().length>3) add("ex",e.n,e.p,"codigo",`Ex. ${e.n}: ${l.trim()}`); });
+}
+COMPARACOES.forEach((c,i)=>{ add("cmp",i,c.a,"comparacoes",`${c.t}: ${c.regra} ${P[c.a].nome}: ${c.sa} ${c.t.split(" × ")[1]}: ${c.sb}`); });
+PRINCIPIOS.forEach((p,i)=>add("princ",i,p.pad[0]||null,"principiosGerais",`${p.nome}: ${p.txt}`));
+ESTILO.forEach((s,i)=>add("estilo",i,null,"estilo",`${s[0]}: ${s[1]}`));
+
+/* ===================== ESTADO ===================== */
+const TABS=[["busca","Pesquisa"],...PATTERNS.map(p=>[p.id,p.nome]),["exercicios","Exercícios 1–14"],["qual","Qual padrão?"],["comparar","Comparações"],["principios","Princípios"],["professor","Estilo do professor"]];
+let state={view:"busca",q:"",attr:"tudo",pfilter:new Set(),ex:null,showSol:false,focusAttr:null};
+try{ const s=JSON.parse(localStorage.getItem("ppp-guia")||"{}"); if(s.attr) state.attr=s.attr; }catch(e){}
+const h=(location.hash||"").slice(1); if(TABS.some(t=>t[0]===h)) state.view=h; else if(/^ex\d+$/.test(h)){state.view="exercicios";state.ex=+h.slice(2);}
+
+/* ===================== RENDER ===================== */
+function renderTabs(){
+  $("#tabs").innerHTML=TABS.map(([id,l])=>`<button class="tab" role="tab" type="button" data-tab="${id}" aria-selected="${state.view===id}">${esc(l)}</button>`).join("");
+}
+function renderAttrSel(){
+  $("#attrSel").innerHTML=ATTRS.map(([v,l])=>`<option value="${v}" ${state.attr===v?"selected":""}>${esc(l)}</option>`).join("");
+}
+function go(view,extra){ Object.assign(state,{view},extra||{}); try{history.replaceState(null,"","#"+(view==="exercicios"&&state.ex?"ex"+state.ex:view));}catch(e){} render(); window.scrollTo({top:0}); }
+
+function vBusca(){
+  const q=state.q.trim(); const nq=norm(q); const words=nq.split(/\s+/).filter(Boolean);
+  const chips=`<div class="chips" aria-label="Filtrar por padrão">${PATTERNS.map(p=>`<button type="button" class="chip" data-pf="${p.id}" aria-pressed="${state.pfilter.has(p.id)}" style="--c:var(${p.cor})"><span class="dot"></span>${p.nome}</button>`).join("")}</div>`;
+  let hits=INDEX.filter(it=>{
+    if(state.attr!=="tudo" && it.attr!==state.attr) return false;
+    if(state.pfilter.size && !(it.padrao && state.pfilter.has(it.padrao))) return false;
+    if(!words.length) return true;
+    return words.every(w=>it.n.includes(w));
+  });
+  const total=hits.length;
+  // contagem por atributo
+  const byAttr={}; hits.forEach(h=>byAttr[h.attr]=(byAttr[h.attr]||0)+1);
+  const facets=Object.entries(byAttr).sort((a,b)=>b[1]-a[1]).map(([a,n])=>`<button type="button" class="chip" data-attr="${a}" aria-pressed="${state.attr===a}">${esc(ATTR_LABEL[a]||"Categoria")} <span class="count">${n}</span></button>`).join("");
+  const shown=hits.slice(0,120);
+  const intro = !q && state.attr==="tudo" && !state.pfilter.size;
+  const list=shown.map(it=>{
+    const pc = it.padrao?`style="--c:var(${P[it.padrao].cor})"`:"";
+    const where = `${it.padrao?P[it.padrao].nome:"Geral"} · ${ATTR_LABEL[it.attr]||"Categoria"}${it.tipo==="ex"?" · Exercício "+it.alvo:""}`;
+    return `<button type="button" class="res" ${pc} data-go="${it.tipo}|${it.alvo}|${it.attr}"><span class="where">${esc(where)}</span><span class="snip">${highlightText(it.texto.length>260?it.texto.slice(0,260)+"…":it.texto,q)}</span></button>`;
+  }).join("");
+  return `<div class="view">
+   <div style="display:grid;gap:8px">
+     <span class="eyebrow">Pesquisa por atributo</span>
+     <h2 style="font-size:1.8rem">${intro?"O que você precisa revisar?":(total+" resultado"+(total===1?"":"s"))}</h2>
+     <p class="lead">${intro?"Digite qualquer termo na barra acima e escolha em qual atributo pesquisar: intenção, gatilhos, papéis, código, pegadinhas, exercícios… Filtre também por padrão. Clique num resultado para abrir o ponto exato.":"Filtros ativos: "+esc(ATTR_LABEL[state.attr])+(state.pfilter.size?" · "+[...state.pfilter].map(id=>P[id].nome).join(", "):"")+(q?" · termo “"+esc(q)+"”":"")}</p>
+   </div>
+   ${chips}
+   ${intro?vBuscaIntro():`<div class="facets">${facets}</div><div class="results">${list||'<p class="lead">Nada encontrado. Tente um termo mais curto, troque o atributo para “Tudo” ou limpe os filtros de padrão.</p>'}</div>${total>120?'<p class="footer-note">Mostrando 120 de '+total+'. Refine o termo ou o atributo.</p>':""}`}
+  </div>`;
+}
+function vBuscaIntro(){
+  const ex=[["undo","naoUsar"],["final","tudo"],["fila","tudo"],["hasNext","codigo"],["interface","papeis"],["enum","tudo"],["herança","pegadinhas"],["notificar","gatilhos"],["Invoker","papeis"],["gancho","tudo"]];
+  return `<div class="grid">
+    <div class="card"><h3>Buscas rápidas</h3><div class="chips">${ex.map(([t,a])=>`<button type="button" class="chip" data-quick="${esc(t)}|${a}">${esc(t)}</button>`).join("")}</div></div>
+    <div class="card"><h3>Resumo dos 7 padrões</h3>${PATTERNS.map(p=>`<div style="display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:baseline"><button type="button" class="chip" data-tab="${p.id}" style="--c:var(${p.cor})"><span class="dot"></span>${p.nome}</button><span style="font-size:.92rem">${esc(p.frase)}</span></div>`).join("")}</div>
+    <div class="card"><h3>Como estudar com este guia</h3><ul style="margin:0;padding-left:1.1em;display:grid;gap:4px"><li>Use <b>Qual padrão?</b> colando um enunciado para treinar o reconhecimento.</li><li>Em <b>Exercícios 1–14</b>, tente escrever antes de abrir a solução.</li><li>Leia as notas amarelas (pegadinhas) de cada padrão na véspera.</li><li>Veja <b>Estilo do professor</b>: é como ele resolveu a lista de revisão.</li></ul></div>
+  </div>`;
+}
+
+function vPadrao(id){
+  const p=P[id]; const fa=state.focusAttr;
+  const row=(k,label,html)=>`<div class="attr${fa===k?" hit":""}" id="a-${k}"><div class="k"><b>${p.nome.replace(/\s/g,"")}</b>.${esc(label)}</div><div class="v">${html}</div></div>`;
+  const ul=a=>`<ul>${a.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`;
+  const exs=p.ex.map(n=>{const e=EXERCICIOS.find(x=>x.n===n);return `<button type="button" class="chip" data-ex="${n}"><span class="num">#${n}</span> ${esc(e.titulo)}</button>`}).join(" ");
+  return `<div class="view" style="--c:var(${p.cor})">
+   <article class="uml">
+    <div class="uml-head"><span class="stereo">«${p.cat.toLowerCase()}»</span><h2>${p.nome}</h2><p>${esc(p.frase)}</p></div>
+    <div class="attrs">
+      ${row("intencao","intencao",`<p>${esc(p.intencao)}</p>`)}
+      ${row("problema","problema",`<p>${esc(p.problema)}</p>`)}
+      ${row("gatilhos","gatilhos",`<div class="chips">${p.gatilhos.map(g=>`<span class="chip small">${esc(g)}</span>`).join("")}</div>`)}
+      ${row("papeis","papeis",`<div class="tbl"><table class="roles"><thead><tr><th>Papel</th><th>No código</th></tr></thead><tbody>${p.papeis.map(r=>`<tr><td><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td></tr>`).join("")}</tbody></table></div>`)}
+      ${row("uml","estrutura",`<pre class="ascii">${esc(p.uml)}</pre>`)}
+      ${row("principios","principios",`<div class="chips">${p.principios.map(g=>`<span class="chip small">${esc(g)}</span>`).join("")}</div>`)}
+      ${row("usar","quandoUsar",ul(p.usar))}
+      ${row("naoUsar","quandoNaoUsar",ul(p.naoUsar))}
+      ${row("codigo","esqueleto",codeBlock(p.codigo,"Esqueleto para escrever de cabeça"))}
+      ${row("repo","exemplosRepo",`<ul>${p.repo.map(r=>`<li><code>${esc(r[0])}</code> — ${esc(r[1])}</li>`).join("")}</ul>`)}
+      ${row("pegadinhas","pegadinhas",`<div class="notes">${p.pegadinhas.map(x=>`<div class="note">${esc(x)}</div>`).join("")}</div>`)}
+      ${row("perguntas","perguntasProva",p.perguntas.map(q=>`<details class="qa"><summary>${esc(q[0])}</summary><div>${esc(q[1])}</div></details>`).join(""))}
+      ${row("exercicios","exercicios",`<div class="chips">${exs}</div>`)}
+    </div>
+   </article>
+  </div>`;
+}
+
+function vExercicios(){
+  if(state.ex){
+    const e=EXERCICIOS.find(x=>x.n===state.ex); const p=P[e.p];
+    const prev=EXERCICIOS.find(x=>x.n===e.n-1), next=EXERCICIOS.find(x=>x.n===e.n+1);
+    return `<div class="view">
+     <button type="button" class="btn ghost" data-exback="1">← Todos os exercícios</button>
+     <article class="ex" style="--c:var(${p.cor})">
+      <header><div class="meta" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><span class="num">Exercício ${e.n}</span><button type="button" class="chip" data-tab="${p.id}" style="--c:var(${p.cor})"><span class="dot"></span>${p.nome}</button></div><h2>${esc(e.titulo)}</h2></header>
+      <section><h3>cenário</h3><p style="margin:0;max-width:72ch">${esc(e.cenario)}</p></section>
+      <section><h3>por que este padrão</h3><p style="margin:0;max-width:72ch">${esc(e.por)}</p></section>
+      <section><h3>classes</h3><p style="margin:0;font-family:var(--f-mono);font-size:.88rem;overflow-wrap:anywhere">${esc(e.classes)}</p></section>
+      <section><h3>solução</h3>
+        <button type="button" class="btn" data-sol="1" aria-expanded="${state.showSol}">${state.showSol?"Esconder solução":"Mostrar solução (tente antes!)"}</button>
+        <div class="spoiler" ${state.showSol?"":"hidden"}>${codeBlock(e.code,"Solução comentada")}</div>
+      </section>
+      <section><div class="note">${esc(e.dica)}</div></section>
+     </article>
+     <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap">${prev?`<button type="button" class="btn ghost" data-ex="${prev.n}">← #${prev.n} ${esc(prev.titulo)}</button>`:"<span></span>"}${next?`<button type="button" class="btn ghost" data-ex="${next.n}">#${next.n} ${esc(next.titulo)} →</button>`:""}</div>
+    </div>`;
+  }
+  return `<div class="view"><div style="display:grid;gap:8px"><span class="eyebrow">09_revisao/lista1.md</span><h2 style="font-size:1.8rem">Exercícios da lista de revisão</h2><p class="lead">Cada card mostra o cenário. Dentro, a solução fica escondida até você pedir. Tente identificar o padrão só pelo cenário antes de olhar a etiqueta.</p></div>
+  <div class="grid">${EXERCICIOS.map(e=>`<div class="card" style="--c:var(${P[e.p].cor})"><div class="meta"><span class="num">#${e.n}</span><span class="chip small">${dot(e.p)}${P[e.p].nome}</span></div><h3>${esc(e.titulo)}</h3><p style="margin:0;font-size:.95rem;color:var(--muted)">${esc(e.cenario)}</p><button type="button" class="btn ghost" data-ex="${e.n}">Abrir exercício</button></div>`).join("")}</div></div>`;
+}
+
+const KEYS={
+ strategy:["formas de","forma de","algoritmo","criterio","ordenacao","ordenar","calcular","calculo","modalidade","pagamento","trocar","escolher","escolhe","estrategia","regra diferente","cada uma","frete","desconto","imposto","nao deve conhecer as regras"],
+ observer:["notific","avisar","avisad","informad","sempre que","inscrit","seguidor","assinante","interessad","atualizad","quando mudar","quando a","mudar","todos os","alerta","evento","publicar","receber"],
+ template:["mesmo processo","mesmas etapas","etapas","sequencia","passos","ordem","sempre segue","seguem","processo geral","esqueleto","relatorio","importar","exportar","abrir","fechar","formato"],
+ command:["desfazer","undo","refazer","fila","histor","executar depois","posteriormente","solicitacao","operacao","operacoes","acao","comando","botao","controle","agendar","registrar"],
+ state:["estado","situacao","depende do","nao pode","enquanto","passa a","passa para","muda para","volta ao","transicao","maquina","personagem","morto","pulando","semaforo","liberad","aguardando"],
+ iterator:["percorrer","percorra","sem conhecer","armazenad","array","arraylist","linkedlist","colecao","lista de","playlist","navegar","proximo","reverso","sequencia de elementos","iterar"],
+ decorator:["adiciona","combina","combinac","extra","adicional","ingrediente","acrescent","sem alterar","camada","empilh","envolv","embrulh","decorar","borda","cobertura","formatac","negrito"]
+};
+function vQual(){
+  return `<div class="view"><div style="display:grid;gap:8px"><span class="eyebrow">Treino de reconhecimento</span><h2 style="font-size:1.8rem">Qual padrão resolve este enunciado?</h2><p class="lead">Cole o enunciado de uma questão. O guia procura as palavras-gatilho de cada padrão e mostra quais pesam mais. É um apoio para treinar: na prova, a justificativa é sua.</p></div>
+  <div class="idf"><div style="display:grid;gap:8px;align-content:start"><label for="enun" class="eyebrow">Enunciado</label><textarea id="enun">Um aplicativo de delivery possui pedidos. Quando o pedido estiver aguardando pagamento, ele não pode ser enviado. Depois de pago, passa para em preparo e, em seguida, saiu para entrega. Cada ação do pedido se comporta de forma diferente dependendo da situação atual.</textarea><div class="chips"><button type="button" class="chip" data-sample="0">Exemplo: delivery</button><button type="button" class="chip" data-sample="1">Exemplo: pizzaria</button><button type="button" class="chip" data-sample="2">Exemplo: editor</button><button type="button" class="chip" data-sample="3">Exemplo: canal de vídeos</button></div></div>
+  <div id="idfOut" style="display:grid;gap:6px;align-content:start"></div></div></div>`;
+}
+const SAMPLES=["Um aplicativo de delivery possui pedidos. Quando o pedido estiver aguardando pagamento, ele não pode ser enviado. Depois de pago, passa para em preparo e, em seguida, saiu para entrega. Cada ação do pedido se comporta de forma diferente dependendo da situação atual.","Uma pizzaria oferece borda recheada, queijo extra e bacon como adicionais, em qualquer combinação e quantidade. O preço final deve somar os extras escolhidos, sem criar uma classe para cada combinação.","Um editor de desenho permite desfazer com Ctrl+Z. Cada operação (desenhar, mover, apagar) deve ser guardada num histórico para poder ser desfeita ou refeita depois.","Quando um canal publica um vídeo, os inscritos, o sistema de recomendação e o serviço de e-mail precisam ser avisados. O canal não deve conhecer cada um deles."];
+function runIdf(){
+  const out=$("#idfOut"); if(!out) return;
+  const t=norm($("#enun").value);
+  const scores=PATTERNS.map(p=>{const found=KEYS[p.id].filter(k=>t.includes(k));return {p,found,n:found.length};}).sort((a,b)=>b.n-a.n);
+  const max=Math.max(1,scores[0].n);
+  out.innerHTML=`<span class="eyebrow">Pontuação por gatilhos encontrados</span>`+scores.map(s=>`<div class="bar" style="--c:var(${s.p.cor})"><button type="button" class="chip" data-tab="${s.p.id}" style="--c:var(${s.p.cor})"><span class="dot"></span>${s.p.nome}</button><div class="track"><div class="fill" style="width:${s.n/max*100}%"></div></div><span class="n">${s.n}</span>${s.n?`<div class="why">encontrou: ${s.found.map(esc).join(", ")}</div>`:""}</div>`).join("")+
+   (scores[0].n?`<div class="note" style="margin-top:8px">Mais provável: <b>${scores[0].p.nome}</b>. ${esc(scores[0].p.frase)} Confira as pegadinhas antes de responder${scores[1].n&&scores[1].n>=scores[0].n-1?", porque "+scores[1].p.nome+" ficou perto":""}.</div>`:`<p class="lead">Nenhum gatilho encontrado ainda. Cole o texto completo do enunciado.</p>`);
+}
+
+function vComparar(){
+  return `<div class="view"><div style="display:grid;gap:8px"><span class="eyebrow">Diferenças que costumam cair</span><h2 style="font-size:1.8rem">Comparações entre padrões</h2></div>
+  ${COMPARACOES.map(c=>{const nb=c.t.split(" × ")[1].replace(/ \(.*\)/,"");return `<section class="cmp"><h3>${esc(c.t)}</h3><p class="rule" style="margin:0">${esc(c.regra)}</p><div class="two"><div class="side" style="--c:var(${P[c.a].cor})"><b>${P[c.a].nome}</b><p style="margin:4px 0 0">${esc(c.sa)}</p></div><div class="side" style="--c:var(${c.t.includes("laço")?"--muted":P[c.b].cor})"><b>${esc(nb)}</b><p style="margin:4px 0 0">${esc(c.sb)}</p></div></div></section>`}).join("")}</div>`;
+}
+function vPrincipios(){
+  return `<div class="view"><div style="display:grid;gap:8px"><span class="eyebrow">A base de todos os padrões</span><h2 style="font-size:1.8rem">Princípios de projeto</h2><p class="lead">Se você entende estes, os padrões viram consequência. As etiquetas mostram onde cada princípio aparece.</p></div>
+  <div class="grid">${PRINCIPIOS.map(p=>`<div class="card"><h3>${esc(p.nome)}</h3><p style="margin:0">${esc(p.txt)}</p><div class="chips">${p.pad.map(id=>`<button type="button" class="chip" data-tab="${id}" style="--c:var(${P[id].cor})"><span class="dot"></span>${P[id].nome}</button>`).join("")}</div></div>`).join("")}</div></div>`;
+}
+function vProfessor(){
+  return `<div class="view"><div style="display:grid;gap:8px"><span class="eyebrow">09_revisao/lista1 · código do professor</span><h2 style="font-size:1.8rem">Como o professor resolve</h2><p class="lead">O repositório recebeu as soluções do professor para a lista de revisão. Elas mostram o jeito que ele espera ver o código. Vale imitar a estrutura, inclusive nomes como update, addObserver e changeState.</p></div>
+  <div class="grid">${ESTILO.map(s=>`<div class="card"><h3>${esc(s[0])}</h3><p style="margin:0">${esc(s[1])}</p></div>`).join("")}</div>
+  <div class="note"><b>Para não repetir na prova:</b> a MainTemplateMethod chama gravacao() direto em vez de organizarTexto(), então o template não é usado; existem duas classes iguais de estado (ProdutoLiberado e LiberadoProduto); o estado Cancela não sai mais de si mesmo. São detalhes de um código feito ao vivo em aula, mas na prova eles podem custar pontos.</div></div>`;
+}
+
+function render(){
+  renderTabs();
+  const v=state.view; let html="";
+  if(v==="busca") html=vBusca();
+  else if(P[v]) html=vPadrao(v);
+  else if(v==="exercicios") html=vExercicios();
+  else if(v==="qual") html=vQual();
+  else if(v==="comparar") html=vComparar();
+  else if(v==="principios") html=vPrincipios();
+  else if(v==="professor") html=vProfessor();
+  $("#main").innerHTML=html;
+  if(v==="qual") runIdf();
+  if(state.focusAttr && P[v]){ const el=document.getElementById("a-"+state.focusAttr); if(el) setTimeout(()=>el.scrollIntoView({block:"center"}),0); }
+}
+
+/* ===================== EVENTOS ===================== */
+$("#searchForm").addEventListener("submit",e=>e.preventDefault());
+$("#q").addEventListener("input",e=>{ state.q=e.target.value; if(state.view!=="busca"){state.view="busca";} state.focusAttr=null; render(); });
+$("#attrSel").addEventListener("change",e=>{ state.attr=e.target.value; try{localStorage.setItem("ppp-guia",JSON.stringify({attr:state.attr}));}catch(_){} state.view="busca"; render(); });
+document.addEventListener("click",e=>{
+  const b=e.target.closest("button"); if(!b) return;
+  if(b.dataset.tab){ go(b.dataset.tab,{focusAttr:null,ex:null}); return; }
+  if(b.dataset.pf){ const id=b.dataset.pf; state.pfilter.has(id)?state.pfilter.delete(id):state.pfilter.add(id); render(); return; }
+  if(b.dataset.attr){ state.attr = state.attr===b.dataset.attr?"tudo":b.dataset.attr; renderAttrSel(); render(); return; }
+  if(b.dataset.quick){ const [t,a]=b.dataset.quick.split("|"); state.q=t; state.attr=a; $("#q").value=t; renderAttrSel(); render(); return; }
+  if(b.dataset.go){ const [tipo,alvo,attr]=b.dataset.go.split("|");
+    if(tipo==="padrao") go(alvo,{focusAttr:attr==="cat"?null:attr});
+    else if(tipo==="ex") go("exercicios",{ex:+alvo,showSol:attr==="codigo"});
+    else if(tipo==="cmp") go("comparar");
+    else if(tipo==="princ") go("principios");
+    else if(tipo==="estilo") go("professor");
+    return; }
+  if(b.dataset.ex){ go("exercicios",{ex:+b.dataset.ex,showSol:false}); return; }
+  if(b.dataset.exback){ go("exercicios",{ex:null}); return; }
+  if(b.dataset.sol){ state.showSol=!state.showSol; render(); return; }
+  if(b.dataset.sample){ $("#enun").value=SAMPLES[+b.dataset.sample]; runIdf(); return; }
+  if(b.dataset.copy){ const pre=document.getElementById(b.dataset.copy); const txt=pre.innerText;
+    const done=()=>{b.textContent="Copiado"; setTimeout(()=>b.textContent="Copiar",1400);};
+    try{ navigator.clipboard.writeText(txt).then(done,()=>{selectEl(pre);b.textContent="Selecionado, use Ctrl+C";}); }catch(_){ selectEl(pre); b.textContent="Selecionado, use Ctrl+C"; }
+  }
+});
+document.addEventListener("input",e=>{ if(e.target.id==="enun") runIdf(); });
+function selectEl(el){ const r=document.createRange(); r.selectNodeContents(el); const s=getSelection(); s.removeAllRanges(); s.addRange(r); }
+
+renderAttrSel(); render();
+</script>
+
+</body></html>
