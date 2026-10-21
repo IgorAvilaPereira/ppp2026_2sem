@@ -1,4 +1,4 @@
-Aqui está o exemplo clássico do Simulador de Patos (Use a Cabeça! Padrões de Projetos) estruturado perfeitamente em Markdown, ideal para os seus estudos ou anotações:
+
 
 🧱 O Padrão Adapter: O Exemplo do Simulador de Patos
 
@@ -8,7 +8,8 @@ O simulador de patos foi inteiramente construído esperando objetos do tipo Duck
 🦆 1. O Ecossistema Original (O Pato)
 
 O simulador possui uma interface Duck e uma classe concreta de um pato real (MallardDuck):
-java
+
+```java
 // Interface esperada pelo sistema (Target)
 public interface Duck {
     public void quack(); // Patos grasnam
@@ -26,13 +27,14 @@ public class MallardDuck implements Duck {
     public void fly() {
         System.out.println("Estou voando uma longa distância!");
     }
-}
+```
 Use o código com cuidado.
 
 🦃 2. A Classe Incompatível (O Peru)
 
 Você precisa adicionar Perus ao simulador. No entanto, a interface de um peru é ligeiramente diferente: eles não grasnam (eles fazem guglar / gobble) e eles não voam distâncias longas (apenas curtas):
-java
+
+```java
 // Interface do objeto que queremos integrar (Adaptee)
 public interface Turkey {
     public void gobble();   // Perus fazem gulu-gulu
@@ -51,13 +53,15 @@ public class WildTurkey implements Turkey {
         System.out.println("Estou voando uma distância bem curtinha!");
     }
 }
+```
 Use o código com cuidado.
 O problema: O simulador só aceita quem assina o contrato Duck. Passar um WildTurkey direto causará um erro de compilação.
 
 🔀 3. A Solução: O Adaptador (TurkeyAdapter)
 
 Para resolver o problema sem alterar o simulador e nem reescrever a classe do peru, cria-se o TurkeyAdapter. Ele se disfarça de Pato (implementa Duck), mas guarda uma instância de Peru lá dentro:
-java
+
+```java
 // O Adaptador implementa a interface que o cliente espera
 public class TurkeyAdapter implements Duck {
     private Turkey turkey;
@@ -83,11 +87,13 @@ public class TurkeyAdapter implements Duck {
     }
 }
 Use o código com cuidado.
+```
 
 🎮 4. O Simulador Rodando (Client)
 
 No método principal, o sistema interage com o peru adaptado exatamente da mesma forma que interage com qualquer pato:
-java
+
+```java
 public class SimuladorDePatos {
     public static void main(String[] args) {
         MallardDuck pato = new MallardDuck();
@@ -114,6 +120,7 @@ public class SimuladorDePatos {
         duck.fly();
     }
 }
+```
 Use o código com cuidado.
 
 📊 Estrutura de Mapeamento do Padrão neste Exemplo
