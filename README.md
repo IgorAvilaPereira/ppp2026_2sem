@@ -715,4 +715,6 @@ tubeManager (com Proxy) - Exemplo Aula](https://github.com/IgorAvilaPereira/ppp2
 [Adapter](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./12_adapter/Adapter) <br>
 [adapter_duck](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./12_adapter/adapter_duck) <br>
 [adapter_pokemonapi_digimon](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./12_adapter/adapter_pokemonapi_digimon) <br>
+[aula](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./12_adapter/aula) <br>
+[pokedesk](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./12_adapter/pokedesk) <br>
 [proxy_aula](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./12_adapter/proxy_aula) <br>
