@@ -123,7 +123,7 @@ public class SimuladorDePatos {
 ```
 Use o código com cuidado.
 
-📊 Estrutura de Mapeamento do Padrão neste Exemplo
+## 📊 Estrutura de Mapeamento do Padrão neste Exemplo
 
 • Client (Cliente): Método testarPato(Duck duck) do simulador.
 
