@@ -690,8 +690,8 @@ tubeManager (com Proxy) - Exemplo Aula](https://github.com/IgorAvilaPereira/ppp2
 [adapter_exemplo1.png](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./12_adapter/adapter_exemplo1.png) <br>
 [adapter_exemplo2.png](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./12_adapter/adapter_exemplo2.png) <br>
 [adapter.pdf](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./12_adapter/adapter.pdf) <br>
+[adapter_teoria.md](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./12_adapter/adapter_teoria.md) <br>
 [adapter_vs_proxy.png](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./12_adapter/adapter_vs_proxy.png) <br>
-[proxy_teoria.md](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./12_adapter/proxy_teoria.md) <br>
 
 **Exemplos de Adapter:**
 
