@@ -1,11 +1,11 @@
 
 
-🧱 O Padrão Adapter: O Exemplo do Simulador de Patos
+# 🧱 O Padrão Adapter: O Exemplo do Simulador de Patos
 
 Baseado no livro "Use a Cabeça! Padrões de Projetos"
 O simulador de patos foi inteiramente construído esperando objetos do tipo Duck (Pato). De repente, surge a necessidade de introduzir um Turkey (Peru) no sistema. Como as interfaces de comportamento de ambos são incompatíveis, usa-se o padrão Adapter para criar uma "ponte" entre eles.
 
-🦆 1. O Ecossistema Original (O Pato)
+## 🦆 1. O Ecossistema Original (O Pato)
 
 O simulador possui uma interface Duck e uma classe concreta de um pato real (MallardDuck):
 
@@ -30,7 +30,7 @@ public class MallardDuck implements Duck {
 ```
 Use o código com cuidado.
 
-🦃 2. A Classe Incompatível (O Peru)
+## 🦃 2. A Classe Incompatível (O Peru)
 
 Você precisa adicionar Perus ao simulador. No entanto, a interface de um peru é ligeiramente diferente: eles não grasnam (eles fazem guglar / gobble) e eles não voam distâncias longas (apenas curtas):
 
@@ -57,7 +57,7 @@ public class WildTurkey implements Turkey {
 Use o código com cuidado.
 O problema: O simulador só aceita quem assina o contrato Duck. Passar um WildTurkey direto causará um erro de compilação.
 
-🔀 3. A Solução: O Adaptador (TurkeyAdapter)
+## 🔀 3. A Solução: O Adaptador (TurkeyAdapter)
 
 Para resolver o problema sem alterar o simulador e nem reescrever a classe do peru, cria-se o TurkeyAdapter. Ele se disfarça de Pato (implementa Duck), mas guarda uma instância de Peru lá dentro:
 
@@ -89,7 +89,7 @@ public class TurkeyAdapter implements Duck {
 Use o código com cuidado.
 ```
 
-🎮 4. O Simulador Rodando (Client)
+## 🎮 4. O Simulador Rodando (Client)
 
 No método principal, o sistema interage com o peru adaptado exatamente da mesma forma que interage com qualquer pato:
 
@@ -126,6 +126,9 @@ Use o código com cuidado.
 📊 Estrutura de Mapeamento do Padrão neste Exemplo
 
 • Client (Cliente): Método testarPato(Duck duck) do simulador.
+
 • Target (Alvo): Interface Duck.
+
 • Adapter (Adaptador): Classe TurkeyAdapter.
+
 • Adaptee (Adaptado): Interface Turkey / Classe WildTurkey.
