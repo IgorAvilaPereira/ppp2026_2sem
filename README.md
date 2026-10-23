@@ -718,3 +718,6 @@ tubeManager (com Proxy) - Exemplo Aula](https://github.com/IgorAvilaPereira/ppp2
 [aula](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./12_adapter/aula) <br>
 [pokedesk](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./12_adapter/pokedesk) <br>
 [proxy_aula](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./12_adapter/proxy_aula) <br>
+## [./13_seminario_andamento](https://github.com/IgorAvilaPereira/ppp2026_2sem/tree/main/./13_seminario_andamento) <br>
+<br><br>[Baixar todo o material da aula](https://download-directory.github.io/?url=http://github.com/IgorAvilaPereira/ppp2026_2sem/tree/main/13_seminario_andamento) <br><br>
+&nbsp;
