@@ -721,6 +721,9 @@ tubeManager (com Proxy) - Exemplo Aula](https://github.com/IgorAvilaPereira/ppp2
 ## [./13_seminario_andamento](https://github.com/IgorAvilaPereira/ppp2026_2sem/tree/main/./13_seminario_andamento) <br>
 <br><br>[Baixar todo o material da aula](https://download-directory.github.io/?url=http://github.com/IgorAvilaPereira/ppp2026_2sem/tree/main/13_seminario_andamento) <br><br>
 &nbsp;
+## [./14_atividade3_2bim](https://github.com/IgorAvilaPereira/ppp2026_2sem/tree/main/./14_atividade3_2bim) <br>
+<br><br>[Baixar todo o material da aula](https://download-directory.github.io/?url=http://github.com/IgorAvilaPereira/ppp2026_2sem/tree/main/14_atividade3_2bim) <br><br>
+&nbsp;
 ## [./14_prototype](https://github.com/IgorAvilaPereira/ppp2026_2sem/tree/main/./14_prototype) <br>
 [exemplo_prototype_emails.md](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./14_prototype/exemplo_prototype_emails.md) <br>
 [exemplo_prototype_formularios.md](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./14_prototype/exemplo_prototype_formularios.md) <br>
