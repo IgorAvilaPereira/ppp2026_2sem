@@ -1008,6 +1008,7 @@ Carro{modelo='Sedan', cor='Preto'}
 [builder_sql](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./15_builder/builder_sql) <br>
 [exemplo_builder](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./15_builder/exemplo_builder) <br>
 ## [./16_revisao](https://github.com/IgorAvilaPereira/ppp2026_2sem/tree/main/./16_revisao) <br>
+[lista2.md](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./16_revisao/lista2.md) <br>
 **Revisão**
 
 * Decorator
