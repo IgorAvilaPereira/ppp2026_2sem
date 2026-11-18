@@ -1,3 +1,4 @@
+
 # Padrão Criacional Builder em Java: Teoria e Implementações
 
 ## 1. Teoria: O que é o Padrão Builder?
@@ -23,12 +24,15 @@ Na orientação a objetos, instanciar classes com muitos atributos (obrigatório
 ## 3. Onde e quando é usado?
 
 ### Cenários de Uso Recomendados
+
 * Quando uma classe possui **4 ou mais atributos**, especialmente quando vários deles são opcionais ou possuem valores padrão.
 * Quando o sistema exige **objetos imutáveis** (como DTOs, *Value Objects* no DDD, eventos de mensageria ou configurações de sistema).
 * Quando a criação do objeto exige **etapas sequenciais**, manipulação de listas internas ou validações cruzadas entre campos antes da finalização.
 
 ### Exemplos Nativos na API do Java
+
 O próprio JDK utiliza amplamente o padrão Builder em suas bibliotecas padrão:
+
 * `java.lang.StringBuilder` e `java.lang.StringBuffer`
 * `java.net.http.HttpRequest.newBuilder()`
 * `java.util.stream.Stream.Builder`
@@ -75,6 +79,7 @@ classDiagram
     Cliente ..> Builder : utiliza para configurar
     Produto *-- Builder : contém (classe interna estática)
     Builder ..> Produto : instancia e valida
+
 ```
 
 ---
@@ -166,6 +171,7 @@ public class Produto {
         }
     }
 }
+
 ```
 
 #### 2. Como Utilizar
@@ -185,6 +191,7 @@ public class ExemploBuilder1 {
                 .build();
     }
 }
+
 ```
 
 ---
@@ -217,6 +224,7 @@ public class Produto {
     public int getEstoque() { return estoque; }
     public List<String> getTags() { return tags; }
 }
+
 ```
 
 #### 2. Definição do Builder Externo (`Builder2.java`)
@@ -271,6 +279,7 @@ public class Builder2 {
         return new Produto(this.nome, this.preco, this.estoque, this.tags);
     }
 }
+
 ```
 
 #### 3. Como Utilizar
@@ -289,6 +298,7 @@ public class ExemploBuilder2 {
                 .build();
     }
 }
+
 ```
 
 ---
@@ -333,6 +343,7 @@ public class Produto {
         }
     }
 }
+
 ```
 
 #### 2. Como Utilizar
@@ -352,6 +363,7 @@ public class ExemploLombok {
                 .build();
     }
 }
+
 ```
 
 ---
@@ -392,6 +404,7 @@ public interface Produto {
         }
     }
 }
+
 ```
 
 #### 2. Como Utilizar
@@ -410,6 +423,7 @@ public class ExemploImmutables {
                 .build();
     }
 }
+
 ```
 
 ---
@@ -417,11 +431,30 @@ public class ExemploImmutables {
 ## 6. Comparação Geral
 
 | Característica | Builder1 (Interna) | Builder2 (Externa) | Builder3 (Lombok) | Builder4 (Immutables) |
-| :--- | :--- | :--- | :--- | :--- |
-| **Encapsulamento** | Alto (construtor `private`). | Baixo (exige construtor acessível). | Alto (construtor `private` gerado). | Alto (interface + classe gerada). |
+| --- | --- | --- | --- | --- |
+| **Encapsulamento** | Alto (construtor `private`). | Baixo (exige construtor acessível). | Alto (construtor `private` gerado). | Alto (interface + gerada). |
 | **Código Boilerplate** | Alto (escrito manualmente). | Alto (escrito manualmente). | Mínimo (anotações). | Mínimo (anotações). |
 | **Campos Obrigatórios** | Validação manual no `.build()`. | Validação manual no `.build()`. | Manual ou via `@NonNull`. | **Nativo** (lança exceção se faltar). |
 | **Valores Padrão** | Atribuição direta no campo do builder. | Atribuição direta no campo do builder. | Requer `@Builder.Default`. | Requer `@Value.Default` no método. |
-| **Coleções / Listas** | Manual (`add` / `addAll` + `unmodifiableList`). | Manual (`add` / `addAll` + `List.copyOf`). | Via `@Singular` (gera singular, plural e lista imutável). | **Nativo** (gera `add`, `addAll` e lista imutável sem anotações extras). |
+| **Coleções / Listas** | Manual (`add`/`addAll` + `unmodifiableList`). | Manual (`add`/`addAll` + `List.copyOf`). | Via `@Singular` (singular, plural e lista imutável). | **Nativo** (gera `add`, `addAll` e lista imutável). |
 | **Validação de Regras** | Manual dentro do `.build()`. | Manual dentro do `.build()`. | Sobrescrevendo o `.build()` interno. | Via método anotado com `@Value.Check`. |
 | **Dependências** | Nenhuma (Java puro). | Nenhuma (Java puro). | Biblioteca Lombok + Plugin IDE. | Biblioteca Immutables (Annotation Processor). |
+
+---
+
+## 7. Geração Automatizada de Builders no VS Code
+
+Escrever todo o código *boilerplate* de um Builder manual (`Builder1` ou `Builder2`) linha por linha pode ser repetitivo. No **Visual Studio Code (VS Code)**, você pode agilizar ou automatizar essa criação combinando recursos nativos de reescrita com extensões especializadas.
+
+### 7.1. Ferramentas e Extensões Úteis no Marketplace
+
+* **Design Patterns Snippets for Java**: Extensão prática focada em injetar códigos de padrões GoF. Ela permite que você gere esqueletos de construtores e builders rapidamente por meio de comandos.
+* **Extension Pack for Java (Red Hat)**: Fornece as *Source Actions* essenciais do ecossistema Java no VS Code (`Ctrl+.` no Windows/Linux ou `Cmd+.` no macOS, ou clique com o botão direito -> **Source Action...**). Embora não crie um Builder completo com um único clique nativo, ela agiliza a criação de **Construtores parametrizados**, **Getters** e **Setters** que servem de alicerce para estruturar classes complexas.
+* **Suporte ao Lombok via Maven/Gradle**: Caso utilize a abordagem do **Builder3**, certifique-se de habilitar o processamento de anotações (*Annotation Processing*) no seu projeto Java no VS Code para que o plugin do Lombok gere os métodos fluentes automaticamente em segundo plano.
+
+### 7.2. Como aplicar via Comandos e Atalhos
+
+1. Abra o arquivo `.java` contendo os atributos da sua classe (ex: `Produto.java`).
+2. Utilize o atalho da Paleta de Comandos (`Ctrl+Shift+P` ou `Cmd+Shift+P`).
+3. Busque por comandos providos por extensões de produtividade/design patterns (como comandos de geração de código para construtores ou templates do Builder).
+4. Caso prefira o método sem plugins de terceiros, utilize as *Source Actions* (`Ctrl+.`) para gerar rapidamente o construtor privado e os getters da classe principal, escrevendo a estática interna do Builder com o auxílio do *IntelliSense* do VS Code.
