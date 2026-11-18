@@ -10,7 +10,43 @@
 
 * Builder3: Classe Builder Gerada por Loombok
 
+```xml
+<dependencies>
+	<dependency>
+		<groupId>org.projectlombok</groupId>
+		<artifactId>lombok</artifactId>
+		<version>1.18.48</version>
+		<scope>provided</scope>
+	</dependency>
+</dependencies>
+```
+
 * Builder4: Classe Builder Gerada por Immutables
+
+```xml
+<dependencies>
+
+<!-- https://mvnrepository.com/artifact/org.immutables/builder -->
+<dependency>
+    <groupId>org.immutables</groupId>
+    <artifactId>builder</artifactId>
+    <version>2.10.0-rc0</version>
+</dependency>
+
+<!-- https://mvnrepository.com/artifact/org.immutables/value -->
+<dependency>
+    <groupId>org.immutables</groupId>
+    <artifactId>value</artifactId>
+    <version>2.10.0-rc0</version>
+    <scope>provided</scope>
+</dependency>
+
+</dependencies>
+
+```
+
+* Builder3: Classe Builder Gerada por IDE's (Netbeans)
+
 
 <!--https://github.com/IgorAvilaPereira/ppp2024_2sem/tree/main/codigos/builder-->
 
@@ -62,27 +98,7 @@
 * **annotations** https://mvnrepository.com/artifact/org.immutables/builder/2.9.2
 * **annotations** https://mvnrepository.com/artifact/org.immutables/value/2.9.2
 
-```xml
-<dependencies>
 
-<!-- https://mvnrepository.com/artifact/org.immutables/builder -->
-<dependency>
-    <groupId>org.immutables</groupId>
-    <artifactId>builder</artifactId>
-    <version>2.10.0-rc0</version>
-</dependency>
-
-<!-- https://mvnrepository.com/artifact/org.immutables/value -->
-<dependency>
-    <groupId>org.immutables</groupId>
-    <artifactId>value</artifactId>
-    <version>2.10.0-rc0</version>
-    <scope>provided</scope>
-</dependency>
-
-</dependencies>
-
-```
 
 * **compilação** https://projectlombok.org/features/Builder
 
