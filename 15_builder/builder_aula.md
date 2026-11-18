@@ -1,42 +1,127 @@
-# Padrão Builder em Java: Manual vs. Bibliotecas (Com Validações e Valores Padrão)
+# Padrão Criacional Builder em Java: Teoria e Implementações
 
-Este guia apresenta 4 formas diferentes de implementar o padrão **Builder** para a mesma classe (`Produto`), partindo das implementações manuais (classe interna e externa) até o uso das bibliotecas **Lombok** e **Immutables**.
+## 1. Teoria: O que é o Padrão Builder?
 
-Todos os exemplos abaixo incluem:
-* **Campo Obrigatório com Validação:** `nome` (não pode ser nulo ou vazio).
-* **Campo Obrigatório sem Valor Padrão:** `preco` (deve ser maior ou igual a zero).
-* **Campo Opcional com Valor Padrão:** `estoque` (assume `0` caso não seja informado).
+O **Builder** é um padrão de projeto criacional (*Creational Design Pattern*), catalogado originalmente pela *Gang of Four* (GoF) e popularizado no ecossistema Java por Joshua Bloch no livro *Effective Java*.
+
+A sua proposta central é **separar a construção de um objeto complexo da sua representação final**, permitindo que o mesmo processo de construção possa criar diferentes representações de forma legível, segura e passo a passo.
 
 ---
 
-## Builder1: Classe Interna Estática (Abordagem Clássica / Effective Java)
+## 2. Para que serve?
 
-Nesta abordagem tradicional, o builder é uma classe `public static` dentro da própria classe alvo. O construtor de `Produto` é `private`, garantindo que o objeto só seja criado através do builder após passar pelas validações.
+Na orientação a objetos, instanciar classes com muitos atributos (obrigatórios e opcionais) costuma gerar problemas clássicos que o Builder resolve:
 
-### 1. Definição da Classe (`Produto.java`)
+* **Evita o anti-padrão *Telescoping Constructor*:** Elimina a necessidade de criar dezenas de sobrecargas de construtores com diferentes combinações de parâmetros (`new Produto(nome)`, `new Produto(nome, preco)`, `new Produto(nome, preco, estoque)`, etc.), que tornam o código difícil de ler e propenso a erros de troca de ordem entre argumentos do mesmo tipo.
+* **Substitui o padrão *JavaBeans* (`setters`) em objetos imutáveis:** O uso de construtor vazio seguido de vários `setters` deixa o objeto em um estado inconsistente durante a montagem e impede que os atributos sejam `final` (imutáveis e seguros para *threads*).
+* **Centraliza validações:** Permite validar regras de negócio e invariantes antes mesmo de o objeto existir na memória (dentro do método `.build()`).
+* **Garante imutabilidade de coleções:** Facilita o encapsulamento defensivo de listas e conjuntos antes de entregar a instância final ao cliente.
+* **Melhora a legibilidade (Interface Fluente):** O encadeamento de métodos nomeados funciona como parâmetros nomeados, deixando claro o papel de cada valor passado.
+
+---
+
+## 3. Onde e quando é usado?
+
+### Cenários de Uso Recomendados
+* Quando uma classe possui **4 ou mais atributos**, especialmente quando vários deles são opcionais ou possuem valores padrão.
+* Quando o sistema exige **objetos imutáveis** (como DTOs, *Value Objects* no DDD, eventos de mensageria ou configurações de sistema).
+* Quando a criação do objeto exige **etapas sequenciais**, manipulação de listas internas ou validações cruzadas entre campos antes da finalização.
+
+### Exemplos Nativos na API do Java
+O próprio JDK utiliza amplamente o padrão Builder em suas bibliotecas padrão:
+* `java.lang.StringBuilder` e `java.lang.StringBuffer`
+* `java.net.http.HttpRequest.newBuilder()`
+* `java.util.stream.Stream.Builder`
+* `java.util.Locale.Builder`
+* `java.util.Calendar.Builder`
+
+---
+
+## 4. Estrutura UML (Mermaid)
+
+O diagrama abaixo ilustra a estrutura clássica do padrão Builder aplicado ao domínio deste guia (variante *Effective Java*, onde o produto contém seu próprio builder interno):
+
+```mermaid
+classDiagram
+    class Cliente {
+        +main(args: String[]) void
+    }
+
+    class Produto {
+        -final String nome
+        -final double preco
+        -final int estoque
+        -final List~String~ tags
+        -Produto(builder: Builder)
+        +getNome() String
+        +getPreco() double
+        +getEstoque() int
+        +getTags() List~String~
+    }
+
+    class Builder {
+        -String nome
+        -double preco
+        -int estoque
+        -List~String~ tags
+        +nome(nome: String) Builder
+        +preco(preco: double) Builder
+        +estoque(estoque: int) Builder
+        +adicionarTag(tag: String) Builder
+        +tags(tags: List~String~) Builder
+        +build() Produto
+    }
+
+    Cliente ..> Builder : utiliza para configurar
+    Produto *-- Builder : contém (classe interna estática)
+    Builder ..> Produto : instancia e valida
+```
+
+---
+
+## 5. Exemplos Práticos em Java
+
+Abaixo estão **4 formas diferentes** de implementar o padrão **Builder** para a mesma classe (`Produto`), incluindo **valores padrão**, **validações** e **manipulação segura de coleções (`List<String> tags`)**.
+
+---
+
+### Builder1: Classe Interna Estática (Abordagem Clássica / Effective Java)
+
+Nesta abordagem tradicional, o builder é uma classe `public static` dentro da própria classe alvo. A lista de tags recebe uma cópia defensiva imutável (`List.copyOf`) no momento da construção para impedir alterações externas posteriores.
+
+#### 1. Definição da Classe (`Produto.java`)
 
 ```java
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class Produto {
     private final String nome;
     private final double preco;
     private final int estoque;
+    private final List<String> tags;
 
     // Construtor privado: apenas o Builder1 interno tem acesso
     private Produto(Builder1 builder) {
         this.nome = builder.nome;
         this.preco = builder.preco;
         this.estoque = builder.estoque;
+        // Cópia imutável defensiva da coleção
+        this.tags = Collections.unmodifiableList(new ArrayList<>(builder.tags));
     }
 
     public String getNome() { return nome; }
     public double getPreco() { return preco; }
     public int getEstoque() { return estoque; }
+    public List<String> getTags() { return tags; }
 
     // Classe Builder Interna Estática
     public static class Builder1 {
         private String nome;
         private double preco;
-        private int estoque = 0; // Valor padrão definido na declaração
+        private int estoque = 0; // Valor padrão para campo opcional
+        private final List<String> tags = new ArrayList<>(); // Lista inicializada vazia por padrão
 
         public Builder1 nome(String nome) {
             this.nome = nome;
@@ -53,13 +138,29 @@ public class Produto {
             return this;
         }
 
+        // Adiciona um item individual à coleção
+        public Builder1 adicionarTag(String tag) {
+            if (tag != null && !tag.isBlank()) {
+                this.tags.add(tag);
+            }
+            return this;
+        }
+
+        // Adiciona uma coleção inteira
+        public Builder1 tags(List<String> tags) {
+            if (tags != null) {
+                this.tags.addAll(tags);
+            }
+            return this;
+        }
+
         public Produto build() {
-            // Validação centralizada antes da criação do objeto
+            // Validações antes de instanciar o objeto
             if (nome == null || nome.isBlank()) {
-                throw new IllegalArgumentException("O nome do produto é obrigatório.");
+                throw new IllegalStateException("O nome do produto é obrigatório.");
             }
             if (preco < 0) {
-                throw new IllegalArgumentException("O preço não pode ser negativo.");
+                throw new IllegalStateException("O preço não pode ser negativo.");
             }
             return new Produto(this);
         }
@@ -67,15 +168,20 @@ public class Produto {
 }
 ```
 
-### 2. Como Utilizar
+#### 2. Como Utilizar
 
 ```java
+import java.util.List;
+
 public class ExemploBuilder1 {
     public static void main(String[] args) {
-        // Estoque omitido: assumirá o valor padrão 0
         Produto produto = new Produto.Builder1()
                 .nome("Teclado Mecânico")
                 .preco(350.00)
+                .adicionarTag("Periféricos")
+                .adicionarTag("Gamer")
+                .tags(List.of("RGB", "USB-C"))
+                // 'estoque' omitido: assumirá o valor padrão 0
                 .build();
     }
 }
@@ -83,38 +189,47 @@ public class ExemploBuilder1 {
 
 ---
 
-## Builder2: Classe Externa Independente
+### Builder2: Classe Externa Independente
 
-Aqui, o builder é uma classe separada em seu próprio arquivo (`Builder2.java`). Como está fora de `Produto`, a classe `Produto` precisa expor um construtor `public` ou de pacote (*package-private*) para ser instanciada.
+Aqui, o builder é uma classe separada em seu próprio arquivo (`Builder2.java`). Como está fora de `Produto`, a classe `Produto` expõe um construtor `public` e realiza a cópia defensiva da lista internamente.
 
-### 1. Definição da Classe Principal (`Produto.java`)
+#### 1. Definição da Classe Principal (`Produto.java`)
 
 ```java
+import java.util.List;
+
 public class Produto {
     private final String nome;
     private final double preco;
     private final int estoque;
+    private final List<String> tags;
 
     // Construtor público necessário para o Builder externo
-    public Produto(String nome, double preco, int estoque) {
+    public Produto(String nome, double preco, int estoque, List<String> tags) {
         this.nome = nome;
         this.preco = preco;
         this.estoque = estoque;
+        this.tags = (tags == null) ? List.of() : List.copyOf(tags);
     }
 
     public String getNome() { return nome; }
     public double getPreco() { return preco; }
     public int getEstoque() { return estoque; }
+    public List<String> getTags() { return tags; }
 }
 ```
 
-### 2. Definição do Builder Externo (`Builder2.java`)
+#### 2. Definição do Builder Externo (`Builder2.java`)
 
 ```java
+import java.util.ArrayList;
+import java.util.List;
+
 public class Builder2 {
     private String nome;
     private double preco;
-    private int estoque = 0; // Valor padrão
+    private int estoque = 0; // Valor padrão para campo opcional
+    private final List<String> tags = new ArrayList<>(); // Coleção padrão vazia
 
     public Builder2 nome(String nome) {
         this.nome = nome;
@@ -131,28 +246,46 @@ public class Builder2 {
         return this;
     }
 
+    public Builder2 adicionarTag(String tag) {
+        if (tag != null && !tag.isBlank()) {
+            this.tags.add(tag);
+        }
+        return this;
+    }
+
+    public Builder2 tags(List<String> tags) {
+        if (tags != null) {
+            this.tags.addAll(tags);
+        }
+        return this;
+    }
+
     public Produto build() {
-        // Validação no builder externo
+        // Validações centralizadas antes de chamar o construtor público
         if (nome == null || nome.isBlank()) {
-            throw new IllegalArgumentException("O nome do produto é obrigatório.");
+            throw new IllegalStateException("O nome do produto é obrigatório.");
         }
         if (preco < 0) {
-            throw new IllegalArgumentException("O preço não pode ser negativo.");
+            throw new IllegalStateException("O preço não pode ser negativo.");
         }
-        return new Produto(this.nome, this.preco, this.estoque);
+        return new Produto(this.nome, this.preco, this.estoque, this.tags);
     }
 }
 ```
 
-### 3. Como Utilizar
+#### 3. Como Utilizar
 
 ```java
+import java.util.List;
+
 public class ExemploBuilder2 {
     public static void main(String[] args) {
         Produto produto = new Builder2()
                 .nome("Teclado Mecânico")
                 .preco(350.00)
-                .estoque(15)
+                .adicionarTag("Periféricos")
+                .tags(List.of("Gamer", "RGB"))
+                // 'estoque' omitido: assumirá o valor padrão 0
                 .build();
     }
 }
@@ -160,50 +293,62 @@ public class ExemploBuilder2 {
 
 ---
 
-## Builder3: Classe Builder Gerada por Lombok
+### Builder3: Classe Builder Gerada por Lombok
 
-O **Lombok** utiliza anotações para gerar o código *boilerplate* em tempo de compilação. Para definir valores padrão, utiliza-se `@Builder.Default`. Para validações, é possível customizar a classe `Builder3` interna (o Lombok mescla o código escrito por você com os métodos gerados automaticamente).
+O **Lombok** utiliza anotações para gerar o código *boilerplate* em tempo de compilação. Para listas, a anotação `@Singular` gera automaticamente métodos para adicionar um elemento por vez (`tag(...)`), uma coleção inteira (`tags(...)`) e limpar a lista (`clearTags()`), além de entregar uma lista imutável no objeto final.
 
-### 1. Definição da Classe (`Produto.java`)
+#### 1. Definição da Classe (`Produto.java`)
 
 ```java
+import java.util.List;
 import lombok.Builder;
+import lombok.NonNull;
+import lombok.Singular;
 import lombok.Value;
 
-@Value // Torna a classe imutável (private final, getters, equals, hashCode, toString)
+@Value
 @Builder(builderClassName = "Builder3")
 public class Produto {
+    @NonNull // Valida automaticamente que 'nome' não pode ser nulo (lança NullPointerException)
     String nome;
+
     double preco;
 
-    @Builder.Default // Informa ao Lombok para manter o valor padrão se o método não for chamado
+    @Builder.Default // Garante que o valor padrão seja respeitado pelo builder gerado
     int estoque = 0;
 
-    // Customização parcial do Builder3 para adicionar validações no build()
+    @Singular("tag") // Gera .tag("...") para item único, .tags(List) para coleção e garante imutabilidade
+    List<String> tags;
+
+    // Personalização do builder gerado pelo Lombok para regras de negócio adicionais
     public static class Builder3 {
         public Produto build() {
             if (this.nome == null || this.nome.isBlank()) {
-                throw new IllegalArgumentException("O nome do produto é obrigatório.");
+                throw new IllegalStateException("O nome do produto é obrigatório.");
             }
             if (this.preco < 0) {
-                throw new IllegalArgumentException("O preço não pode ser negativo.");
+                throw new IllegalStateException("O preço não pode ser negativo.");
             }
-            // Chama o construtor gerado pelo @Value
-            return new Produto(this.nome, this.preco, this.estoque$value);
+            return new Produto(this.nome, this.preco, this.estoque$value, this.tags);
         }
     }
 }
 ```
 
-### 2. Como Utilizar
+#### 2. Como Utilizar
 
 ```java
+import java.util.List;
+
 public class ExemploLombok {
     public static void main(String[] args) {
-        // Estoque omitido: assumirá o valor padrão 0 definido com @Builder.Default
         Produto produto = Produto.builder()
                 .nome("Teclado Mecânico")
                 .preco(350.00)
+                .tag("Periféricos") // Método singular gerado por @Singular("tag")
+                .tag("Gamer")
+                .tags(List.of("RGB", "USB-C")) // Método plural gerado automaticamente
+                // 'estoque' omitido: assumirá o valor padrão 0
                 .build();
     }
 }
@@ -211,48 +356,57 @@ public class ExemploLombok {
 
 ---
 
-## Builder4: Classe Builder Gerada por Immutables
+### Builder4: Classe Builder Gerada por Immutables
 
-A biblioteca **Immutables** gera uma implementação concreta (`ImmutableProduto`) a partir de uma interface. Por padrão, todos os atributos são obrigatórios (lançando `IllegalStateException` se omitidos), valores padrão são definidos com `@Value.Default` e validações são executadas automaticamente através de um método anotado com `@Value.Check`.
+A biblioteca **Immutables** trabalha a partir de interfaces anotadas com `@Value.Immutable`. Ela trata coleções (`List`, `Set`, `Map`) de forma nativa: gera automaticamente métodos `add...` e `addAll...`, inicializa como lista vazia se nada for informado e envolve o resultado em uma coleção estritamente imutável.
 
-### 1. Definição da Interface (`Produto.java`)
+#### 1. Definição da Interface (`Produto.java`)
 
 ```java
+import java.util.List;
 import org.immutables.value.Value;
 
 @Value.Immutable
 @Value.Style(typeBuilder = "Builder4") // Define o nome do builder gerado como Builder4
 public interface Produto {
-    String nome();  // Obrigatório por padrão no Immutables
-    double preco(); // Obrigatório por padrão no Immutables
+    String nome();   // Obrigatório por padrão no Immutables
+    double preco();  // Obrigatório por padrão no Immutables
 
-    @Value.Default  // Define o valor padrão quando não informado no builder
+    @Value.Default   // Define o valor padrão 0 caso não seja informado no builder
     default int estoque() {
         return 0;
     }
 
-    @Value.Check    // Executado automaticamente ao chamar .build()
+    // Coleções são nativamente suportadas: gera addTags(...) e addAllTags(...)
+    // Se nenhum item for adicionado, assume lista vazia imutável por padrão
+    List<String> tags();
+
+    // Método de validação executado automaticamente ao final do .build()
+    @Value.Check
     default void validar() {
         if (nome().isBlank()) {
-            throw new IllegalArgumentException("O nome do produto é obrigatório.");
+            throw new IllegalStateException("O nome do produto é obrigatório.");
         }
         if (preco() < 0) {
-            throw new IllegalArgumentException("O preço não pode ser negativo.");
+            throw new IllegalStateException("O preço não pode ser negativo.");
         }
     }
 }
 ```
 
-### 2. Como Utilizar
+#### 2. Como Utilizar
 
 ```java
+import java.util.List;
+
 public class ExemploImmutables {
     public static void main(String[] args) {
-        // Se nome() ou preco() não forem informados, o Immutables lança IllegalStateException.
-        // Se estoque() for omitido, assumirá 0.
         Produto produto = ImmutableProduto.builder()
                 .nome("Teclado Mecânico")
                 .preco(350.00)
+                .addTags("Periféricos", "Gamer") // Método gerado nativamente para itens
+                .addAllTags(List.of("RGB", "USB-C")) // Método gerado nativamente para coleções
+                // 'estoque' omitido: assumirá o valor padrão 0
                 .build();
     }
 }
@@ -260,12 +414,14 @@ public class ExemploImmutables {
 
 ---
 
-## Comparação Geral
+## 6. Comparação Geral
 
 | Característica | Builder1 (Interna) | Builder2 (Externa) | Builder3 (Lombok) | Builder4 (Immutables) |
 | :--- | :--- | :--- | :--- | :--- |
-| **Encapsulamento** | Alto (construtor `private`). | Baixo (construtor `public`). | Alto (construtor `private`). | Alto (interface + classe gerada). |
-| **Valores Padrão** | Atribuição direta no campo do builder. | Atribuição direta no campo do builder. | Anotação `@Builder.Default`. | Método `default` com `@Value.Default`. |
-| **Campos Obrigatórios** | Verificação manual no `.build()`. | Verificação manual no `.build()`. | Verificação manual sobrescrevendo `.build()`. | Nativos por padrão (`IllegalStateException`). |
-| **Validação de Regras** | Manual no método `.build()`. | Manual no método `.build()`. | Sobrescrevendo `.build()` no builder. | Método `default` com `@Value.Check`. |
+| **Encapsulamento** | Alto (construtor `private`). | Baixo (exige construtor acessível). | Alto (construtor `private` gerado). | Alto (interface + classe gerada). |
+| **Código Boilerplate** | Alto (escrito manualmente). | Alto (escrito manualmente). | Mínimo (anotações). | Mínimo (anotações). |
+| **Campos Obrigatórios** | Validação manual no `.build()`. | Validação manual no `.build()`. | Manual ou via `@NonNull`. | **Nativo** (lança exceção se faltar). |
+| **Valores Padrão** | Atribuição direta no campo do builder. | Atribuição direta no campo do builder. | Requer `@Builder.Default`. | Requer `@Value.Default` no método. |
+| **Coleções / Listas** | Manual (`add` / `addAll` + `unmodifiableList`). | Manual (`add` / `addAll` + `List.copyOf`). | Via `@Singular` (gera singular, plural e lista imutável). | **Nativo** (gera `add`, `addAll` e lista imutável sem anotações extras). |
+| **Validação de Regras** | Manual dentro do `.build()`. | Manual dentro do `.build()`. | Sobrescrevendo o `.build()` interno. | Via método anotado com `@Value.Check`. |
 | **Dependências** | Nenhuma (Java puro). | Nenhuma (Java puro). | Biblioteca Lombok + Plugin IDE. | Biblioteca Immutables (Annotation Processor). |
