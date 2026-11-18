@@ -187,25 +187,4 @@ f) Implemente validações para impedir a construção de usuários sem nome ou 
 
 g) Demonstre a utilização do Builder na classe `Main`.
 
-## **3. Desafio integrador (opcional)**
 
-Desenvolva uma aplicação Java para gerenciamento de uma biblioteca, utilizando os seis padrões de projeto estudados.
-
-| Padrão    | Funcionalidade                                                                     |
-| --------- | ---------------------------------------------------------------------------------- |
-| Decorator | Adicionar funcionalidades extras aos empréstimos, como seguro e extensão de prazo. |
-| Adapter   | Integrar um serviço externo de consulta de livros.                                 |
-| Proxy     | Controlar o acesso aos documentos digitais da biblioteca.                          |
-| Prototype | Clonar livros para criar novos registros a partir de exemplares existentes.        |
-| Singleton | Gerenciar as configurações gerais da biblioteca.                                   |
-| Builder   | Construir objetos de livros com diferentes atributos opcionais.                    |
-
-**Requisitos gerais:**
-
-1. Implementar cada padrão em classes separadas.
-2. Utilizar interfaces quando apropriado.
-3. Criar uma classe `Main` para demonstrar cada implementação.
-4. Organizar o código em pacotes.
-5. Demonstrar o funcionamento dos padrões com diferentes cenários de execução.
-
-**Orientação para a revisão:** priorize a implementação dos seis padrões sem utilizar bibliotecas prontas que já forneçam essas soluções. O objetivo é praticar a construção das classes, interfaces, composição de objetos, encapsulamento e instanciação em Java.
