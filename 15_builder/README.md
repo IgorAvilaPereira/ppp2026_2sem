@@ -38,7 +38,7 @@
 
 ```
 
-* Builder3: Classe Builder Gerada por IDE's (Netbeans)
+* Builder5: Classe Builder Gerada por IDE's (Netbeans)
 
 
 <!--https://github.com/IgorAvilaPereira/ppp2024_2sem/tree/main/codigos/builder-->
