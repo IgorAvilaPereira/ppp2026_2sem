@@ -1018,6 +1018,10 @@ Carro{modelo='Sedan', cor='Preto'}
 [aula_builder](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./15_builder/aula_builder) <br>
 [builder_sql](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./15_builder/builder_sql) <br>
 [exemplo_builder](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./15_builder/exemplo_builder) <br>
+[pizzaria](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./15_builder/pizzaria) <br>
+[pizzaria_immutable](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./15_builder/pizzaria_immutable) <br>
+[pizzaria_loombok](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./15_builder/pizzaria_loombok) <br>
+[pizzaria_vscode](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./15_builder/pizzaria_vscode) <br>
 ## [./16_revisao](https://github.com/IgorAvilaPereira/ppp2026_2sem/tree/main/./16_revisao) <br>
 [lista2.md](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./16_revisao/lista2.md) <br>
 **Revisão**
