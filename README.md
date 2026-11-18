@@ -901,6 +901,7 @@ Carro{modelo='Sedan', cor='Preto'}
 [builder_aula.md](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./15_builder/builder_aula.md) <br>
 [builder_exemplos.md](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./15_builder/builder_exemplos.md) <br>
 [builder.md](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./15_builder/builder.md) <br>
+[builder_motivacao.md](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./15_builder/builder_motivacao.md) <br>
 [builder.pdf](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./15_builder/builder.pdf) <br>
 [builder_teoria.md](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./15_builder/builder_teoria.md) <br>
 [builder_tipos_implementacao.md](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./15_builder/builder_tipos_implementacao.md) <br>
