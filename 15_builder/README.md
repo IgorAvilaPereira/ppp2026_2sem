@@ -22,26 +22,19 @@
 ```
 
 * Builder4: Classe Builder Gerada por Immutables
-
 ```xml
-<dependencies>
-
-<!-- https://mvnrepository.com/artifact/org.immutables/builder -->
-<dependency>
-    <groupId>org.immutables</groupId>
-    <artifactId>builder</artifactId>
-    <version>2.10.0-rc0</version>
-</dependency>
-
-<!-- https://mvnrepository.com/artifact/org.immutables/value -->
-<dependency>
-    <groupId>org.immutables</groupId>
-    <artifactId>value</artifactId>
-    <version>2.10.0-rc0</version>
-    <scope>provided</scope>
-</dependency>
-
-</dependencies>
+ <dependency>
+ <groupId>org.immutables</groupId>
+ <artifactId>value</artifactId>
+ <version>2.12.3</version>
+ <scope>provided</scope>
+ </dependency>
+ <dependency>
+ <groupId>org.immutables</groupId>
+ <artifactId>builder</artifactId>
+ <version>2.12.3</version>
+ <scope>provided</scope>
+ </dependency>
 
 ```
 
