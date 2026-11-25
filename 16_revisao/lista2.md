@@ -1,5 +1,3 @@
-Acrescentei o padrão **Decorator** à revisão conceitual e organizei o material com os seis padrões solicitados. Também preparei o **gabarito completo em Java**, com implementações e exemplos de execução para os sete exercícios.
-
 # **Lista de Revisão – Design Patterns com Java**
 
 **Objetivo:** revisar os padrões de projeto Decorator, Adapter, Proxy, Prototype, Singleton e Builder, compreendendo suas aplicações por meio de exemplos práticos e exercícios de programação em Java.
