@@ -1,3 +1,5 @@
+Acrescentei o padrão **Decorator** à revisão conceitual e organizei o material com os seis padrões solicitados. Também preparei o **gabarito completo em Java**, com implementações e exemplos de execução para os sete exercícios.
+
 # **Lista de Revisão – Design Patterns com Java**
 
 **Objetivo:** revisar os padrões de projeto Decorator, Adapter, Proxy, Prototype, Singleton e Builder, compreendendo suas aplicações por meio de exemplos práticos e exercícios de programação em Java.
@@ -187,4 +189,15 @@ f) Implemente validações para impedir a construção de usuários sem nome ou 
 
 g) Demonstre a utilização do Builder na classe `Main`.
 
+
+## **Comparativo final dos padrões**
+
+| Padrão    | Pergunta que ajuda a identificar o problema                           |
+| --------- | --------------------------------------------------------------------- |
+| Decorator | Como adicionar funcionalidades sem modificar a classe original?       |
+| Adapter   | Como integrar duas classes que possuem interfaces incompatíveis?      |
+| Proxy     | Como controlar o acesso a um objeto?                                  |
+| Prototype | Como criar objetos a partir de outros objetos existentes?             |
+| Singleton | Como garantir que exista apenas uma instância de determinada classe?  |
+| Builder   | Como construir objetos com muitos atributos, especialmente opcionais? |
 
