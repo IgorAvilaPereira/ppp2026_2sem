@@ -1037,5 +1037,11 @@ Carro{modelo='Sedan', cor='Preto'}
 * Prototype
 
 * Builder
+[adapter](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./16_revisao/adapter) <br>
+[builder](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./16_revisao/builder) <br>
+[lista2](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./16_revisao/lista2) <br>
+[prototype](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./16_revisao/prototype) <br>
+[proxy](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./16_revisao/proxy) <br>
+[singleton](https://github.com/IgorAvilaPereira/ppp2026_2sem/blob/main/./16_revisao/singleton) <br>
 ## [./17_atividade3_2bim](https://github.com/IgorAvilaPereira/ppp2026_2sem/tree/main/./17_atividade3_2bim) <br>
 Atividade 3 
