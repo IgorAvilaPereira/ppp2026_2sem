@@ -10,5 +10,6 @@ public class Main {
     public static void main(String[] args) {
 
         Pizza p = Pizza.pizza(false, false, false, false, 0, null);
+        System.out.println(p);
     }
 }
